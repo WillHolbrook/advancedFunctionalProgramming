@@ -10,7 +10,7 @@ We expect you to work for 13 hours every week on this module, as follows:
 
  * In some weeks, however, there will be an assessed test in the Lab UG04. Check [Canvas](https://canvas.bham.ac.uk/courses/65779/assignments).
 
- * 9 hours studying handouts, watching recorded lectures about them, doing unassessed but mandatory exercises, and recording your performance on Canvas.
+ * 9 hours studying handouts, possibly also watching recorded lectures about them, doing unassessed but mandatory exercises, and recording your performance on Canvas.
 
 ## What you have to do this week
 
@@ -20,7 +20,7 @@ We expect you to work for 13 hours every week on this module, as follows:
 
 ### Attend the Monday 5-7pm lecture
 
-You **must** read the handout carefully enough before the lecture to be able to fully participate in the discussions.
+No previous preparation needed.
 
 ### Complete the lab exercises by the end of this week
 
@@ -30,7 +30,7 @@ You **must** read the handout carefully enough before the lecture to be able to 
 
 ### Attend the UG04 Lab in Computer Science at 12-2pm
 
-No previous preparation needed.
+We assume that you have attended the Monday lecture. If you haven't, please catch up by reading the handouts for this week.
 
  * There will be a lecture.
  * You will also get exercises to do during the lab.
@@ -39,7 +39,7 @@ We've also recorded a [more structured version](https://canvas.bham.ac.uk/course
 
 ### Important
 
- * The first lab is particularly crucial. Make sure you don't miss it. In general you should not miss any lab
+ * The first lab is particularly crucial. Make sure you don't miss it. In general you should not miss any lab, as it includes taught material delivered by the lecturers.
 
  * [Lab1 information and tasks](/LectureNotes/files/lab1.lagda.md)
 
@@ -48,7 +48,7 @@ We've also recorded a [more structured version](https://canvas.bham.ac.uk/course
  * [Introduction](/LectureNotes/files/introduction.lagda.md)
  * [Resources](/LectureNotes/files/resources.md)
 
-### Watch videos for this week
+### Watch videos for this week (optional)
 
 The videos are not mandatory if you can manage to understand the handouts.
 The lectures will repeat what is in the videos, but not everything. This is because we will both explain and discuss the material of the handouts, and sometimes do things that are not in the handouts or the videos.

@@ -58,8 +58,8 @@ We've also recorded a [more structured version](https://canvas.bham.ac.uk/course
 
 ### Read handouts for this week
 
- * [Introduction](/LectureNotes/files/introduction.lagda.md)
- * [Resources](/LectureNotes/files/resources.md)
+ * [Introduction](/files/LectureNotes/files/introduction.lagda.md)
+ * [Resources](/files/LectureNotes/files/resources.md)
 
 ### Watch videos for this week (optional)
 

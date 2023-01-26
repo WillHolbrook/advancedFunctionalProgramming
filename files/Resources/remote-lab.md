@@ -1,10 +1,5 @@
 # Working at the School UG04 lab remotely from your own machine
 
-## Warning
-
-Unfortunately, we are not able to offer support for this. But you are welcome to ask questions on [Teams](https://teams.microsoft.com/l/team/19%3aR61tJG-pMjV401vTB2LyPJrPPpwhLzKQb2XbdwC9R5s1%40thread.tacv2/conversations?groupId=61980408-0833-4885-91fa-2ecde6c7c03f&tenantId=b024cacf-dede-4241-a15c-3c97d553e9f3) and if we know a solution to your problem, we will try to help, or another student may know the answer.
-
-
 ## Installing `ssh`
 
 ### Linux
@@ -16,7 +11,7 @@ $ sudo apt install ssh
 But this should be already installed by default.
 This also works for many other Debian-based distributions of Linux.
 
-If you use a different distribution of Linux, you may need to replace `apt` by the package manager of your distribution. Please check the documentation of your Linux distribution to learn how to install packages. But in any case the package will be called `sshfs`.
+If you use a different distribution of Linux, you may need to replace `apt` by the package manager of your distribution. Please check the documentation of your Linux distribution to learn how to install packages. But in any case the package will be called `ssh`.
 
 ### Mac
 
@@ -47,15 +42,15 @@ $ agda-mode setup
 ```
 After the first time you don't need to do this any longer. However, you need to do `module load agda` every time you login to a machine before start working.
 
-Notice that `username` has to be in **lowercase**. Also, make sure you use your **School of Computer Science password**, if you set it to be **different** from the **University password**.
+Notice that `username` has to be in **lowercase**. Also, make sure you use your **School of Computer Science password** and password, if you set it to be **different** from the **University password**.
 
  * The first `ssh` is to connect to the student's gateway machine `tinky-winky`,
    abbreviated `tw`. You will get a terminal running there.
 
  * From this terminal, the command `ssh-lab` takes you to a random machine in the lab in
-   room UG04 of the Computer Science building. The randomness is to balance the load.
+   room UG04 of the Computer Science building. The randomness is to balance the load of the lab machines.
 
- * Now in the lab machine terminal, the command `module load agda` will make Agda
+ * In the lab machine terminal, the command `module load agda` will make Agda
    available.
 
 Now you are ready to go.
@@ -70,8 +65,8 @@ Now you are ready to go.
 
  * Run `emacs somefile.agda` from the terminal. You will be able to create Agda programs and have them checked from there.
 
- * If you press `Ctrl-Z` you will get back to the terminal without closing emacs and making it into a background process. To get back to emacs, run the command `fg` (foreground).
+ * If you press `Ctrl-z` you will get back to the terminal without closing emacs and making it into a background process. To get back to emacs, run the command `fg` (foreground).
 
- * When you are done, you can quit emacs with `Ctrl-X Ctrl-C`.
+ * When you are done, you can quit emacs with `Ctrl-x Ctrl-c`.
 
  * Then you can run `logout` to close the ssh connection, and `logout` again to close the first one.

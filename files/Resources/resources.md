@@ -8,7 +8,8 @@ so that you don't need to install it in your own machine. We also explain how to
 
 We are using Agda 2.6.2, the latest version at the time of writing. There is a standard library, but we are not going to use it.
 
-You may still wish to [install Agda in your own machine](https://agda.readthedocs.io/en/latest/getting-started/installation.html), but we are not able to provide support, although you are welcome to ask questions on Teams.
+You may still wish to install Agda in your own machine - see below - but we are not able to provide support, although you are welcome to ask questions on Teams and in the lab.
+
 It is much easier to install on Linux and Mac, and possible on Windows (one option is to use the Window Subsystem Linux (WSL) and use the Linux installation guide).
 
 ## Agda resources that you will need for daily use
@@ -37,9 +38,44 @@ The [Getting Started](https://plfa.github.io/GettingStarted/) section of the onl
 
 We will maintain a sample emacs configuration file which you may wish to use as a reference [here](https://git.cs.bham.ac.uk/mhe/afp-learning/-/blob/main/files/Resources/sample.emacs).
 
+### Sample emacs configuration
+
+[Here](sample.emacs) is a sample `.emacs` Agda configuration file that in particular will make sure that your fonts are rendered correctly.
+
 ## Missing unicode symbols on Windows via `ssh`
 
 If you are on Windows and are using `ssh` to access lab machines through Powershell (or some other emulator) and some unicode symbols are not displayed, then you could try installing and using [Windows Terminal](https://www.microsoft.com/en-us/p/windows-terminal/9n0dx20hk701?activetab=pivot:overviewtab) as an alternative to Powershell. Windows Terminal has full unicode support and can be found in the Microsoft Store.
+
+## Installing Agda in debian-based linux, including ubuntu
+
+1. `$ sudo apt-get install agda`
+
+1. `$ agda-mode setup`
+
+1. Add this line to your `~/.emacs` configuration file:
+
+   `(add-to-list 'auto-mode-alist '("\\.lagda.md\\'" . agda2-mode))`
+
+This will automatically install emacs for you.
+
+**For questions about linux installation, ask Ayberk Tosun, Eric Finster or Martin Escardo in the lab or on Teams.**
+
+
+## Installing Agda in MacOS
+
+1. Install the [Homebrew](https://brew.sh/) package manager if you don't already have it.
+
+1. `$ brew install agda`
+
+1. `$ agda-mode setup`
+
+1. Add this line to your `~/.emacs` configuration file:
+
+   `(add-to-list 'auto-mode-alist '("\\.lagda.md\\'" . agda2-mode))`
+
+This will automatically install emacs for you.
+
+**For questions about MacOS installation, ask Andrew Sneap, Ayberk Tosun, Todd Ambridge or Martin Escardo in the lab or on Teams.**
 
 ## Installing Agda on Windows
 
@@ -80,7 +116,11 @@ For Windows users who want to install Agda locally, you can do the following:
    `(set-fontset-font "fontset-default" nil (font-spec :name "DejaVu Sans Mono"))`
    `(set-fontset-font t nil "Symbola" nil 'append)`
 
-For questions about Windows installation, ask our lecturer Todd Ambridge in the lab or on Teams.
+**For questions about Windows installation, ask our lecturer Todd Ambridge in the lab or on Teams.**
+
+## Advanced Agda installation in various operating systems
+
+[Read the docs](https://agda.readthedocs.io/en/latest/getting-started/installation.html).
 
 ## Visual Studio Code
 

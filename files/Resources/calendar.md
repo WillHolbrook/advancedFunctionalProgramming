@@ -33,4 +33,4 @@ Su Mo Tu We Th Fr Sa
  7  8  9 10 11 12 13   Week 12 Welfare catch-up test
 ```
 
-Week 11 is the last week of teaching
+Week 11 is the last week of teaching.

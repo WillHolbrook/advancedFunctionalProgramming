@@ -35,12 +35,6 @@ If you are an *Advanced MSc* student and don't have *all* of the above four prer
 
 No previous preparation needed.
 
-### Complete the lab exercises by the end of this week
-
- * And report your performance on Cavas.
-
- * We will provide solutions in a file, some of them explained in videos.
-
 ### Attend the UG04 Lab in Computer Science at 12-2pm
 
 We assume that you have attended the Monday lecture. If you haven't, please catch up by reading the handouts for this week.
@@ -55,6 +49,12 @@ We've also recorded a [more structured version](https://canvas.bham.ac.uk/course
  * The first lab is particularly crucial. Make sure you don't miss it. In general you should not miss any lab, as it includes taught material delivered by the lecturers.
 
  * [Lab1 information and tasks](/files/LectureNotes/files/lab1.lagda.md)
+
+### Complete the lab exercises by the end of this week
+
+ * And report your performance on Cavas.
+
+ * We will provide solutions in a file, some of them explained in videos.
 
 ### Read handouts for this week
 

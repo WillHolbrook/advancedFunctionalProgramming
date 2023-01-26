@@ -37,7 +37,7 @@ If you have any doubts, please check with your lecturer either after the lecture
 
 No previous preparation needed.
 
-### Attend the UG04 Lab in Computer Science at 12-2pm
+### Attend the UG04 Lab in Computer Science at on Tuesday at 4-6pm
 
 We assume that you have attended the Monday lecture. If you haven't, please catch up by reading the handouts for this week.
 

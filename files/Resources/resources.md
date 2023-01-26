@@ -2,16 +2,13 @@
 
 ## Agda installation
 
-We offer you a complete Agda environment
+We offer you a complete Agda environment in the UG04 Lab machines, either in person of [remotely](remote-lab.md).
 
- * in the UG04 Lab machines, either in person of [remotely](remote-lab.md) and
- * as a Jupyter [Notebook accessible via a browser](https://jupyter.apps.okd.aws.cs.bham.ac.uk),
+so that you don't need to install it in your own machine. We also explain how to work remotely in the first [lab lecture](/files/LectureNotes/files/lab1.lagda.md).
 
-so that you don't need to install it in your own machine. However, unfortunately, Jupyter won't work well, because both Jupyter and browsers capture emacs/Agda keybindings. So you more likely prefer remote access to the lab. We also explain how to do this in the first [lab lecture](lab1.lagda.md).
+We are using Agda 2.6.2, the latest version at the time of writing. There is a standard library, but we are not going to use it.
 
-We are using Agda 2.6.2, the latest version at the time of writing. There is a standard library, but we are not going to use it, at least not to begin with.
-
-You may still wish to [install Agda in your own machine](https://agda.readthedocs.io/en/latest/getting-started/installation.html), but we are not able to provide support, although you are welcome to ask questions on [Teams](https://teams.microsoft.com/l/team/19%3aR61tJG-pMjV401vTB2LyPJrPPpwhLzKQb2XbdwC9R5s1%40thread.tacv2/conversations?groupId=61980408-0833-4885-91fa-2ecde6c7c03f&tenantId=b024cacf-dede-4241-a15c-3c97d553e9f3).
+You may still wish to [install Agda in your own machine](https://agda.readthedocs.io/en/latest/getting-started/installation.html), but we are not able to provide support, although you are welcome to ask questions on Teams.
 It is much easier to install on Linux and Mac, and possible on Windows (one option is to use the Window Subsystem Linux (WSL) and use the Linux installation guide).
 
 ## Agda resources that you will need for daily use
@@ -46,7 +43,44 @@ If you are on Windows and are using `ssh` to access lab machines through Powersh
 
 ## Installing Agda on Windows
 
-There is a [post on Teams](https://teams.microsoft.com/l/message/19:2b952d80a58b4e5882117663e0dcced6@thread.tacv2/1644313258583?tenantId=b024cacf-dede-4241-a15c-3c97d553e9f3&groupId=61980408-0833-4885-91fa-2ecde6c7c03f&parentMessageId=1644313258583&teamName=Advanced%20Functional%20Programming&channelName=UG04%20Lab&createdTime=1644313258583) that will help users install Agda locally on a Windows machine.
+For Windows users who want to install Agda locally, you can do the following:
+
+1. Open `PowerShell` with Admin privs
+
+1. Install Chocolatey:
+
+   `Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))`
+
+1. Install cabal:
+
+   `choco install cabal`
+
+1. Update cabal:
+
+   `cabal update`
+
+1. Install ghci:
+
+   `cabal install --lib ghci`
+
+1. Install Agda:
+
+   `cabal install Agda`
+
+1. Install emacs:
+
+   `choco install emacs`
+
+1. Setup Agda:
+
+   `agda-mode setup`
+
+1. Install DejaVu Sans Mono and Symbola fonts -- make the former your default font and the latter your fallback font by adding the following to your .emacs file:
+
+   `(set-fontset-font "fontset-default" nil (font-spec :name "DejaVu Sans Mono"))`
+   `(set-fontset-font t nil "Symbola" nil 'append)`
+
+For questions about Windows installation, ask our lecturer Todd Ambridge in the lab or on Teams.
 
 ## Visual Studio Code
 

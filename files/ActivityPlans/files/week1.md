@@ -14,6 +14,19 @@ We expect you to work for 13 hours every week on this module, as follows:
 
 ## What you have to do this week
 
+### Check that you have the prerequisites to attend this module
+
+This module *requires* either
+
+ 1. Functional Programming in Haskell,
+ 2. Data Structures and Algorithms,
+ 3. Theories of computation, and
+ 4. Mathematical and logical foundations of computer science
+
+or being a Math/CS undergrad student at the University of Birmingham and having 1-3 above.
+
+If you are an *Advanced MSc* student and don't have *all* of the above four prerequisites, you can only take this module with special dispensation of the Program Director.
+
 ### Check the GitLab repository
 
  * [GitLab](/README.md)

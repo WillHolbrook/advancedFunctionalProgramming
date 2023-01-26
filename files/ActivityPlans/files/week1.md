@@ -25,7 +25,7 @@ This module *requires* either
 
 or being a Math/CS undergrad student at the University of Birmingham and having 1-3 above.
 
-If you are an *Advanced MSc* student and don't have *all* of the above four prerequisites, you can only take this module with special dispensation of the Program Director.
+If you are an *Advanced MSc* student and don't have *all* of the above four prerequisites, you can only take this module with special dispensation from the Program Director.
 
 ### Check the GitLab repository
 

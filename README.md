@@ -1,6 +1,15 @@
 # Advanced Functional Programming index
 
 Under construction. A lot more of information will be added here.
+ 1. Lectures
+
+    * Week 1-10: Monday 5-7pm, Sports and Exercise Science LT2
+
+    * Week 11: Monday 4-6pm, Computer Science UG04 Lab
+
+ 1. Lab
+
+      * Week 1-11: Tuesday 4-6pm Computer Science UG04 Lab
 
  1. [Lecture Notes](files/LectureNotes), including lab sheets.
  1. [Resources for daily use](files/Resources/resources.md)

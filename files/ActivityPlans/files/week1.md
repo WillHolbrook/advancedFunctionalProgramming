@@ -54,7 +54,7 @@ We've also recorded a [more structured version](https://canvas.bham.ac.uk/course
 
  * The first lab is particularly crucial. Make sure you don't miss it. In general you should not miss any lab, as it includes taught material delivered by the lecturers.
 
- * [Lab1 information and tasks](/LectureNotes/files/lab1.lagda.md)
+ * [Lab1 information and tasks](/files/LectureNotes/files/lab1.lagda.md)
 
 ### Read handouts for this week
 

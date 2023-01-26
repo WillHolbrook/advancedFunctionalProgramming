@@ -20,7 +20,7 @@ The assessed tests for this module will be conducted exclusively in the School o
 
 **Even if you have your own machine with you**.
 
-If you are allowed to attend the lab lecture remotely, please check [remote lab access](remote-lab.md) for instructions about `ssh` installation.
+See [remote lab access](remote-lab.md) for instructions about `ssh` installation.
 
 ## Connecting remotely to the lab
 

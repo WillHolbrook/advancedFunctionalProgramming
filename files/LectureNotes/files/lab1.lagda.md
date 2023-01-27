@@ -87,7 +87,7 @@ See [remote lab access](remote-lab.md) for instructions about `ssh` installation
 
  1. Now we will clone the AFP GitLab repository. You will need to do it only once in the lab machines.
 
-    `$ git clone https://git.cs.bham.ac.uk/mhe/afp-learning.git`
+    `$ git clone https://git.cs.bham.ac.uk/afp/afp-learning-2022-2023.git`
 
     * We assume that you learned the basics of `git` in the module Functional Programming and possibly in other modules.
 

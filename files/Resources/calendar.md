@@ -1,9 +1,9 @@
 # Module calendar
 
-Lectures  Mondays  5-7
-Labs      Tuesdays 4-6
-
 ```
+Lectures  Mondays  5-7pm, except week 11, which is 4-6pm
+Labs      Tuesdays 4-6pm
+
     Jan / Feb 2023
 Su Mo Tu We Th Fr Sa
    30 31  1  2  3  4   Week  1

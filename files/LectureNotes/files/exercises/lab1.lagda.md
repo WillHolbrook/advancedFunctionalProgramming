@@ -203,7 +203,7 @@ infixr 20 _||_
 infixr 30 _&&_
 
 if_then_else_ : {A : Type} → Bool → A → A → A
-if b then x else y = y
+if b then x else y = {!!}
 
 _+_ : ℕ → ℕ → ℕ
 x + y = {!!}

@@ -2,7 +2,7 @@
 
  1. Lectures
 
-    * Weeks 1-10: Monday 5-7pm, Sports and Exercise Science LT2
+    * Weeks 1-10: Monday 5-7pm, Sports and Exercise Sciences LT2
 
     * Week 11: Monday 4-6pm, Computer Science UG04 Lab
 

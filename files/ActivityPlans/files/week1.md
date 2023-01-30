@@ -100,3 +100,7 @@ Our TA's are
 
   * [Andrew Sneap](https://www.birmingham.ac.uk/staff/profiles/computer-science/phd/sneap-andrew.aspx)
   * [Ayberk Tosun](https://www.cs.bham.ac.uk/~axt978/)
+
+Our lab demonstrator is
+
+  * [Vlad-Dimitrie Florea]()

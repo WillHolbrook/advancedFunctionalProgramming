@@ -111,10 +111,14 @@ For Windows users who want to install Agda locally, you can do the following:
 
    `agda-mode setup`
 
-1. Install DejaVu Sans Mono and Symbola fonts -- make the former your default font and the latter your fallback font by adding the following to your .emacs file:
+1. Install DejaVu Sans Mono and Symbola fonts -- make the former your default font and the latter your fallback font by adding the following to your `.emacs` file:
 
    `(set-fontset-font "fontset-default" nil (font-spec :name "DejaVu Sans Mono"))`
    `(set-fontset-font t nil "Symbola" nil 'append)`
+
+1. Add this line to your `~/.emacs` configuration file:
+
+   `(add-to-list 'auto-mode-alist '("\\.lagda.md\\'" . agda2-mode))`
 
 **For questions about Windows installation, ask our lecturer Todd Ambridge in the lab or on Teams.**
 

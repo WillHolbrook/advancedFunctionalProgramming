@@ -58,7 +58,7 @@ there is an *identification* between them. And the distinction between
 sameness and identification is important.
 
 We can use the function `transport` (defined in the module
-[identity-type](identity-type.lagda))
+[identity-type](identity-type.lagda.md))
 
 ```agda-repetition
     transport : {X : Type} (A : X → Type)
@@ -110,7 +110,7 @@ So the functions `from-Σ-≡` and `to-Σ-≡` give a complete characterization 
 ## Dependent version of `ap`
 
 Recall the function `ap` defined in the module
-[identity-type](identity-type.lagda):
+[identity-type](identity-type.lagda.md):
 
 ```agda-repetition
     ap : {A B : Type} (f : A → B) {x y : A} → x ≡ y → f x ≡ f y

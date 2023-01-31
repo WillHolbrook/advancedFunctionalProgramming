@@ -94,7 +94,7 @@ The assessed tests for this module will be conducted exclusively in the School o
     $ ssh-keygen -t ed25519 -P '' -f ~/.ssh/gitlab
     $ chmod 0644 ~/.ssh/gitlab.pub
     $ chmod 0600 ~/.ssh/gitlab
-    $ cat ${SSH_KEY}.pub
+    $ cat ~/.ssh/gitlab.pub
     ```
 
     Now paste the key shown by the `cat` command at [GitLab SSH Keys](https://git.cs.bham.ac.uk/-/profile/keys)

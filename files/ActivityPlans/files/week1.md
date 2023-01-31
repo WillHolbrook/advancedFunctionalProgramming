@@ -31,7 +31,7 @@ If you have any doubts, please check with your lecturer either after the lecture
 
 ### Check the GitLab repository
 
- * [GitLab](/README.md)
+ * [GitLab top level](/README.md)
 
 ### Attend the Monday 5-7pm lecture
 
@@ -61,7 +61,7 @@ We've also recorded a [more structured version](https://canvas.bham.ac.uk/course
 ### Read handouts for this week
 
  * [Introduction](/files/LectureNotes/files/introduction.lagda.md)
- * [Resources](/files/LectureNotes/files/resources.md)
+ * [Resources](/files/Resources/resources.md)
 
 ### Watch videos for this week (optional)
 

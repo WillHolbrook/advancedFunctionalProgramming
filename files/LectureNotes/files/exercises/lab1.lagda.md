@@ -112,7 +112,7 @@ The assessed tests for this module will be conducted exclusively in the School o
 
     * If you want to experiment with any of the provided files, which you should certainly do when you are studying, make a copy of the file with a new name. Don't forget to change the line `module filename where` with the new name you have chosen.
 
- 1. See [remote lab access](remote-lab.md) for instructions about `ssh` installation if you want to do the above from your own machine in the future.
+ 1. See [remote lab access](/files/Resources/remote-lab.md) for instructions about `ssh` installation if you want to do the above from your own machine in the future.
 
  1. **Optional** suggestion to make your life easier when **working with your own machine**. We can't offer support for this, but feel free to ask on [Teams](https://teams.microsoft.com/l/team/19%3aR61tJG-pMjV401vTB2LyPJrPPpwhLzKQb2XbdwC9R5s1%40thread.tacv2/conversations?groupId=61980408-0833-4885-91fa-2ecde6c7c03f&tenantId=b024cacf-dede-4241-a15c-3c97d553e9f3).
 

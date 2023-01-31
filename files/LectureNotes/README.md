@@ -8,7 +8,8 @@ Under construction and constant revision for improvement until the end of term.
 
 ## [Lab and homework exercises and solutions](files/exercises)
 
-## [Videos](https://canvas.bham.ac.uk/courses/56295/external_tools/12214)
+## [Videos](https://bham.cloud.panopto.eu/Panopto/Pages/Sessions/List.aspx?folderID=90934e87-051f-4a19-8daa-ae290124ba02)
+
 
 ## [Lecture Notes](files)
 

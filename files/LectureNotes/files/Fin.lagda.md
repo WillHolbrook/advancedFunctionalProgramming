@@ -60,7 +60,7 @@ Fin-elim A a f = h
   h zero    = a
   h (suc k) = f k (h k)
 ```
-So this again looks like [primitive recursion](natural-numbers-types.lagda.md). And it gives an induction principle for `Fin`.
+So this again looks like [primitive recursion](natural-numbers-type.lagda.md). And it gives an induction principle for `Fin`.
 
 ## Every element of `Fin n` can be regarded as an element of `ℕ`
 

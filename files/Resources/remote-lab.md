@@ -65,8 +65,8 @@ Now you are ready to go.
 
  * Run `emacs somefile.agda` from the terminal. You will be able to create Agda programs and have them checked from there.
 
- * If you press `Ctrl-z` you will get back to the terminal without closing emacs and making it into a background process. To get back to emacs, run the command `fg` (foreground).
+ * If you press `ctrl-z` you will get back to the terminal without closing emacs and making it into a background process. To get back to emacs, run the command `fg` (foreground).
 
- * When you are done, you can quit emacs with `Ctrl-x Ctrl-c`.
+ * When you are done, you can quit emacs with `ctrl-x ctrl-c`.
 
  * Then you can run `logout` to close the ssh connection, and `logout` again to close the first one.

@@ -152,7 +152,7 @@ The assessed tests for this module will be conducted exclusively in the School o
  1. Now let's edit our first Agda file from the terminal.
 
     ```terminal
-    $ cd ~/afp-learning/files/LectureNotes/files/
+    $ cd ~/afp-learning/files/LectureNotes/files/exercises
     $ cp lab1.lagda.md my-lab1.lagda.md
     $ emacs my-lab1.lagda.md
     ```

@@ -2,7 +2,7 @@
 ```agda
 {-# OPTIONS --without-K --safe #-}
 
-module introduction where
+module introduction-during-lecture where
 ```
 -->
 # Introduction to Advanced Functional Programming
@@ -58,9 +58,15 @@ We begin with some examples you are familiar from Haskell. Notice that the synta
 data Bool : Type where
  true false : Bool
 
+-- Given any type A, the Maybe type constructor produces a new type Maybe A.
+-- E.g. nothing and just 17 are two elements of the type Maybe ℕ.
+
 data Maybe (A : Type) : Type where
  nothing : Maybe A
  just    : A → Maybe A
+
+-- E.g. left ¨john¨ is an element of the type Either String ℕ, and so is right 16.
+-- Another example is Either ℕ ℕ
 
 data Either (A B : Type) : Type where
  left  : A → Either A B
@@ -75,6 +81,8 @@ data ℕ : Type where
 data List (A : Type) : Type where
  []   : List A
  _::_ : A → List A → List A
+
+-- E.g. 3 :: 5 :: 7 :: []
 
 infixr 10 _::_
 

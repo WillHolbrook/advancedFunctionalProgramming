@@ -1,6 +1,6 @@
 # Weekly Activity Plans
 
- * [Week 1](files/week1.md)
+ * [Week 1](files/ActivityPlan/files/week1.md)
  * [Week 2](files/week2.md)
  * [Week 3](files/week3.md)
  * [Week 4](files/week4.md)

@@ -4,7 +4,7 @@
 
 We offer you a complete Agda environment in the UG04 Lab machines, either in person of [remotely](remote-lab.md).
 
-so that you don't need to install it in your own machine. We also explain how to work remotely in the first [lab lecture](/files/LectureNotes/files/lab1.lagda.md).
+so that you don't need to install it in your own machine. We also explain how to work remotely in the first [lab lecture](/files/LectureNotes/files/exercises/lab1.lagda.md).
 
 We are using Agda 2.6.2, the latest version at the time of writing. There is a standard library, but we are not going to use it.
 
@@ -36,7 +36,7 @@ Agda has a very nice interactive environment for writing programs which works in
 The [Getting Started](https://plfa.github.io/GettingStarted/) section of the online book
 [Programming Language Foundations in Agda](https://plfa.github.io/) has a nice installation guide as well as a summary of emacs commands.
 
-We will maintain a sample emacs configuration file which you may wish to use as a reference [here](https://git.cs.bham.ac.uk/mhe/afp-learning/-/blob/main/files/Resources/sample.emacs).
+We will maintain a sample emacs configuration file which you may wish to use as a reference [here](/files/Resources/sample.emacs).
 
 ### Sample emacs configuration
 

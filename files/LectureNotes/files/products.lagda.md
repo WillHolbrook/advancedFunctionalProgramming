@@ -85,7 +85,7 @@ Its computational interpretation is the same, "first do f and then do g", but it
 
 ## `Π` notation
 
-We have mentioned in the [propositions as types table](curry-howard.lagda) that the official notation in MLTT for the dependent function type uses `Π`, the Greek letter Pi, for *product*. We can, if we want, introduce the same notation in Agda, using a `syntax` declaration:
+We have mentioned in the [propositions as types table](curry-howard.lagda.md) that the official notation in MLTT for the dependent function type uses `Π`, the Greek letter Pi, for *product*. We can, if we want, introduce the same notation in Agda, using a `syntax` declaration:
 ```agda
 Pi : (A : Type) (B : A → Type) → Type
 Pi A B = (x : A) → B x

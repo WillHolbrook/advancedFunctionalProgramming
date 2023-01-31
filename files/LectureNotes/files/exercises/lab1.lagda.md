@@ -20,8 +20,6 @@ The assessed tests for this module will be conducted exclusively in the School o
 
 **Even if you have your own machine with you**.
 
-See [remote lab access](remote-lab.md) for instructions about `ssh` installation.
-
 ## Connecting remotely to the lab
 
  * Now you will connect to the lab using `ssh`, even if you are already in the lab.
@@ -81,26 +79,23 @@ See [remote lab access](remote-lab.md) for instructions about `ssh` installation
       ```
       anywhere.
 
-    * Type `Ctrl-x Ctrl-s` to save the file.
+    * Type `ctrl-x ctrl-s` to save the file.
 
-    * Type `Ctrl-x Ctrl-c` to quit emacs.
+    * Type `ctrl-x ctrl-c` to quit emacs.
 
 
  1. Have you already generated an ssh key for the School git? If so, skip this step.
 
     In a terminal, run the following commands:
 
-    * `$ mkdir -p ~/.ssh`
-
-    * `$ chmod 0700 ~/.ssh`
-
-    * `$ ssh-keygen -t ed25519 -P '' -f ~/.ssh/gitlab `
-
-    * `$ chmod 0644 ~/.ssh/gitlab.pub`
-
-    * `$ chmod 0600 ~/.ssh/gitlab`
-
-    * `$ cat ${SSH_KEY}.pub`
+    ```terminal
+    $ mkdir -p ~/.ssh
+    $ chmod 0700 ~/.ssh
+    $ ssh-keygen -t ed25519 -P '' -f ~/.ssh/gitlab
+    $ chmod 0644 ~/.ssh/gitlab.pub
+    $ chmod 0600 ~/.ssh/gitlab
+    $ cat ${SSH_KEY}.pub
+    ```
 
     Now paste the key shown by the `cat` command at [GitLab SSH Keys](https://git.cs.bham.ac.uk/-/profile/keys)
 
@@ -116,6 +111,8 @@ See [remote lab access](remote-lab.md) for instructions about `ssh` installation
     * **Don't modify** any of the existing files as you will get conflicts.
 
     * If you want to experiment with any of the provided files, which you should certainly do when you are studying, make a copy of the file with a new name. Don't forget to change the line `module filename where` with the new name you have chosen.
+
+ 1. See [remote lab access](remote-lab.md) for instructions about `ssh` installation if you want to do the above from your own machine in the future.
 
  1. **Optional** suggestion to make your life easier when **working with your own machine**. We can't offer support for this, but feel free to ask on [Teams](https://teams.microsoft.com/l/team/19%3aR61tJG-pMjV401vTB2LyPJrPPpwhLzKQb2XbdwC9R5s1%40thread.tacv2/conversations?groupId=61980408-0833-4885-91fa-2ecde6c7c03f&tenantId=b024cacf-dede-4241-a15c-3c97d553e9f3).
 
@@ -166,13 +163,13 @@ See [remote lab access](remote-lab.md) for instructions about `ssh` installation
 
     * In a browser, open [Emacs reference card](https://www.gnu.org/software/emacs/refcards/pdf/refcard.pdf).
 
-## `Ctrl-g Ctrl-g`
+## `ctrl-g ctrl-g`
 
 You will need to type this when you start a sequence of emacs commands and then you want to give up without completing the sequence.
 
 ## Our first Agda file
 
-Within emacs now type `Ctrl-c Ctrl-l`. This will "load" the Agda file and check it for correctness. The following program fragment has holes that we will fill interactively using the emacs mode for Agda. You can cheat by looking at the handout [introduction](introduction.lagda.md). But you *should not* copy and paste. Instead, you should learn and use the interactive mode following the lecturers verbal and visual instructions.
+Within emacs now type `ctrl-c ctrl-l`. This will "load" the Agda file and check it for correctness. The following program fragment has holes that we will fill interactively using the emacs mode for Agda. You can cheat by looking at the handout [introduction](introduction.lagda.md). But you *should not* copy and paste. Instead, you should learn and use the interactive mode following the lecturers verbal and visual instructions.
 
 ```agda
 module my-lab1 where

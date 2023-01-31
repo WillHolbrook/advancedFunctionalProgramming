@@ -1,6 +1,6 @@
 # Week 1 Lab Lecture
 
-Agda has an interactive mode that is based on the text editor [emacs](resources.md). The objective of this lab is to begin to learn it.
+Agda has an interactive mode that is based on the text editor [emacs](files/Resources/resources.md). The objective of this lab is to begin to learn it.
 There is also a [plugin for VS Code](resources.md), but we haven't tried it.
 
 ## These are instructions to be followed during the lab live lecture

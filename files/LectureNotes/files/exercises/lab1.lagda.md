@@ -16,7 +16,7 @@ There is also a [plugin for VS Code](resources.md), but we haven't tried it.
 
 The assessed tests for this module will be conducted exclusively in the School of Computer Science lab machines, and so it is important that you learn how to work in Agda with the lab machines, even if you plan to install Agda in your own machine for study purposes.
 
-## Please login to a lab machine if you are physically in the lab
+## Please login to a lab machine
 
 **Even if you have your own machine with you**.
 

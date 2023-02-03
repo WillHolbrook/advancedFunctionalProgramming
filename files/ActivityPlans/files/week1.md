@@ -44,7 +44,11 @@ We assume that you have attended the Monday lecture. If you haven't, please catc
  * There will be a lecture.
  * You will also get exercises to do during the lab.
 
-We've also recorded a [more structured version](https://canvas.bham.ac.uk/courses/56295/external_tools/12214) of what we taught in the lab, which an additional feature that shows the emacs keystrokes in a side panel.
+We've also recorded a more structured version of what we taught in the lab, which an additional feature that shows the emacs keystrokes in a side panel:
+
+ * [Lab 1 part 1](https://bham.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=8dee113c-bcaf-40d7-8046-ae2f00ed96b9)
+ * [Lab 1 part 2](https://bham.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=620194bc-0233-43c6-9d61-ae2f00ed96b1)
+ * [Lab 1 part 3](https://bham.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=2529bf9e-4128-4bf9-9f6f-ae2f00ed96b3)
 
 ### Important
 

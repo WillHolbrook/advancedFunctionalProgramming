@@ -8,6 +8,12 @@
  1. [Canvas page](https://canvas.bham.ac.uk/courses/65779)
  1. [Module syllabus](https://www.cs.bham.ac.uk/internal/modules/2022/06-35309/)
  1. [Module calendar](files/Resources/calendar.md)
+ 1. Assessment (see dates [Module calendar](files/Resources/calendar.md)
+
+    * Two tests worth 50% each.
+
+    * For students taking the **extended** version of the module 40% (Test 1), 40% (Test 2), 20% (extended coursework).
+
  1. Lectures
 
     * Weeks 1-10: Monday 5-7pm, Sports and Exercise Sciences LT2

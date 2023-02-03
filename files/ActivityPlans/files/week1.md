@@ -4,7 +4,7 @@
 
 We expect you to work for 13 hours every week on this module, as follows:
 
- * 2 hours attending in person lectures **5-7pm on Mondays** in [Sport and Exercise Sciences LT2 (Y14)](https://www.birmingham.ac.uk/contact/directions/index.aspx), except in the last week of term, which is in Computer Science UG04 at 4-6pm.
+ * 2 hours attending in person lectures **5-7pm on Mondays** in [Sport and Exercise Sciences LT2 (Y14)](https://www.birmingham.ac.uk/contact/directions/index.aspx), except in the last week of term, which is a bank holiday.
 
  * 2 hours in the Lab UG4 (Computer Science building) **4-6pm on Tuesdays.**
 

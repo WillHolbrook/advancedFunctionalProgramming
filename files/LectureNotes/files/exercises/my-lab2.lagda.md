@@ -3,7 +3,7 @@
 Do as much as you can in the lab, and complete the remaining exercises in your own time. Feel free to ask questions on Teams in the channel `lab`. But don't give spoilers there.
 
 ```agda
-module my-lab2 where
+module exercises.my-lab2 where
 
 open import prelude hiding (if_then_else_;_||_)
 private
@@ -33,7 +33,8 @@ datatype
   right : B → Either A B
 
  if'_then_else_ : {A B : Type} → Bool → A → B → Either A B
- if' b then x else y = {!!}
+ if' true then x else y = left x
+ if' false then x else y = right y
 ```
 
 **Define** this function.
@@ -45,14 +46,14 @@ how much pattern-matching we wish to perform:
 
 ```agda
  _||_ : Bool → Bool → Bool
- true  || y = {!!}
- false || y = {!!}
+ true  || y = true
+ false || y = y
 
  _||'_ : Bool → Bool → Bool
- true  ||' true  = {!!}
- true  ||' false = {!!}
- false ||' true  = {!!}
- false ||' false = {!!}
+ true  ||' true  = true
+ true  ||' false = true
+ false ||' true  = true
+ false ||' false = false
 ```
 
 **Complete** the two holes for `_||_` and the four holes for `_||'_`.
@@ -63,10 +64,29 @@ We can prove this for both of our definitions:
 
 ```agda
  ||-assoc : (a b c : Bool)  → a ||  (b ||  c) ≡ (a ||  b) || c
- ||-assoc a b c = {!!}
-
+ ||-assoc true b c = refl true
+ ||-assoc false true c = refl true
+ ||-assoc false false c = refl c
+ {-
+ ||-assoc true true true = refl true
+ ||-assoc true true false = refl true
+ ||-assoc true false true = refl true
+ ||-assoc true false false = refl true
+ ||-assoc false true true = refl true
+ ||-assoc false true false = refl true
+ ||-assoc false false true = refl true
+ ||-assoc false false false = refl false 
+-}
+ 
  ||'-assoc : (a b c : Bool) → a ||' (b ||' c) ≡ (a ||' b) ||' c
- ||'-assoc a b c = {!!}
+ ||'-assoc true true true = refl true
+ ||'-assoc true true false = refl true
+ ||'-assoc true false true = refl true
+ ||'-assoc true false false = refl true
+ ||'-assoc false true true = refl true
+ ||'-assoc false true false = refl true
+ ||'-assoc false false true = refl true
+ ||'-assoc false false false = refl false
 ```
 
 **Complete** both of these proofs.
@@ -81,23 +101,34 @@ Which of these did you prefer proving, and why?
 
 ```agda
  ||-is-commutative : (a b : Bool) → a || b ≡ b || a
- ||-is-commutative a b = {!!}
+ ||-is-commutative true true = refl true
+ ||-is-commutative true false = refl true
+ ||-is-commutative false true = refl true
+ ||-is-commutative false false = refl false
 ```
 
 #### Exercise 1.4
+
+#####Identity element == Unit element
+In mathematics, an identity element, or neutral element, of a binary operation operating on a set is an element of the set that leaves unchanged every element of the set when the operation is applied.[1][2] This concept is used in algebraic structures such as groups and rings. The term identity element is often shortened to identity (as in the case of additive identity and multiplicative identity)[3] when there is no possibility of confusion, but the identity implicitly depends on the binary operation it is associated with.
+
+Let (S, ∗) be a set S equipped with a binary operation ∗. Then an element e of S is called a left identity if e ∗ s = s for all s in S, and a right identity if s ∗ e = s for all s in S.[4] If e is both a left identity and a right identity, then it is called a two-sided identity, or simply an identity
+[Link to Wiki Article](https://en.wikipedia.org/wiki/Identity_element)
+
 
 **Complete** the proof that `false` is the left unit element of `||`:
 
 ```agda
  false-left-unit-for-|| : (b : Bool) → false || b ≡ b
- false-left-unit-for-|| b = {!!}
+ false-left-unit-for-|| b = refl b
 ```
 
 **Complete** the proof that `false` is the right unit element of `||`:
 
 ```agda
  false-right-unit-for-|| : (b : Bool) → b || false ≡ b
- false-right-unit-for-|| b = {!!}
+ false-right-unit-for-|| true = refl true
+ false-right-unit-for-|| false = refl false
 ```
 
 #### Exercise 1.5
@@ -108,28 +139,34 @@ Now prove the analogous properties for `&&`.
 
 ```agda
  &&-is-associative : (a b c : Bool) → a && (b && c) ≡ (a && b) && c
- &&-is-associative a b c = {!!}
+ &&-is-associative true true c = refl c
+ &&-is-associative true false c = refl false
+ &&-is-associative false b c = refl false
 ```
 
 **Complete** the proof that Boolean conjunction is commutative:
 
 ```agda
  &&-is-commutative : (a b : Bool) → a && b ≡ b && a
- &&-is-commutative a b = {!!}
+ &&-is-commutative true true = refl true
+ &&-is-commutative true false = refl false
+ &&-is-commutative false true = refl false
+ &&-is-commutative false false = refl false
 ```
 
 **Complete** the proof that that `true` is the left unit element of `&&`:
 
 ```agda
  true-left-unit-for-&& : (b : Bool) → true && b ≡ b
- true-left-unit-for-&& b = {!!}
+ true-left-unit-for-&& b = refl b
 ```
 
 **Complete** the proof that that `true` is the right unit element of `&&`:
 
 ```agda
  true-right-unit-for-&& : (b : Bool) → b && true ≡ b
- true-right-unit-for-&& b = {!!}
+ true-right-unit-for-&& true = refl true
+ true-right-unit-for-&& false = refl false
 ```
 
 #### Exercise 1.6
@@ -144,12 +181,17 @@ disjunction:
 
 ```agda
  &&-distributes-over-|| : (a b c : Bool) → a && (b || c) ≡ (a && b) || (a && c)
- &&-distributes-over-|| a b c = {!!}
+ &&-distributes-over-|| true true c = refl true
+ &&-distributes-over-|| true false true = refl true
+ &&-distributes-over-|| true false false = refl false
+ &&-distributes-over-|| false b c = refl false
 ```
 
 ```agda
  ||-distributes-over-&& : (a b c : Bool) → a || (b && c) ≡ (a || b) && (a || c)
- ||-distributes-over-&& a b c = {!!}
+ ||-distributes-over-&& true b c = refl true
+ ||-distributes-over-&& false true c = refl c
+ ||-distributes-over-&& false false c = refl false
 ```
 
 
@@ -165,7 +207,10 @@ the same for the Booleans.
 
 ```agda
  _≣_ : Bool → Bool → Type
- x ≣ y = {!!}
+ true ≣ true = 𝟙
+ true ≣ false = 𝟘
+ false ≣ true = 𝟘
+ false ≣ false = 𝟙
 ```
 
 **Define** this function.
@@ -178,7 +223,10 @@ We can also define a Boolean-valued equality function.
 
 ```agda
  _==_ : Bool → Bool → Bool
- x == y = {!!}
+ true == true = true
+ true == false = false
+ false == true = false
+ false == false = true
 ```
 
 **Define** this function.
@@ -191,7 +239,8 @@ function `back` in
 
 ```agda
  ≡-to-≣ : (x y : Bool) → x ≡ y → x ≣ y
- ≡-to-≣ x y e = {!!}
+ ≡-to-≣ true true e = ⋆
+ ≡-to-≣ false false e = ⋆
 ```
 
 **Complete** this function.
@@ -209,7 +258,8 @@ Now we can consider another conversion function.
 
 ```agda
  ≣-to-== : (x y : Bool) → x ≣ y → is-true (x == y)
- ≣-to-== x y e = {!!}
+ ≣-to-== true true e = refl true
+ ≣-to-== false false e = refl true
 ```
 
 **Define** this function.
@@ -220,7 +270,8 @@ And similarly, we have
 
 ```agda
  ==-to-≡ : (x y : Bool) → is-true (x == y) → x ≡ y
- ==-to-≡ x y e = {!!}
+ ==-to-≡ true true e = refl true
+ ==-to-≡ false false e = refl false
 ```
 
 **Define** this function.
@@ -232,13 +283,13 @@ implications
 
 ```agda
  ≡-to-== : (x y : Bool) → x ≡ y → is-true (x == y)
- ≡-to-== x y e = {!!}
+ ≡-to-== x y e = ≣-to-== x y (≡-to-≣ x y e)
 
  ≣-to-≡ : (x y : Bool) → x ≣ y → x ≡ y
- ≣-to-≡ x y e = {!!}
+ ≣-to-≡ x y e = ==-to-≡ x y (≣-to-== x y e)
 
  ==-to-≣ : (x y : Bool) → is-true (x == y) → x ≣ y
- ==-to-≣ x y e = {!!}
+ ==-to-≣ x y e = ≡-to-≣ x y (==-to-≡ x y e)
 ```
 
 **Complete** these functions.
@@ -254,7 +305,8 @@ implications
 
 ```agda
  +-suc-on-left : (x y : ℕ) → (suc x) + y ≡ suc (x + y)
- +-suc-on-left x y = {!!}
+ +-suc-on-left zero y = refl (suc y)
+ +-suc-on-left (suc x) y = refl (suc (suc (x + y)))               
 ```
 
 #### Exercise 1.2
@@ -272,7 +324,9 @@ We can define `max` operation on natural numbers as follows:
 
 ```agda
  min : ℕ → ℕ → ℕ
- min m n = {!!}
+ min zero n = zero
+ min (suc m) zero = zero
+ min (suc m) (suc n) = suc (min m n)
 ```
 
 ### Section 2: Natural numbers and proofs using induction
@@ -300,7 +354,11 @@ Using similar induction hypotheses, try to complete the following exercises.
 
 ```agda
  +-suc-on-right : (x y : ℕ) → x + suc y ≡ suc (x + y)
- +-suc-on-right x y = {!!}
+ +-suc-on-right zero y = refl (suc y)
+ +-suc-on-right (suc x) y = ap suc IH
+   where
+     IH : x + suc y ≡ suc (x + y)
+     IH = +-suc-on-right x y
 ```
 
 #### Exercise 2.2
@@ -312,7 +370,8 @@ In algebra, an operator `_*_` is called idempotent iff `x * x = x` for every
 
 ```agda
  max-idempotent : (x : ℕ) → max x x ≡ x
- max-idempotent x = {!!}
+ max-idempotent zero = refl zero
+ max-idempotent (suc x) = ap suc (max-idempotent x)
 ```
 
 #### Exercise 2.3
@@ -322,7 +381,10 @@ commutative operator:
 
 ```agda
  max-commutative : (x y : ℕ) → max x y ≡ max y x
- max-commutative x y = {!!}
+ max-commutative zero zero = refl zero
+ max-commutative zero (suc y) = refl (suc y)
+ max-commutative (suc x) zero = refl (suc x)
+ max-commutative (suc x) (suc y) = ap suc (max-commutative x y)
 ```
 
 #### Exercise 2.4
@@ -334,7 +396,8 @@ Now recall that we defined `min` in Exercise 1.2. Similarly, we can show that
 
 ```agda
  min-idempotent : (x : ℕ) → min x x ≡ x
- min-idempotent x = {!!}
+ min-idempotent zero = refl zero
+ min-idempotent (suc x) = ap suc (min-idempotent x)
 ```
 
 #### Exercise 2.5
@@ -343,5 +406,8 @@ Now recall that we defined `min` in Exercise 1.2. Similarly, we can show that
 
 ```agda
  min-commutative : (x y : ℕ) → min x y ≡ min y x
- min-commutative x y = {!!}
+ min-commutative zero zero = refl zero
+ min-commutative zero (suc y) = refl zero
+ min-commutative (suc x) zero = refl zero
+ min-commutative (suc x) (suc y) = ap suc (min-commutative x y)
 ```

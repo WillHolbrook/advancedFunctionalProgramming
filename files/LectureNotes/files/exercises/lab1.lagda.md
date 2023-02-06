@@ -86,18 +86,13 @@ The assessed tests for this module will be conducted exclusively in the School o
 
  1. Have you already generated an ssh key for the School git? If so, skip this step.
 
-    In a terminal, run the following commands:
+    In a terminal, run the following command:
 
     ```terminal
-    $ mkdir -p ~/.ssh
-    $ chmod 0700 ~/.ssh
-    $ ssh-keygen -t ed25519 -P '' -f ~/.ssh/gitlab
-    $ chmod 0644 ~/.ssh/gitlab.pub
-    $ chmod 0600 ~/.ssh/gitlab
-    $ cat ~/.ssh/gitlab.pub
+    $ setup-git
     ```
 
-    Now paste the key shown by the `cat` command at [GitLab SSH Keys](https://git.cs.bham.ac.uk/-/profile/keys)
+    Now paste the key shown in the terminal at the page [GitLab SSH Keys](https://git.cs.bham.ac.uk/-/profile/keys)
 
 
  1. Now we will clone the AFP GitLab repository. You will need to do it only once in the lab machines.

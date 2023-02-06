@@ -78,7 +78,7 @@ We can prove this for both of our definitions:
  ||-assoc false false false = refl false 
 -}
  
- ||'-assoc : (a b c : Bool) → a ||' (b ||' c) ≡ (a ||' b) ||' c
+ ||'-assoc : (a b c : Bool) → a ||' (b ||' c) ≡ (a ||' b) ||' c 
  ||'-assoc true true true = refl true
  ||'-assoc true true false = refl true
  ||'-assoc true false true = refl true

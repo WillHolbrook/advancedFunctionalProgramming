@@ -97,7 +97,9 @@ The assessed tests for this module will be conducted exclusively in the School o
 
  1. Now we will clone the AFP GitLab repository. You will need to do it only once in the lab machines.
 
-    `$ git clone git@git.cs.bham.ac.uk:afp/afp-learning-2022-2023.git`
+    ```terminal
+    $ git clone git@git.cs.bham.ac.uk:afp/afp-learning-2022-2023.git`
+    ```
 
     * We assume that you learned the basics of `git` in the module Functional Programming and possibly in other modules.
 

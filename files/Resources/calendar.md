@@ -1,7 +1,7 @@
 # Module calendar
 
 ```
-Lectures  Mondays  5-7pm, except week 11, which is 4-6pm
+Lectures  Mondays  5-7pm, except week 11, which is a bank holiday
 Labs      Tuesdays 4-6pm
 
     Jan / Feb 2023

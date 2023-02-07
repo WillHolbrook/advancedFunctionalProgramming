@@ -25,7 +25,7 @@ Its elimination principle is as follows:
        → (x : 𝟙) → A x
 𝟙-elim a ⋆ = a
 ```
-In logical terms, this says that it order to prove that a property `A` of elements of the unit type `𝟙` holds for all elements of the type `𝟙`, it is enough to prove that it holds for the element `⋆`. The non-dependent version says that if A holds, then "true implies A".
+In logical terms, this says that in order to prove that a property `A` of elements of the unit type `𝟙` holds for all elements of the type `𝟙`, it is enough to prove that it holds for the element `⋆`. The non-dependent version says that if A holds, then "true implies A".
 ```agda
 𝟙-nondep-elim : {A : Type}
               → A

@@ -3,8 +3,6 @@ module lecture2 where
 
 open import prelude
 ```
-Σ
-∑
 \sum is different to \Sigma but \sigma gives you σ cash money
 
 Following logical expression has the following type in agda

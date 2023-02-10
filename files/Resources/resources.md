@@ -128,7 +128,7 @@ For Windows users who want to install Agda locally, you can do the following:
 
 ## Visual Studio Code
 
-There is [plugin for Agda support](https://marketplace.visualstudio.com/items?itemName=banacorn.agda-mode) available on the Visual Studio Marketplace. We haven't tried it.
+There is [plugin for Agda support](https://marketplace.visualstudio.com/items?itemName=banacorn.agda-mode) available on the Visual Studio Marketplace. We haven't tried it. VS code is available in the lab and will be allowed in the tests.
 
 ## Further reading
 

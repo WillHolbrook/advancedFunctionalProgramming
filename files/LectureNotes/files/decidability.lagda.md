@@ -173,52 +173,63 @@ Although boolean-valued predicates are fine, we prefer to use type-valued predic
 If `A` and `B` are logically equivalent, then `A` is decidable if and only if `B` is decidable. We first prove one direction.
 ```agda
 map-decidable : {A B : Type} → (A → B) → (B → A) → is-decidable A → is-decidable B
-map-decidable f g a = ?
+map-decidable f g (inl a) = inl (f a)
+map-decidable f g (inr p) = inr (p ∘ g)
 
 map-decidable-corollary : {A B : Type} → (A ⇔ B) → (is-decidable A ⇔ is-decidable B)
-map-decidable-corollary (f , g) = ?
+map-decidable-corollary (f , g) = (map-decidable f g) , (map-decidable g f)
 ```
 Variation:
 ```agda
 map-decidable' : {A B : Type} → (A → ¬ B) → (¬ A → B) → is-decidable A → is-decidable B
-map-decidable' f g a = ?
+map-decidable' f g (inl a) = inr (f a)
+map-decidable' f g (inr p) = inl (g p)
 ```
 
 ```agda
 pointed-types-are-decidable : {A : Type} → A → is-decidable A
-pointed-types-are-decidable = ?
+pointed-types-are-decidable = inl
 
 empty-types-are-decidable : {A : Type} → ¬ A → is-decidable A
-empty-types-are-decidable = ?
+empty-types-are-decidable = inr
 
 𝟙-is-decidable : is-decidable 𝟙
-𝟙-is-decidable = ?
+𝟙-is-decidable = inl ⋆
 
 𝟘-is-decidable : is-decidable 𝟘
-𝟘-is-decidable = ?
+𝟘-is-decidable = inr 𝟘-is-empty
 
 ∔-preserves-decidability : {A B : Type}
                          → is-decidable A
                          → is-decidable B
                          → is-decidable (A ∔ B)
-∔-preserves-decidability a b = ?
+∔-preserves-decidability (inl a) _ = inl (inl a)
+∔-preserves-decidability (inr _) (inl b) = inl (inr b)
+∔-preserves-decidability (inr p) (inr q) = inr (∔-nondep-elim p q)
 
 ×-preserves-decidability : {A B : Type}
                          → is-decidable A
                          → is-decidable B
                          → is-decidable (A × B)
-×-preserves-decidability a b = ?
+×-preserves-decidability (inl a) (inl b) = inl (a , b)
+×-preserves-decidability (inl a) (inr q) = inr λ (x , y) → q y
+×-preserves-decidability (inr p) (inl b) = inr λ (x , y) → p x
+×-preserves-decidability (inr p) (inr q) = inr λ (x , y) → p x
 
 →-preserves-decidability : {A B : Type}
                          → is-decidable A
                          → is-decidable B
                          → is-decidable (A → B)
-→-preserves-decidability a b = ?
+→-preserves-decidability a (inl b) = inl λ _ → b
+→-preserves-decidability (inl a) (inr q) = inr λ f → q (f a)
+→-preserves-decidability (inr p) (inr q) = inl λ a → 𝟘-elim (p a)
 
 ¬-preserves-decidability : {A : Type}
                          → is-decidable A
                          → is-decidable (¬ A)
-¬-preserves-decidability d = ?
+--¬-preserves-decidability (inl a) = inr λ x → x a
+--¬-preserves-decidability (inr p) = inl p
+¬-preserves-decidability a = →-preserves-decidability a 𝟘-is-decidable
 ```
 
 ## Exhaustively searchable types
@@ -281,12 +292,30 @@ has-decidable-equality X = (x y : X) → is-decidable (x ≡ y)
 Some examples:
 ```agda
 Bool-has-decidable-equality : has-decidable-equality Bool
-Bool-has-decidable-equality x y = ?
+Bool-has-decidable-equality true true = inl (refl true)
+Bool-has-decidable-equality true false = inr true-is-not-false
+Bool-has-decidable-equality false true = inr λ ()
+Bool-has-decidable-equality false false = inl (refl false)
 
 open import natural-numbers-functions
 
 ℕ-has-decidable-equality : has-decidable-equality ℕ
-ℕ-has-decidable-equality x y = ?
+ℕ-has-decidable-equality zero zero = inl (refl zero)
+ℕ-has-decidable-equality zero (suc y) = inr λ ()
+ℕ-has-decidable-equality (suc x) zero = inr λ ()
+ℕ-has-decidable-equality (suc x) (suc y) = III
+  where
+    IH : is-decidable (x ≡ y)
+    IH = ℕ-has-decidable-equality x y
+
+    I : suc x ≡ suc y → x ≡ y
+    I (refl (suc x)) = refl x
+
+    I' : suc x ≡ suc y → x ≡ y
+    I' = suc-is-injective
+  
+    III : is-decidable (suc x ≡ suc y)
+    III = map-decidable {x ≡ y} (ap suc) I IH
 ```
 
 ## Equality of functions
@@ -305,8 +334,15 @@ private
  h x = suc x
 
  f-equals-g : f ∼ g
- f-equals-g x = ?
+ f-equals-g zero = refl zero
+ f-equals-g (suc x) = ap suc (f-equals-g x)
 
  f-not-equals-h : ¬ (f ∼ h)
- f-not-equals-h e = ?
+ f-not-equals-h e = II I
+   where
+     I : zero ≡ suc zero
+     I = e zero
+
+     II : zero ≡ suc zero → 𝟘
+     II ()
 ```

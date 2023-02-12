@@ -5,6 +5,7 @@
 module natural-numbers-type where
 
 open import general-notation
+open import identity-type
 ```
 -->
 # The type `ℕ` of natural numbers
@@ -71,4 +72,32 @@ suc x * y = x * y + y
 
 infixr 20 _+_
 infixr 30 _*_
+
+_+'_ : ℕ → ℕ → ℕ
+_+'_ x y  = ℕ-iteration y suc x
+
+_*'_ : ℕ → ℕ → ℕ
+_*'_ x y = ℕ-iteration zero ((_+'_) y) x
+
+infixr 20 _+'_
+infixr 30 _*'_
+
+
+_ : 1 +' 2 ≡ 3
+_ = refl 3
+
+_ : 2 *' 2 ≡ 4
+_ = refl 4
+
++'-eq-+ : (x y : ℕ)  → x +' y ≡ x + y
++'-eq-+ zero y = refl y
++'-eq-+ (suc x) y = ap suc (+'-eq-+ x y)
+
+--*'-eq-* : (x y : ℕ) → x *' y ≡ x * y
+--*'-eq-* zero y = refl zero
+--*'-eq-* (suc x) y = ap {!!} {!!}
+
+
+_+₃_ : ℕ → ℕ → ℕ
+_+₃_ x y  = ℕ-nondep-elim y (λ k n → suc n) x
 ```

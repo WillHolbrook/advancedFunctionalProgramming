@@ -39,7 +39,7 @@ Although it is not possible in general to write a program of type `¬¬ A → A`
 ```agda
 ¬¬-elim : {A : Type} → is-decidable A → ¬¬ A → A
 ¬¬-elim (inl x) f = x
-¬¬-elim (inr g) f = 𝟘-elim (f g)
+¬¬-elim (inr g) f = 𝟘-nondep-elim (f g)
 ```
 
 ## Decidable propositions as booleans
@@ -173,60 +173,52 @@ Although boolean-valued predicates are fine, we prefer to use type-valued predic
 If `A` and `B` are logically equivalent, then `A` is decidable if and only if `B` is decidable. We first prove one direction.
 ```agda
 map-decidable : {A B : Type} → (A → B) → (B → A) → is-decidable A → is-decidable B
-map-decidable f g (inl x) = inl (f x)
-map-decidable f g (inr h) = inr (λ y → h (g y))
+map-decidable f g a = ?
 
 map-decidable-corollary : {A B : Type} → (A ⇔ B) → (is-decidable A ⇔ is-decidable B)
-map-decidable-corollary (f , g) = map-decidable f g , map-decidable g f
+map-decidable-corollary (f , g) = ?
 ```
 Variation:
 ```agda
 map-decidable' : {A B : Type} → (A → ¬ B) → (¬ A → B) → is-decidable A → is-decidable B
-map-decidable' f g (inl x) = inr (f x)
-map-decidable' f g (inr h) = inl (g h)
+map-decidable' f g a = ?
 ```
 
 ```agda
 pointed-types-are-decidable : {A : Type} → A → is-decidable A
-pointed-types-are-decidable = inl
+pointed-types-are-decidable = ?
 
 empty-types-are-decidable : {A : Type} → ¬ A → is-decidable A
-empty-types-are-decidable = inr
+empty-types-are-decidable = ?
 
 𝟙-is-decidable : is-decidable 𝟙
-𝟙-is-decidable = pointed-types-are-decidable ⋆
+𝟙-is-decidable = ?
 
 𝟘-is-decidable : is-decidable 𝟘
-𝟘-is-decidable = empty-types-are-decidable 𝟘-is-empty
+𝟘-is-decidable = ?
 
 ∔-preserves-decidability : {A B : Type}
                          → is-decidable A
                          → is-decidable B
                          → is-decidable (A ∔ B)
-∔-preserves-decidability (inl x) _       = inl (inl x)
-∔-preserves-decidability (inr _) (inl y) = inl (inr y)
-∔-preserves-decidability (inr h) (inr k) = inr (∔-nondep-elim h k)
+∔-preserves-decidability a b = ?
 
 ×-preserves-decidability : {A B : Type}
                          → is-decidable A
                          → is-decidable B
                          → is-decidable (A × B)
-×-preserves-decidability (inl x) (inl y) = inl (x , y)
-×-preserves-decidability (inl _) (inr k) = inr (λ (x , y) → k y)
-×-preserves-decidability (inr h) _       = inr (λ (x , y) → h x)
+×-preserves-decidability a b = ?
 
 →-preserves-decidability : {A B : Type}
                          → is-decidable A
                          → is-decidable B
                          → is-decidable (A → B)
-→-preserves-decidability _       (inl y) = inl (λ _ → y)
-→-preserves-decidability (inl x) (inr k) = inr (λ f → k (f x))
-→-preserves-decidability (inr h) (inr k) = inl (λ x → 𝟘-elim (h x))
+→-preserves-decidability a b = ?
 
 ¬-preserves-decidability : {A : Type}
                          → is-decidable A
                          → is-decidable (¬ A)
-¬-preserves-decidability d = →-preserves-decidability d 𝟘-is-decidable
+¬-preserves-decidability d = ?
 ```
 
 ## Exhaustively searchable types
@@ -289,30 +281,12 @@ has-decidable-equality X = (x y : X) → is-decidable (x ≡ y)
 Some examples:
 ```agda
 Bool-has-decidable-equality : has-decidable-equality Bool
-Bool-has-decidable-equality true  true  = inl (refl true)
-Bool-has-decidable-equality true  false = inr true-is-not-false
-Bool-has-decidable-equality false true  = inr false-is-not-true
-Bool-has-decidable-equality false false = inl (refl false)
+Bool-has-decidable-equality x y = ?
 
 open import natural-numbers-functions
 
 ℕ-has-decidable-equality : has-decidable-equality ℕ
-ℕ-has-decidable-equality 0       0       = inl (refl zero)
-ℕ-has-decidable-equality 0       (suc y) = inr zero-is-not-suc
-ℕ-has-decidable-equality (suc x) 0       = inr suc-is-not-zero
-ℕ-has-decidable-equality (suc x) (suc y) = III
- where
-  IH : is-decidable (x ≡ y)
-  IH = ℕ-has-decidable-equality x y
-
-  I : x ≡ y → suc x ≡ suc y
-  I = ap suc
-
-  II : suc x ≡ suc y → x ≡ y
-  II = suc-is-injective
-
-  III : is-decidable (suc x ≡ suc y)
-  III = map-decidable I II IH
+ℕ-has-decidable-equality x y = ?
 ```
 
 ## Equality of functions
@@ -331,24 +305,8 @@ private
  h x = suc x
 
  f-equals-g : f ∼ g
- f-equals-g 0       = refl (f 0)
- f-equals-g (suc x) = goal
-  where
-   IH : f x ≡ g x
-   IH = f-equals-g x
-
-   goal : f (suc x) ≡ g (suc x)
-   goal = f (suc x) ≡⟨ refl _ ⟩
-          suc x     ≡⟨ refl _ ⟩
-          suc (f x) ≡⟨ ap suc IH ⟩
-          suc (g x) ≡⟨ refl _ ⟩
-          g (suc x) ∎
+ f-equals-g x = ?
 
  f-not-equals-h : ¬ (f ∼ h)
- f-not-equals-h e = contradiction d
-  where
-   d : 0 ≡ 1
-   d = e 0
-   contradiction : ¬ (0 ≡ 1)
-   contradiction ()
+ f-not-equals-h e = ?
 ```

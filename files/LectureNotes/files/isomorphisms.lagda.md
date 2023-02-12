@@ -25,6 +25,8 @@ module _ where
 
   _≅_ : Type → Type → Type
   A ≅ B = Σ f ꞉ (A → B) , is-bijection f
+
+test = true
 ```
 And here we give an equivalent definition which uses records and is usually more convenient in practice and is the one we adopt:
 ```agda
@@ -44,7 +46,18 @@ record _≅_ (A B : Type) : Type where
   bijectivity : is-bijection bijection
 
 infix 0 _≅_
+
+record _≅'_ (A B : Type) : Type where
+  field
+    f : A → B
+    g : B → A
+    l : (a : A) → g (f a) ≡ a
+    r : (b : B) → f (g b) ≡ b
+
+infix 0 _≅'_
 ```
+
+
 The definition with `Σ` is probably more intuitive, but, as discussed above, the definition with a record is often easier to work with, because we can easily extract the components of the definitions using the names of the fields. It also often allows Agda to infer more types, and to give us more sensible goals in the interactive development of Agda programs and proofs.
 
 Notice that `inverse` plays the role of `g`. The reason we use `inverse` is that then we can use the word `inverse` to extract the inverse of a bijection. Similarly we use `bijection` for `f`, as we can use the word `bijection` to extract the bijection from a record.
@@ -75,7 +88,7 @@ Bool-𝟚-isomorphism = record { bijection = f ; bijectivity = f-is-bijection }
   fg 𝟏 = refl 𝟏
 
   f-is-bijection : is-bijection f
-  f-is-bijection = record { inverse = g ; η = gf ; ε = fg }
+  f-is-bijection = Inverse g gf fg
 ```
 But there is also a different isomorphism:
 ```agda
@@ -100,5 +113,31 @@ Bool-𝟚-isomorphism' = record { bijection = f ; bijectivity = f-is-bijection }
 
   f-is-bijection : is-bijection f
   f-is-bijection = record { inverse = g ; η = gf ; ε = fg }
+
+  _∔'_ : Type → Type → Type
+  A ∔' B = (Σ b ꞉ Bool , P b)
+    where
+     P : Bool → Type
+     P true = A
+     P false = B
+
+  f' : {A B : Type} → A ∔ B → A ∔' B
+  f' (inl a) = true , a
+  f' (inr b) = false , b
+
+  g' : {A B : Type} → A ∔' B → A ∔ B
+  g' (true , p) = inl p
+  g' (false , p) = inr p
+
+  l : {A B : Type} → (x : A ∔ B) → g' (f' x) ≡ x
+  l (inl x) = refl (inl x)
+  l (inr x) = refl (inr x)
+
+  r : {A B : Type} → (x : A ∔' B) → f' (g' x) ≡ x
+  r (true , p) = refl (true , p)
+  r (false , p) = refl (false , p)
+
+  binary-sum-is-bijection : {A B : Type} → A ∔ B ≅' A ∔' B
+  binary-sum-is-bijection = record {f = f' ; g = g' ; l = l ; r = r}
 ```
 And these are the only two isomorphisms (you could try to prove this in Agda as a rather advanced exercise). More advanced examples are in other files.

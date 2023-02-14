@@ -207,7 +207,8 @@ infixr 20 _||_
 infixr 30 _&&_
 
 if_then_else_ : {A : Type} → Bool → A → A → A
-if b then x else y = y
+if true then x else y = x
+if false then x else y = y
 
 _+_ : ℕ → ℕ → ℕ
 zero + y = y

@@ -1,7 +1,10 @@
 {-# OPTIONS --without-K --safe #-}
 
 --
--- Attendance Code: 26870462
+--  A list of Agda Emacs Commands can be found here:
+--
+--    https://agda.readthedocs.io/en/v2.6.3/tools/emacs-mode.html
+--
 --
 
 module lecture3 where
@@ -60,6 +63,7 @@ is-decidable A = A ∔ ¬ A  -- ¬ A := A → 𝟘
 -- C-c C-,  -- Show goal and context
 -- C-c C-.  -- Show goal and context and current hole's type
 -- C-u C-u ... -- Same but first normalize everything
+-- C-c C-r  -- Refine
 
 ℕ-is-decidable : is-decidable ℕ
 ℕ-is-decidable = inl 4
@@ -149,11 +153,3 @@ zero ≤'' n = true
 suc m ≤'' zero = false
 suc m ≤'' suc n = m ≤'' n
 
--- ≡-nondep-elim : {X : Type} (A : X → X → Type)
---               → ((x : X) → A x x)
---               → (x y : X) → x ≡ y → A x y
--- ≡-nondep-elim A = ≡-elim (λ x y _ → A x y)
-
-trans-nondep : {A : Type} {x y z : A} → x ≡ y → y ≡ z → x ≡ z
-trans-nondep {A} {x} {y} {z} p q = ≡-nondep-elim {A}
-  (λ a b → b ≡ z → a ≡ z) (λ x p → p) x y p q

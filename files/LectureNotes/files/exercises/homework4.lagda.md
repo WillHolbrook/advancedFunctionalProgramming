@@ -1,9 +1,9 @@
-# Week 3 - Homework Sheet
+# Week 4 - Homework Sheet
 
 **Please finish the lab sheet before moving on to these exercises.**
 
 ```agda
-module exercises.homework3 where
+module exercises.homework4 where
 
 open import prelude
 open import exercises.lab3

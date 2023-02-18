@@ -20,7 +20,8 @@ First, we will prove the following lemma.
 ```agda
  reverse-lemma : {X : Type} (x : X) (xs : List X)
                → x :: reverse xs ≡ reverse (xs ++ [ x ])
- reverse-lemma = {!!}
+ reverse-lemma x [] = refl (x :: [])
+ reverse-lemma x (x₁ :: xs) = ap (λ y → y ++ [ x₁ ]) (reverse-lemma x xs)
 ```
 
 **Prove** the lemma about `reverse`.
@@ -32,11 +33,11 @@ equational reasoning][1].
 
 ```agda
  reverse-is-involution : {X : Type} → (xs : List X) → xs ≡ reverse (reverse xs)
- reverse-is-involution [] = {!!}
+ reverse-is-involution [] = refl []
  reverse-is-involution (x :: xs)
-  = x :: xs                       ≡⟨ {!!} ⟩
-    x :: reverse (reverse xs)     ≡⟨ {!!} ⟩
-    reverse (reverse xs ++ [ x ]) ≡⟨ {!!} ⟩
+  = x :: xs                       ≡⟨ ap ((_::_) x) (reverse-is-involution xs) ⟩
+    x :: reverse (reverse xs)     ≡⟨ reverse-lemma x (reverse xs) ⟩
+    reverse (reverse xs ++ [ x ]) ≡⟨ refl (reverse (reverse xs ++ (x :: []))) ⟩
     reverse (reverse (x :: xs))   ∎
 ```
 
@@ -48,7 +49,8 @@ We wish to prove the associativity of `_+_` on the natural numbers.
 
 ```agda
  +-assoc : (x y z : ℕ) → x + (y + z) ≡ (x + y) + z
- +-assoc = {!!}
+ +-assoc zero y z = refl (y + z)
+ +-assoc (suc x) y z = ap suc (+-assoc x y z)
 ```
 
 **Complete** the proof that `_+_` is associative.
@@ -91,10 +93,10 @@ Note that they amount to the constructors of `_≤_`.
 
 ```agda
  ≤'-zero : (  y : ℕ) → 0 ≤' y
- ≤'-zero = {!!}
+ ≤'-zero y = y , (refl y)
 
  ≤'-suc : (x y : ℕ) → x ≤' y → suc x ≤' suc y
- ≤'-suc = {!!}
+ ≤'-suc x y (xy-diff , eq) = xy-diff , (ap suc eq)
 ```
 
 **Prove** the two little lemmas about `_≤'_`.
@@ -105,7 +107,8 @@ We now prove that the first definition implies the second.
 
 ```agda
  ≤-prime : (x y : ℕ) → x ≤ y → x ≤' y
- ≤-prime = {!!}
+ ≤-prime 0 y (≤-zero y) = ≤'-zero y
+ ≤-prime (suc x) (suc y) (≤-suc x y x≤y) = ≤'-suc x y (≤-prime x y x≤y)
 ```
 
 **Prove** that `x ≤ y` implies `x ≤' y` using the little lemmas from 3.1.
@@ -115,8 +118,19 @@ We now prove that the first definition implies the second.
 The other direction is slightly trickier.
 
 ```agda
+ pred : ℕ → ℕ
+ pred zero = zero
+ pred (suc x) = x
+
  ≤-unprime : (x y : ℕ) → x ≤' y → x ≤ y
- ≤-unprime = {!!}
+ ≤-unprime zero y _ = ≤-zero y
+ ≤-unprime (suc x) (suc y) (xy-diff , eq) = ≤-suc x y IH
+   where
+     I : x + xy-diff ≡ y
+     I = ap pred eq
+     
+     IH : x ≤ y
+     IH = ≤-unprime x y (xy-diff , I)
 ```
 
 **Prove** that `x ≤' y` implies `x ≤ y`.
@@ -132,10 +146,11 @@ both our definitions of the order.
 
 ```agda
  ≤-trans : (x y z : ℕ) → x ≤ y → y ≤ z → x ≤ z
- ≤-trans = {!!}
+ ≤-trans zero y z x≤y y≤z = ≤-zero z
+ ≤-trans (suc x) (suc y) (suc z) (≤-suc x y x≤y) (≤-suc y z y≤z) = ≤-suc x z (≤-trans x y z x≤y y≤z)
 
  ≤'-trans : (x y z : ℕ) → x ≤' y → y ≤' z → x ≤' z
- ≤'-trans = {!!}
+ ≤'-trans x y z x≤'y y≤'z = ≤-prime x z (≤-trans x y z (≤-unprime x y x≤'y) (≤-unprime y z y≤'z))
 ```
 
 **Complete** the proofs that `_≤_` and `_≤'_` are transitive.
@@ -190,7 +205,10 @@ the `Bool` type has decidable equality:
 
 ```agda
  bool-has-decidable-equality : has-decidable-equality Bool
- bool-has-decidable-equality = {!!}
+ bool-has-decidable-equality true true = inl (refl true)
+ bool-has-decidable-equality true false = inr λ {()}
+ bool-has-decidable-equality false true = inr λ {()}
+ bool-has-decidable-equality false false = inl (refl false)
 ```
 
 ### Exercise 4.2
@@ -221,8 +239,16 @@ Show that `Fin n` is exhaustively searchable for every `n`.
 
 ```agda
 Fin-is-exhaustively-searchable : (n : ℕ) → is-exhaustively-searchable (Fin n)
-Fin-is-exhaustively-searchable = {!!} 
+Fin-is-exhaustively-searchable zero x y = inr λ {()}
+--Can do InR as its saying finding an element of Fin 0 is impossible
+--Can't do inl as that is the case of you can find an element of n so
+--that A n works but Fin 0 isn't a construcable type
+Fin-is-exhaustively-searchable (suc n) x y with y (zero {n})
+... | inl x-zero = inl (zero {n} , x-zero)
+... | inr x-zero→𝟘 = inr ({! x-zero→𝟘 !})
 ```
-
+--inl (zero {n} , {!!})
+y (zero {n})
+--inl (zero , {!!})
 [0]: https://git.cs.bham.ac.uk/mhe/afp-learning/-/blob/main/files/LectureNotes/files/exercises/homework3.lagda.md#exercise-23
 [1]: https://git.cs.bham.ac.uk/mhe/afp-learning/-/blob/main/files/LectureNotes/files/identity-type.lagda.md#notation-for-equality-reasoning

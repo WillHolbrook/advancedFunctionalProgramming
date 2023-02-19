@@ -6,6 +6,7 @@ module decidability where
 
 open import prelude
 open import negation
+open import exercises.lab2-solutions
 ```
 -->
 # Propositions as types versus propositions as booleans
@@ -94,6 +95,47 @@ This says what to be even *means*. But it doesn't say how we *check* with a comp
   check-even : ℕ → Bool
   check-even 0       = true
   check-even (suc x) = not (check-even x)
+
+  +-suc-on-right : (x y : ℕ) → x + suc y ≡ suc (x + y)
+  +-suc-on-right 0       y = refl (suc y)
+  +-suc-on-right (suc x) y = ap suc (+-suc-on-right x y)
+
+  pred : ℕ → ℕ
+  pred zero = zero
+  pred (suc n) = n
+
+  pred-suc₁ : (x : ℕ) → pred (x + suc x) ≡ x + x
+  pred-suc₁ zero = refl zero
+  pred-suc₁ (suc x) = +-suc-on-right x (suc x)
+
+  pred-split : (n : ℕ) → pred (pred (n + n)) ≡ (pred n) + (pred n)
+  pred-split zero = refl zero
+  pred-split (suc n) = pred-suc₁ n
+
+  pred-on-right : (n : ℕ) → pred (n + n) ≡ n + (pred n)
+  pred-on-right zero = refl zero
+  pred-on-right (suc n) = +-suc-on-right n n
+  
+  is-even→check-even : (x : ℕ) → is-even x → check-even x ≡ true
+  is-even→check-even zero prf = refl true
+  is-even→check-even (suc zero) (suc zero , ())
+  is-even→check-even (suc (suc x)) (n , sucsucx≡n+n) =
+    ap
+      (not ∘ not)
+      (is-even→check-even x (pred n ,  trans (ap (pred ∘ pred)  sucsucx≡n+n) (pred-split n)))
+
+  not-not-check-even≡even : (x : ℕ) → not (not (check-even x)) ≡ check-even x 
+  not-not-check-even≡even zero = refl true
+  not-not-check-even≡even (suc zero) = refl false
+  not-not-check-even≡even (suc (suc x)) = ap (not ∘ not) (not-not-check-even≡even x)
+
+  check-even→is-even : (x : ℕ) → check-even x ≡ true → is-even x
+  check-even→is-even zero eq = zero , (refl zero)
+  check-even→is-even (suc (suc x)) eq with check-even→is-even x (sym (trans (sym eq) (not-not-check-even≡even x)))
+  ... | n , x≡n+n = suc n , ap suc (trans (ap suc x≡n+n) (sym (+-suc-on-right n n)))
+
+  check-even-correct : (x : ℕ) → is-even x ⇔ check-even x ≡ true
+  check-even-correct x = (is-even→check-even x) , check-even→is-even x  
 ```
 
 For this function to be correct, it has to be the case that
@@ -240,6 +282,27 @@ is-exhaustively-searchable : Type → Type₁
 is-exhaustively-searchable X = (A : X → Type)
                              → is-decidable-predicate A
                              → is-decidable (Σ x ꞉ X , A x)
+
+𝟘-is-exhaustively-searchable : is-exhaustively-searchable 𝟘
+𝟘-is-exhaustively-searchable X y = inr (λ (x , y) → x)
+
+𝟙-is-exhaustively-searchable : is-exhaustively-searchable 𝟙
+𝟙-is-exhaustively-searchable X y with y ⋆
+... | inl X⋆ = inl (⋆ , X⋆)
+... | inr X⋆→𝟘 = inr I
+  where
+    I : Σ X → 𝟘
+    I (a , b) = X⋆→𝟘 b
+
+Bool-is-exhaustively-searchable : is-exhaustively-searchable Bool
+Bool-is-exhaustively-searchable X y with y true | y false
+... | inl Xt  | b       = inl (true , Xt)
+... | inr ¬Xt | inl Xf  = inl (false , Xf)
+... | inr ¬Xt | inr ¬Xf = inr I
+  where
+    I : (Σ X → 𝟘)
+    I (true , Xt)  = ¬Xt Xt
+    I (false , Xf) = ¬Xf Xf
 ```
 **Exercise**. Show, in Agda, that the types `𝟘`, `𝟙` , `Bool` and  `Fin n`, for any `n : ℕ`, are exhaustively searchable. The idea is that we check whether or not `A x` holds for each `x : A`, and if we find at least one, we conclude that `Σ x ꞉ X , A x`, and otherwise we conclude that `¬ (Σ x ꞉ X , A x)`. This is possible because these types are finite.
 

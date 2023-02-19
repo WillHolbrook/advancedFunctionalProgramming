@@ -3,6 +3,7 @@
 Do as much as you can in the lab, and complete the remaining exercises in your own time. Feel free to ask questions on Teams in the channel `lab`. But don't give spoilers there.
 
 ```agda
+{-# OPTIONS --without-K --safe #-}
 module exercises.lab2-solutions where
 
 open import prelude hiding (if_then_else_;_||_)

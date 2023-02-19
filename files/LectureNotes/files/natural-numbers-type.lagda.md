@@ -6,6 +6,7 @@ module natural-numbers-type where
 
 open import general-notation
 open import identity-type
+open import products
 ```
 -->
 # The type `ℕ` of natural numbers
@@ -98,30 +99,25 @@ _ = refl 4
 +'-suc-transitivity (suc x) zero = ap suc (+'-suc-transitivity x zero)
 +'-suc-transitivity (suc x) (suc y) = ap suc (+'-suc-transitivity x (suc y))
 
---test : (x y : ℕ) → (x +' suc y) ≡ (y +' suc x) → (x +' suc y) ≡ (suc y +' x)
---test x y e = {!!}
-
 +'-rule₁ : (x y : ℕ) → suc (x +' y) ≡ x +' suc y
 +'-rule₁ zero y = refl (suc y)
 +'-rule₁ (suc x) y = ap suc (+'-rule₁ x y)
 
---+'-commutativity : (x y : ℕ) → (x +' y) ≡ (y +' x)
---+'-commutativity zero zero = refl zero
---+'-commutativity zero (suc y) = ap suc (+'-commutativity zero y)
---+'-commutativity (suc x) zero = ap suc (+'-commutativity x zero)
---+'-commutativity (suc x) (suc y) = goal
---  where
---    goal : suc x +' suc y ≡ suc y +' suc x
---    goal = ap suc {!!}
---
---    IH : (x +' y) ≡ (y +' x)
---    IH = +'-commutativity x y
---
---    I : (a b : ℕ) → (a +' b) ≡ (b +' a) → (a +' suc b) ≡ (b +' suc a)
---    I zero zero e = refl 1
---    I zero (suc b) e = {!!}
---    I (suc a) zero e = {!!}
---    I (suc a) (suc b) e = {!!}
++'-commutativity : (x y : ℕ) → (x +' y) ≡ (y +' x)
++'-commutativity zero zero = refl zero
++'-commutativity zero (suc y) = ap suc (+'-commutativity zero y)
++'-commutativity (suc x) zero = ap suc (+'-commutativity x zero)
++'-commutativity (suc x) (suc y) = goal
+  where
+    III : suc (suc x +' y) ≡ suc y +' suc x
+    III = trans (ap (suc ∘ suc) (+'-commutativity x y)) (+'-rule₁ (suc y) x)
+
+    goal : suc x +' suc y ≡ suc y +' suc x
+    goal = sym (trans (sym III) (+'-rule₁ (suc x) y))
+
+    
+    --suc (suc x +' y) ≡ suc (suc y +' x) → suc (suc y +' x) ≡ suc y +' suc x → suc (suc x +' y) ≡ suc y +' suc x
+    --suc y +' suc x ≡ suc (suc x +' y) → suc (suc x +' y) ≡ suc x +' suc y → suc y +' suc x ≡ suc x +' suc y
   
 
 --*'-eq-* : (x y : ℕ) → x *' y ≡ x * y

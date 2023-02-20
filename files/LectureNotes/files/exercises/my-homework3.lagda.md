@@ -189,7 +189,7 @@ Using your `for-all`, **define** a function that expresses: *for every predicate
 
 ```agda
  filter-soundness : {A : Type} → Type
- filter-soundness {A} = (a : A) → (p : A → Bool) → (xs : List A) → for-all p (filter p xs) ≡ true
+ filter-soundness {A} = (p : A → Bool) → (xs : List A) → for-all p (filter p xs) ≡ true
 ```
 
 Note that the type of the function here is `Type`. This means that you are not

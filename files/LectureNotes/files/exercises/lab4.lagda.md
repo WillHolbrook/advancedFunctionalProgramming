@@ -196,7 +196,7 @@ the `Bool` type has decidable equality:
 ### Exercise 4.2
 
 Recall the following definitions of decidable predicates and "exhaustively searchable" types from
-the [lecture notes](files/LectureNotes/files/decidability.lagda.md)
+the [lecture notes](../decidability.lagda.md)
 
 ```agda
 is-decidable-predicate : {X : Type} → (X → Type) → Type
@@ -215,7 +215,7 @@ data Fin : ℕ → Type where
   zero : {n : ℕ} → Fin (suc n)
   succ : {n : ℕ} → Fin n → Fin (suc n)
 ```
-(You can read more about this type [here](files/LectureNotes/files/Fin.lagda.md))
+(You can read more about this type [here](../Fin.lagda.md))
 
 Show that `Fin n` is exhaustively searchable for every `n`.
 
@@ -224,5 +224,5 @@ Fin-is-exhaustively-searchable : (n : ℕ) → is-exhaustively-searchable (Fin n
 Fin-is-exhaustively-searchable = {!!} 
 ```
 
-[0]: files/LectureNotes/files/exercises/homework3.lagda.md#exercise-23
-[1]: files/LectureNotes/files/identity-type.lagda.md#notation-for-equality-reasoning
+[0]: homework3.lagda.md#exercise-23
+[1]: ../identity-type.lagda.md#notation-for-equality-reasoning

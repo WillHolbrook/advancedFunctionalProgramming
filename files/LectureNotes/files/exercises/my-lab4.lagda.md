@@ -239,16 +239,43 @@ Show that `Fin n` is exhaustively searchable for every `n`.
 
 ```agda
 Fin-is-exhaustively-searchable : (n : ℕ) → is-exhaustively-searchable (Fin n)
-Fin-is-exhaustively-searchable zero X decid-pred-x = inr λ {()}
+Fin-is-exhaustively-searchable zero X decid-pred-X = inr λ {()}
 --Can do InR as its saying finding an element of Fin 0 is impossible
 --Can't do inl as that is the case of you can find an element of n so
 --that A n works but Fin 0 isn't a construcable type
-Fin-is-exhaustively-searchable (suc n) X decid-pred-x with decid-pred-x (zero {n})
+Fin-is-exhaustively-searchable (suc n) X decid-pred-X = IV
+  where
+    III : {A B : Type} → (A → Type) → (B → A) → (B → Type)
+    III at ba b = at (ba b)
+
+    pred-X : Fin n → Type
+    pred-X = III X (succ)
+
+    is-decidable-predicate-pred-X : is-decidable-predicate pred-X
+    is-decidable-predicate-pred-X y = decid-pred-X (succ y)    
+
+    IH : is-decidable (Sigma (Fin n) pred-X)
+    IH = Fin-is-exhaustively-searchable n pred-X is-decidable-predicate-pred-X
+    --IH : Σ (λ x → X (succ x)) ∔ (Σ (λ b → X (succ b)) → 𝟘)
+
+    IV : is-decidable (Sigma (Fin (suc n)) X)
+    IV with IH
+    IV | inl (fst₁ , snd₁) = inl (succ fst₁ , snd₁)
+    IV | inr x = inl (zero , {!!})
+
+```
+with decid-pred-x (zero {n})
 ... | inl x-zero = inl (zero {n} , x-zero)
 ... | inr x-zero→𝟘 = {!!}
   where
-    IH : Σ (λ _ → X zero) ∔ ((x : Σ (λ _ → X zero)) → 𝟘)
-    IH = Fin-is-exhaustively-searchable n (λ _ → X zero) λ x → decid-pred-x zero
+    III : {A B : Type} → (A → Type) → (B → A) → (B → Type)
+    III at ba b = at (ba b)
+
+    IV : Fin n → Type
+    IV = III X (succ)
+
+    IH : {!!}
+    IH = Fin-is-exhaustively-searchable {!!} {!IV!} {!!}
 
     
     II : Σ X → 𝟘
@@ -256,7 +283,10 @@ Fin-is-exhaustively-searchable (suc n) X decid-pred-x with decid-pred-x (zero {n
     II (succ p , q) with IH
     ... | inl (fst₁ , snd₁) = x-zero→𝟘 snd₁
     ... | inr x = {!!}
-```
+
+
+
+
 II ({!p!} , {!q!})
 
  inr {!!}

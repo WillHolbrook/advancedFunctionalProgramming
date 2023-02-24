@@ -243,8 +243,8 @@ Fin-is-exhaustively-searchable zero X decid-pred-X = inr λ {()}
 --Can do InR as its saying finding an element of Fin 0 is impossible
 --Can't do inl as that is the case of you can find an element of n so
 --that A n works but Fin 0 isn't a construcable type
-Fin-is-exhaustively-searchable (suc n) X decid-pred-X with (decid-pred-X zero) 
-... | inl x-zero = inl (zero , x-zero)
+Fin-is-exhaustively-searchable (suc n) X decid-pred-X with (decid-pred-X (zero {n})) 
+... | inl x-zero = inl (zero {n} , x-zero)
 ... | inr x-zero→𝟘 = IV
   where
     III : {A B : Type} → (A → Type) → (B → A) → (B → Type)
@@ -268,7 +268,6 @@ Fin-is-exhaustively-searchable (suc n) X decid-pred-X with (decid-pred-X zero)
         V : Σ X → 𝟘
         V (zero , prf-fsn) = x-zero→𝟘 prf-fsn
         V (succ fn , prf-fsn) = fn→𝟘 (fn , prf-fsn)
-
 ```
 
 Σ X → 𝟘

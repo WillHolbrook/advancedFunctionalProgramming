@@ -284,15 +284,21 @@ is-exhaustively-searchable X = (A : X → Type)
                              → is-decidable (Σ x ꞉ X , A x)
 
 𝟘-is-exhaustively-searchable : is-exhaustively-searchable 𝟘
-𝟘-is-exhaustively-searchable X y = inr (λ (x , y) → x)
+𝟘-is-exhaustively-searchable X y = inr (λ (a , _) → a)
+--inr (λ (x , y) → x)
 
 𝟙-is-exhaustively-searchable : is-exhaustively-searchable 𝟙
 𝟙-is-exhaustively-searchable X y with y ⋆
-... | inl X⋆ = inl (⋆ , X⋆)
-... | inr X⋆→𝟘 = inr I
-  where
-    I : Σ X → 𝟘
-    I (a , b) = X⋆→𝟘 b
+... | inl x = inl (⋆ , x)
+... | inr x = inr (λ (⋆ , b) → x b)
+  
+
+-- with y ⋆
+-- ... | inl X⋆ = inl (⋆ , X⋆)
+-- ... | inr X⋆→𝟘 = inr I
+--   where
+--     I : Σ X → 𝟘
+--     I (a , b) = X⋆→𝟘 b
 
 Bool-is-exhaustively-searchable : is-exhaustively-searchable Bool
 Bool-is-exhaustively-searchable X y with y true | y false

@@ -30,6 +30,12 @@ private
  y₀ = zero {2}
  y₁ = suc {2} (zero {1})
  y₂ = suc {2} (suc {1} (zero {0}))
+
+ z₀ z₁ z₂ z₃ : Fin 4
+ z₀ = zero {3}
+ z₁ = suc y₀
+ z₂ = suc y₁
+ z₃ = suc y₂
 ```
 And these are all the elements of `Fin 3`. Notice that `Fin 0` is empty:
 ```agda

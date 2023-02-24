@@ -5,7 +5,7 @@ Please complete Part II of this week's Lab Sheet before moving on to these exerc
 ## Section 1: Identity Type
 
 ```agda
-module exercises.homework2 where
+module exercises.homework3 where
 
 open import prelude hiding (id ; _∘_)
 

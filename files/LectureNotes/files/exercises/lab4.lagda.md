@@ -214,7 +214,7 @@ the `Bool` type has decidable equality:
 ### Exercise 4.2
 
 Recall the following definitions of decidable predicates and "exhaustively searchable" types from
-the [lecture notes](https://git.cs.bham.ac.uk/afp/afp-learning-2022-2023/-/blob/master/files/LectureNotes/files/decidability.lagda.md)
+the [lecture notes](../decidability.lagda.md)
 
 ```agda
 is-decidable-predicate : {X : Type} → (X → Type) → Type
@@ -233,7 +233,7 @@ data Fin : ℕ → Type where
   zero : {n : ℕ} → Fin (suc n)
   succ : {n : ℕ} → Fin n → Fin (suc n)
 ```
-(You can read more about this type [here](https://git.cs.bham.ac.uk/afp/afp-learning-2022-2023/-/blob/master/files/LectureNotes/files/Fin.lagda.md))
+(You can read more about this type [here](../Fin.lagda.md))
 
 Show that `Fin n` is exhaustively searchable for every `n`.
 
@@ -247,8 +247,6 @@ Fin-is-exhaustively-searchable (suc n) x y with y (zero {n})
 ... | inl x-zero = inl (zero {n} , x-zero)
 ... | inr x-zero→𝟘 = inr ({! x-zero→𝟘 !})
 ```
---inl (zero {n} , {!!})
-y (zero {n})
---inl (zero , {!!})
-[0]: https://git.cs.bham.ac.uk/mhe/afp-learning/-/blob/main/files/LectureNotes/files/exercises/homework3.lagda.md#exercise-23
-[1]: https://git.cs.bham.ac.uk/mhe/afp-learning/-/blob/main/files/LectureNotes/files/identity-type.lagda.md#notation-for-equality-reasoning
+
+[0]: homework3.lagda.md#exercise-23
+[1]: ../identity-type.lagda.md#notation-for-equality-reasoning

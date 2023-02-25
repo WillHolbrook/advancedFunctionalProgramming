@@ -72,6 +72,6 @@ We will additionally start working with the following handouts, which we will co
 
  * We will provide solutions and discuss them in the lab.
 
- * [Lab exercises](/files/LectureNotes/files/exercises/lab5.lagda.md)
+ * [Lab exercises](/files/LectureNotes/files/exercises/lab5.lagda.md).
 
  * An additional collection of [homework](/files/LectureNotes/files/exercises/homework4.lagda.md) exercises is also provided with [solutions](/files/LectureNotes/files/exercises/homework4-solutions.lagda.md) (avoid looking at them until you have attempted the homework).

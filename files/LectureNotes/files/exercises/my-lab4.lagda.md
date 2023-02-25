@@ -268,49 +268,25 @@ Fin-is-exhaustively-searchable (suc n) X decid-pred-X with (decid-pred-X (zero {
         V : Σ X → 𝟘
         V (zero , prf-fsn) = x-zero→𝟘 prf-fsn
         V (succ fn , prf-fsn) = fn→𝟘 (fn , prf-fsn)
+
+≤-lemma : (m n : ℕ) → suc m ≤ suc n → m ≤ n
+≤-lemma m n (≤-suc m n p) = p
+
+not-suc-≤-zero : (n : ℕ) → ¬ (suc n ≤ 0)
+not-suc-≤-zero n ()
+
+≤-is-decidable : (m n : ℕ) → is-decidable (m ≤ n)
+≤-is-decidable zero    zero    = inl (≤-zero zero)
+≤-is-decidable zero    (suc n) = inl (≤-zero (suc n))
+≤-is-decidable (suc m) zero    = inr (not-suc-≤-zero m)
+≤-is-decidable (suc m) (suc n) = ∔-nondep-elim f g IH
+ where
+  IH : (m ≤ n) ∔ ¬ (m ≤ n)
+  IH = ≤-is-decidable m n
+  
+  f : m ≤ n → is-decidable (suc m ≤ suc n)
+  f p = inl (≤-suc m n p)
+  
+  g : ¬ (m ≤ n) → is-decidable (suc m ≤ suc n)
+  g p = inr (λ q → p (≤-lemma m n q))
 ```
-
-Σ X → 𝟘
-with decid-pred-x (zero {n})
-... | inl x-zero = inl (zero {n} , x-zero)
-... | inr x-zero→𝟘 = {!!}
-  where
-    III : {A B : Type} → (A → Type) → (B → A) → (B → Type)
-    III at ba b = at (ba b)
-
-    IV : Fin n → Type
-    IV = III X (succ)
-
-    IH : {!!}
-    IH = Fin-is-exhaustively-searchable {!!} {!IV!} {!!}
-
-    
-    II : Σ X → 𝟘
-    II (zero , q) = x-zero→𝟘 q
-    II (succ p , q) with IH
-    ... | inl (fst₁ , snd₁) = x-zero→𝟘 snd₁
-    ... | inr x = {!!}
-
-
-
-
-II ({!p!} , {!q!})
-
- inr {!!}
-  where
-    II : Σ X → 𝟘
-    II (p , q) = {!!}
-      where
-        I : 𝟘
-        I with decid-pred-x p
-        I | inl b = {!!}
-        I | inr b = {!!}
-
-λ { (fst₁ , snd₁) → {!y fst₁!}}
-λ { (fst₁ , snd₁) → x-zero→𝟘 {!x fst₁!}}
-inl (zero {n} , {!!})
-y (zero {n})
-inl (zero , {!!})
-
-[0]: https://git.cs.bham.ac.uk/mhe/afp-learning/-/blob/main/files/LectureNotes/files/exercises/homework3.lagda.md#exercise-23
-[1]: https://git.cs.bham.ac.uk/mhe/afp-learning/-/blob/main/files/LectureNotes/files/identity-type.lagda.md#notation-for-equality-reasoning

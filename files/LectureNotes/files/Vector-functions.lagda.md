@@ -92,15 +92,17 @@ Vector-iso {A} {n} = record { bijection = f n ; bijectivity = f-is-bijection n }
   f-is-bijection : (n : ℕ) → is-bijection (f n)
   f-is-bijection n = record { inverse = g n ; η = gf n ; ε = fg n }
 
+
+
 private
  open _≅_
  open is-bijection
 
- example₂ : bijection Vector-iso (1 :: 2 :: 3 :: []) ≡ (1 , 2 , 3 , ⋆)
+ example₂ : (bijection Vector-iso) (1 :: 2 :: 3 :: []) ≡ (1 , 2 , 3 , ⋆)
  example₂ = refl _
 
  example₄ : Vector ℕ 3
- example₄ = inverse (bijectivity Vector-iso) (1 , 2 , 3 , ⋆)
+ example₄ = (inverse (bijectivity Vector-iso)) (1 , 2 , 3 , ⋆)
 
  example₅ : example₄ ≡ 1 :: 2 :: 3 :: []
  example₅ = refl _

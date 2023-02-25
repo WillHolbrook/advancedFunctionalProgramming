@@ -48,7 +48,7 @@ Fin-0-is-empty ()
 Here `()` is a pseudo-pattern that tells that there is no constructor for the type.
 ```agda
 Fin-suc-is-nonempty : {n : ℕ} → ¬ is-empty (Fin (suc n))
-Fin-suc-is-nonempty f = f zero
+Fin-suc-is-nonempty {n} f = f (zero {n})
 ```
 
 TODO. The above proofs require more explanation.

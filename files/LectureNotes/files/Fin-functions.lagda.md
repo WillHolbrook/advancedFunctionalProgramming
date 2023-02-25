@@ -19,7 +19,7 @@ zero' : {n : ℕ} → Fin' (suc n)
 zero' = inl ⋆
 
 suc'  : {n : ℕ} → Fin' n → Fin' (suc n)
-suc' = inr
+suc' fn = inr fn
 
 open import Fin
 open import isomorphisms
@@ -30,6 +30,11 @@ Fin-isomorphism n = record { bijection = f n ; bijectivity = f-is-bijection n }
   f : (n : ℕ) → Fin n → Fin' n
   f (suc n) zero    = zero'
   f (suc n) (suc k) = suc' (f n k)
+  -- f (suc n) zero = zero'
+  -- f (suc n) (suc fn) = suc' IH
+  --   where
+  --     IH : Fin' n
+  --     IH = f n fn
 
   g : (n : ℕ) → Fin' n → Fin n
   g (suc n) (inl ⋆) = zero
@@ -37,11 +42,11 @@ Fin-isomorphism n = record { bijection = f n ; bijectivity = f-is-bijection n }
 
   gf : (n : ℕ) → g n ∘ f n ∼ id
   gf (suc n) zero    = refl zero
-  gf (suc n) (suc k) = γ
+  gf (suc n) (suc k) = {!!}
    where
     IH : g n (f n k) ≡ k
     IH = gf n k
-
+    
     γ = g (suc n) (f (suc n) (suc k)) ≡⟨ refl _ ⟩
         g (suc n) (suc' (f n k))      ≡⟨ refl _ ⟩
         suc (g n (f n k))             ≡⟨ ap suc IH ⟩

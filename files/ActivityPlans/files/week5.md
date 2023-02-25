@@ -38,7 +38,7 @@ Watch the videos for this week before the lecture if possible.
 
 We will additionally start working with the following handouts, which we will complete next week.
 
-  1. **More functional programs with the above types**
+  2. **More functional programs with the above types**
      1. [Natural number functions](/files/LectureNotes/files/natural-numbers-functions.lagda.md)
      1. [Boolean functions](/files/LectureNotes/files/Bool-functions.lagda.md)
      1. [Finite types functions](/files/LectureNotes/files/Fin-functions.lagda.md)

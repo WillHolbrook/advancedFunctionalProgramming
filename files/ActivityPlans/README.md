@@ -4,3 +4,4 @@
  * [Week 2](files/week2.md) - Propositions as types and proofs as programs
  * [Week 3](files/week3.md) - Decidability (and Isomorphisms)
  * [Week 4](files/week4.md) - Isomorphisms
+ * [Week 5](files/week5.md) - Induction, new types, and their isomorphisms with old types

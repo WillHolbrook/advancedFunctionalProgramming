@@ -62,10 +62,10 @@ The practice test is in Week 6 in the UG04 lab on Tuesday 4:00-5:50pm.
   1. We will run it in strict exam conditions.
      1. Mobile phones should be put on silent mode and away from your desk after you enter the attendance code.
      1. You must bring your university ID card.
-     1. You will sign an in-person attendance list, in addition to entering the university code.
+     1. You will sign an in-person attendance list, in addition to entering the given code in the university app.
      1. Like in exams, people are not allowed to leave in the last 10 minutes of the test to avoid disruption.
   1. You must use a lab machine (unless given permission by Welfare to use your own machine if you have a RAP).
-  1. If you are entitled to extra time, please get it touch with both Martin Escardo and Eric Finster by email so that we can discuss the arrangements with you.
+  1. If you are entitled to have extra time, please get it touch with both Martin Escardo and Eric Finster by email so that we can discuss the arrangements with you.
   1. The test is open book. You may use:
      1. Your files stored in a lab machine and your own notes on paper.
      1. Canvas and the GitLab repository.

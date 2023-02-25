@@ -76,7 +76,7 @@ We will additionally start working with the following handouts, which we will co
 
  * An additional collection of [homework](/files/LectureNotes/files/exercises/homework4.lagda.md) exercises is also provided with [solutions](/files/LectureNotes/files/exercises/homework4-solutions.lagda.md) (avoid looking at them until you have attempted the homework).
 
-### Next week we will have the practice Test 1
+### Next week we will have the Practice Test 1
 
 The practice test is in Week 6 in the UG04 lab on Tuesday 4:00-5:50pm.
 
@@ -99,7 +99,7 @@ The practice test is in Week 6 in the UG04 lab on Tuesday 4:00-5:50pm.
   1. You may import any handout or solution given in our teaching material (even the ones that are available and we haven't taught yet). You may also copy-and-paste and modify any existing code in the GitLab repository if you find this useful.
   1. You may write helper functions and definitions if you wish.
   1. You **must not** modify the type of any question.
-  1. The test will be marked manually jointly by the lecturers and TA's, and we will award marks for partial correctness. The questions are based on your lab exercises and homework.
+  1. The test will be marked manually jointly by the lecturers and TA's, and we will award marks for partial correctness. The questions are based on your lab exercises and homework. The marks don't contribute to your module grade, as this is only a practice test, and are produced only for the sake of giving you feedback.
   1. We aim to return the marks within 1 week.
   1. The real Test 1 will be in Week 8 (see [module calendar](files/Resources/calendar.md)).
   1. It will cover the material of Weeks 1-5.

@@ -53,11 +53,11 @@ We will additionally start working with the following handouts, which we will co
  * [Lab exercises](/files/LectureNotes/files/exercises/lab5.lagda.md).
  * An additional collection of [homework](/files/LectureNotes/files/exercises/homework4.lagda.md) exercises is also provided with [solutions](/files/LectureNotes/files/exercises/homework4-solutions.lagda.md) (avoid looking at them until you have attempted the homework).
 
-### Next week we will have the Practice Test 1
+### Next week we will have the Practice Test
 
 The practice test is in Week 6 in the UG04 lab on Tuesday 4:00-5:50pm.
 
-  1. We will use the real Test 1 the students took last year.
+  1. We will use real Test 1 that the students took last year.
   1. There are 5 questions of increasing difficulty.
   1. We will run it in strict exam conditions.
      1. Mobile phones should be put on silent mode and away from your desk after you enter the attendance code.
@@ -78,5 +78,5 @@ The practice test is in Week 6 in the UG04 lab on Tuesday 4:00-5:50pm.
   1. You **must not** modify the type of any question.
   1. The test will be marked manually jointly by the lecturers and TA's, and we will award marks for partial correctness. The questions are based on your lab exercises and homework. The marks don't contribute to your module grade, as this is only a practice test, and are produced only for the sake of giving you feedback.
   1. We aim to return the marks within 1 week.
-  1. The real Test 1 will be in Week 8 (see [module calendar](files/Resources/calendar.md)).
+  1. Test 1 will be in Week 8 (see [module calendar](files/Resources/calendar.md)).
   1. It will cover the material of Weeks 1-5.

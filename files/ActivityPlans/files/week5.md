@@ -6,7 +6,7 @@ Make sure you studied the handouts for Weeks 1-4, including the things that were
 
 ### Attend the lecture on Monday 5-7pm
 
-Watch the videos on isomorphisms before the lecture if possible.
+Watch the videos for this week before the lecture if possible.
 
 ### Attend the lab on Tuesday 4-6pm
 
@@ -81,19 +81,21 @@ We will additionally start working with the following handouts, which we will co
 The practice test is in Week 6 in the UG04 lab on Tuesday 4:00-5:50pm.
 
   1. We will use the real Test 1 the students took last year.
+  1. There are 5 questions of increasing difficulty.
   1. We will run it in strict exam conditions.
-     1. Mobile phones should be put on silent and away from your desk after you enter the attendance code.
+     1. Mobile phones should be put on silent mode and away from your desk after you enter the attendance code.
      1. You must bring your university ID card.
      1. You will sign an in-person attendance list, in addition to entering the university code.
+     1. Like in exams, people are not allowed to leave in the last 10 minutes of the test to avoid disruption.
   1. You must use a lab machine (unless given permission by Welfare to use your own machine if you have a RAP).
   1. If you are entitled to extra time, please get it touch with both Martin Escardo and Eric Finster by email so that we can discuss the arrangements with you.
-  1. The test is open book. You can use:
-     1. Your own notes and files stored in a lab machine.
+  1. The test is open book. You may use:
+     1. Your files stored in a lab machine and your own notes on paper.
      1. Canvas and the GitLab repository.
      1. The [Agda documentation](https://agda.readthedocs.io/en/latest/)
+     1. The [emacs reference card](https://www.gnu.org/software/emacs/refcards/pdf/refcard.pdf), [manual](https://www.gnu.org/software/emacs/manual/html_node/emacs/index.html) and [guided tour](https://www.gnu.org/software/emacs/tour/index.html).
      1. No other web page.
      1. No social media.
-  1. There will be 5 questions of increasing difficulty.
   1. You may import any handout or solution given in our teaching material (even the ones that are available and we haven't taught yet). You may also copy-and-paste and modify any existing code in the GitLab repository if you find this useful.
   1. You may write helper functions and definitions if you wish.
   1. You **must not** modify the type of any question.

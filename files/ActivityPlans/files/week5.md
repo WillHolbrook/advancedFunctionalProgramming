@@ -75,3 +75,26 @@ We will additionally start working with the following handouts, which we will co
  * [Lab exercises](/files/LectureNotes/files/exercises/lab5.lagda.md).
 
  * An additional collection of [homework](/files/LectureNotes/files/exercises/homework4.lagda.md) exercises is also provided with [solutions](/files/LectureNotes/files/exercises/homework4-solutions.lagda.md) (avoid looking at them until you have attempted the homework).
+
+### Next week we will have the practice Test 1
+
+The practice test is in Week 6 in the UG04 lab on Tuesday 4:00-5:50pm.
+
+  1. We will use the real Test 1 the students took last year.
+  1. We will run it in strict exam conditions.
+     1. Mobile phones should be put on silent and away from your desk after you enter the attendance code.
+     1. You must bring your university ID card.
+     1. You will sign an in-person attendance list, in addition to entering the university code.
+  1. You must use a lab machine (unless given permission by Welfare to use your own machine if you have a RAP).
+  1. If you are entitled to extra time, please get it touch with both Martin Escardo and Eric Finster by email so that we can discuss the arrangements with you.
+  1. The test is open book. You can use:
+     1. Your own notes and files stored in a lab machine.
+     1. Canvas and the GitLab repository.
+     1. The [Agda documentation](https://agda.readthedocs.io/en/latest/)
+     1. No other web page.
+     1. No social media.
+  1. There will be 5 questions of increasing difficulty.
+  1. You may import any handout or solution given in our teaching material (even the ones that are available and we haven't taught yet). You may also modify any existing code in the GitLab repository if you find this useful.
+  1. You may write helper functions and definitions if you wish.
+  1. You **must not** modify the type of any question.
+  1. The test will be marked manually jointly by the lecturers and TA's, and we will award marks for partial correctness. The questions are based on your lab exercises and homework.

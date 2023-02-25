@@ -98,3 +98,5 @@ The practice test is in Week 6 in the UG04 lab on Tuesday 4:00-5:50pm.
   1. You may write helper functions and definitions if you wish.
   1. You **must not** modify the type of any question.
   1. The test will be marked manually jointly by the lecturers and TA's, and we will award marks for partial correctness. The questions are based on your lab exercises and homework.
+  1. We aim to return the marks within 1 week.
+  1. The real Test 1 will be in Week 8 (see [module calendar](files/Resources/calendar.md)).

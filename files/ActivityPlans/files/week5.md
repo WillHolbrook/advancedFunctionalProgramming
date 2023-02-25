@@ -94,7 +94,7 @@ The practice test is in Week 6 in the UG04 lab on Tuesday 4:00-5:50pm.
      1. No other web page.
      1. No social media.
   1. There will be 5 questions of increasing difficulty.
-  1. You may import any handout or solution given in our teaching material (even the ones that are available and we haven't taught yet). You may also modify any existing code in the GitLab repository if you find this useful.
+  1. You may import any handout or solution given in our teaching material (even the ones that are available and we haven't taught yet). You may also copy-and-paste and modify any existing code in the GitLab repository if you find this useful.
   1. You may write helper functions and definitions if you wish.
   1. You **must not** modify the type of any question.
   1. The test will be marked manually jointly by the lecturers and TA's, and we will award marks for partial correctness. The questions are based on your lab exercises and homework.

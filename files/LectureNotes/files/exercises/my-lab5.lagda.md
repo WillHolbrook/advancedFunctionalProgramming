@@ -356,7 +356,8 @@ we will prove our main result.
 
  even⇒check-even : (n : ℕ) → is-even n → check-even n ≡ true
  even⇒check-even zero e = refl true
- even⇒check-even (suc zero) (suc n/2 , prf) = 𝟘-elim (not-1≡suc-suc n/2 prf)
+ even⇒check-even (suc zero) (suc zero , ())
+ --(suc n/2 , prf) = 𝟘-elim (not-1≡suc-suc n/2 prf)
  even⇒check-even (suc (suc n)) e = even⇒check-even n (evenness-lemma₁ n e)
 ```
 

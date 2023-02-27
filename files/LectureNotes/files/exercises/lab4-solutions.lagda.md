@@ -159,7 +159,7 @@ Fin-is-exhaustively-searchable : (n : ℕ) → is-exhaustively-searchable (Fin n
 Fin-is-exhaustively-searchable 0       = Fin-search-base
 Fin-is-exhaustively-searchable (suc n) = Fin-search-step n (Fin-is-exhaustively-searchable n)
 
--- Example
+-- Examples
 
 A : Fin 5 → Type
 A zero = 𝟘

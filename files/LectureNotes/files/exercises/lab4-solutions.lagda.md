@@ -120,9 +120,9 @@ sake of clarity. In particular, this allows us to see the types of the
 subterms.
 
 The idea of the function is to check whether A zero holds or not using
-the assumption that it is decidable. If it holds, we are done: we've
-found what we are looking for. Otherwise, we use the searcher s to
-check whether there is x with A (succ x) in III.
+the assumption that it is decidable, here called d. If it holds, we
+are done: we've found what we are looking for. Otherwise, we use the
+searcher s to check whether there is x with A (succ x) in III.
 
 -}
 

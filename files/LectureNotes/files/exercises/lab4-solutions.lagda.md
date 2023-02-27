@@ -146,10 +146,10 @@ Fin-search-step n s = I
 
       IV : is-decidable (Σ x ꞉ Fin n , A (succ x))
          → is-decidable (Σ x ꞉ Fin (suc n) , A x)
-      IV (inl (x , a)) = inl (succ x , a) -- We've found something
+      IV (inl (x , a)) = inl (succ x , a) -- We've found something.
       IV (inr g)       = inr V            -- g says that ¬ (Σ x ꞉ Fin (succ n) , A (succ x)),
                                           -- so there is nothing to be found, which is
-                                          -- proved by V.
+                                          -- proved by V with two cases, using f and g.
        where
         V : ¬ (Σ x ꞉ Fin (suc n) , A x)
         V (zero   , a) = f a

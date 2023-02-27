@@ -92,4 +92,101 @@ private
    f p = inl (≤-suc m n p)
    g : ¬ (m ≤ n) → is-decidable (suc m ≤ suc n)
    g p = inr (λ q → p (≤-lemma m n q))
-```
+
+is-decidable-predicate : {X : Type} → (X → Type) → Type
+is-decidable-predicate {X} A = (x : X) → is-decidable (A x)
+
+is-exhaustively-searchable : Type → Type₁
+is-exhaustively-searchable X = (A : X → Type)
+                             → is-decidable-predicate A
+                             → is-decidable (Σ x ꞉ X , A x)
+
+data Fin : ℕ → Type where
+  zero : {n : ℕ} → Fin (suc n)
+  succ : {n : ℕ} → Fin n → Fin (suc n)
+
+Fin-search-base : is-exhaustively-searchable (Fin 0)
+Fin-search-base A d = inr n
+ where
+  n : ¬ (Σ x ꞉ Fin 0 , A x)
+  n ((), _)
+
+{-
+
+In the following, we could have used ∔-elim, but instead we are using
+(equivalently) helper functions II and IV which do pattern matching
+on their input to check which case holds. We are doing this for the
+sake of clarity. In particular, this allows us to see the types of the
+subterms.
+
+The idea of the function is to check whether A zero holds or not using
+the assumption that it is decidable. If it holds, we are done: we've
+found what we are looking for. Otherwise, we use the searcher s to
+check whether there is x with A (succ x) in III.
+
+-}
+
+Fin-search-step : (n : ℕ)
+                → is-exhaustively-searchable (Fin n)
+                → is-exhaustively-searchable (Fin (suc n))
+Fin-search-step n s = I
+ where
+  I : is-exhaustively-searchable (Fin (suc n))
+  I A d = II (d zero)
+   where
+    II : A zero ∔ ¬ A zero → is-decidable (Σ x ꞉ Fin (suc n) , A x)
+    II (inl a) = inl (zero , a) -- We have that a : A zero, so we've found something.
+    II (inr f) = IV III         -- f says that ¬ A zero.
+                                -- So search after zero using s with III,
+                                -- And then feed this to IV to see whether we got
+                                -- something or not.
+     where
+      III : is-decidable (Σ x ꞉ Fin n , A (succ x))
+      III = s (λ x → A (succ x)) (λ x → d (succ x))
+
+      IV : is-decidable (Σ x ꞉ Fin n , A (succ x))
+         → is-decidable (Σ x ꞉ Fin (suc n) , A x)
+      IV (inl (x , a)) = inl (succ x , a) -- We've found something
+      IV (inr g)       = inr V            -- g says that ¬ (Σ x ꞉ Fin (succ n) , A (succ x)),
+                                          -- so there is nothing to be found, which is
+                                          -- proved by V.
+       where
+        V : ¬ (Σ x ꞉ Fin (suc n) , A x)
+        V (zero   , a) = f a
+        V (succ x , a) = g (x , a)
+
+Fin-is-exhaustively-searchable : (n : ℕ) → is-exhaustively-searchable (Fin n)
+Fin-is-exhaustively-searchable 0       = Fin-search-base
+Fin-is-exhaustively-searchable (suc n) = Fin-search-step n (Fin-is-exhaustively-searchable n)
+
+-- Example
+
+A : Fin 5 → Type
+A zero = 𝟘
+A (succ zero) = 𝟘
+A (succ (succ zero)) = 𝟙
+A (succ (succ (succ x))) = 𝟘
+
+𝟘-is-decidable : is-decidable 𝟘
+𝟘-is-decidable = inr id
+
+𝟙-is-decidable : is-decidable 𝟙
+𝟙-is-decidable = inl ⋆
+
+A-is-decidable : (x : Fin 5) → is-decidable (A x)
+A-is-decidable zero = 𝟘-is-decidable
+A-is-decidable (succ zero) = 𝟘-is-decidable
+A-is-decidable (succ (succ zero)) = 𝟙-is-decidable
+A-is-decidable (succ (succ (succ x))) = 𝟘-is-decidable
+
+example-A : Fin-is-exhaustively-searchable 5 A A-is-decidable ≡ inl (succ (succ zero) , ⋆)
+example-A = refl _
+
+B : Fin 4 → Type
+B x = 𝟘
+
+B-is-decidable : (x : Fin 4) → is-decidable (B x)
+B-is-decidable _ = 𝟘-is-decidable
+
+example-B : Fin-is-exhaustively-searchable 4 B B-is-decidable ≡ inr _
+example-B = refl _

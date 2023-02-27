@@ -132,7 +132,7 @@ Fin-search-step : (n : ℕ)
 Fin-search-step n s = I
  where
   I : is-exhaustively-searchable (Fin (suc n))
-  I A d = II (d zero) -- Check whether A zero holds using g and feed this to II.
+  I A d = II (d zero) -- Check whether A zero holds using d and feed this to II.
    where
     II : A zero ∔ ¬ A zero → is-decidable (Σ x ꞉ Fin (suc n) , A x)
     II (inl a) = inl (zero , a) -- We have that a : A zero, so we've found something.

@@ -159,6 +159,9 @@ transitive.
  ≼-unprime [] ys (tail , prf) = []-is-prefix ys
  ≼-unprime (x :: xs) (.x :: .(xs ++ tail)) (tail , refl .(x :: xs ++ tail)) =
    ::-is-prefix x xs (xs ++ tail) (≼-unprime xs (xs ++ tail) (tail ,  refl (xs ++ tail)))
+
+ ≼-unprime' : {X : Type} (xs ys : List X) → xs ≼' ys → xs ≼ ys
+ ≼-unprime' xs .(xs ++ tail) (tail , refl .(xs ++ tail)) = ≼-++ xs tail
 ```
 
 ### Exercise 2.5

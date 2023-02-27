@@ -25,11 +25,11 @@ The following proof skeleton has been provided for you, using
 
  +-comm : (x y : ℕ) → x + y ≡ y + x
  +-comm 0       0       = refl zero
- +-comm 0       (suc y) = ap suc (sym (zero-right-unit y))
- +-comm (suc x) 0       = ap suc (zero-right-unit x)
+ +-comm 0       (suc y) = ap suc (+-comm zero y)
+ +-comm (suc x) 0       = ap suc (+-comm x zero)
  +-comm (suc x) (suc y)
   = suc (x + suc y)     ≡⟨ ap suc (+-comm x (suc y)) ⟩
-    suc (suc (y + x))   ≡⟨ ap (suc ∘ suc) (sym (+-comm x y)) ⟩
+    suc (suc (y + x))   ≡⟨ ap (suc ∘ suc) (+-comm y x) ⟩
     suc (suc x + y)     ≡⟨ ap suc (+-comm (suc x) y) ⟩
     suc (y + suc x)     ∎
 ```

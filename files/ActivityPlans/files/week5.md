@@ -29,12 +29,12 @@ Watch the videos for this week before the lecture if possible.
 ### Continue to read the handouts for this week
 
   1. **More types, their elimination principles, and their isomorphism with Basic MLTT types**
-     1. [Booleans](files/Bool.lagda.md) and [Booleans as a Basic MLTT type](files/Bool-functions.lagda.md)
-     1. [Maybe type](files/Maybe.lagda.md)
-     1. [Finite types](files/Fin.lagda.md)
-     1. [Lists](files/List.lagda.md)
-     1. [Vectors](files/Vector.lagda.md)
-     1. [List and vector isomorphisms](files/vector-and-list-isomorphisms.lagda.md)
+     1. [Booleans](/files/LectureNotes/files/Bool.lagda.md) and [Booleans as a Basic MLTT type](files/Bool-functions.lagda.md)
+     1. [Maybe type](/files/LectureNotes/files/Maybe.lagda.md)
+     1. [Finite types](/files/LectureNotes/files/Fin.lagda.md)
+     1. [Lists](/files/LectureNotes/files/List.lagda.md)
+     1. [Vectors](/files/LectureNotes/files/Vector.lagda.md)
+     1. [List and vector isomorphisms](/files/LectureNotes/files/vector-and-list-isomorphisms.lagda.md)
 
 We will additionally start working with the following handouts, which we will complete next week.
 

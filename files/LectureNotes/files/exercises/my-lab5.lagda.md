@@ -15,7 +15,7 @@ private
 We will also want to use some things from the Lab and Homework sheet of Week 4:
 
 ```agda
- open import exercises.homework4-solutions
+ -- open import exercises.homework4-solutions
  open import exercises.lab4-solutions
 ```
 
@@ -74,9 +74,9 @@ _≤'_ : ℕ → ℕ → Type
 x ≤' y = Σ k ꞉ ℕ , x + k ≡ y
 ```
 
-```agdacode
-_≼'_ : {X : Type} → List X → List X → Type
-_≼'_ {X} xs ys = Σ zs ꞉ List X , xs ++ zs ≡ ys
+```agda
+ _≼'_ : {X : Type} → List X → List X → Type
+ _≼'_ {X} xs ys = Σ zs ꞉ List X , xs ++ zs ≡ ys
 ```
 
 and that `x ≤' y` expresses that the natural number `x` is less than or equal to

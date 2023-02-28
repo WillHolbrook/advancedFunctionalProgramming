@@ -3,10 +3,12 @@
 **Please finish the lab sheet before moving on to these exercises.**
 
 ```agda
+{-# OPTIONS --without-K --safe #-}
+
 module exercises.homework4-solutions where
 
 open import prelude
-open import exercises.lab3
+open import exercises.lab3-solutions
 
 private
 ```
@@ -133,13 +135,10 @@ However, `DNE` is *also* not provable or disprovable in Agda.
 It is the case, however, that if we had access to `LEM`, we could prove `DNE`.
 
 ```agda
- DNE' : {A : Type} → ¬¬ A → A
- DNE' {A} p = γ p
-  where
-   γ : A ∔ ¬ A → A
-   γ (inl a) = a
-   γ (inr q) = 𝟘-nondep-elim (p q)
+ open import decidability
 
+ DNE' : {A : Type} → ¬¬ A → A
+ DNE' {A} = ¬¬-elim LEM
 ```
 
 **Complete** `DNE'` using `LEM`.

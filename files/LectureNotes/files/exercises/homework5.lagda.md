@@ -16,7 +16,7 @@ private
 We wish to prove the commutativity of `_+_` on the natural numbers.
 
 The following proof skeleton has been provided for you, using
-[notation for equational reasoning](https://git.cs.bham.ac.uk/mhe/afp-learning/-/blob/main/files/LectureNotes/files/identity-type.lagda.md#notation-for-equality-reasoning).
+[notation for equational reasoning](/files/LectureNotes/files/identity-type.lagda.md#notation-for-equality-reasoning).
 
 ```agda
  +-comm : (x y : ℕ) → x + y ≡ y + x

@@ -156,8 +156,16 @@ vectors-from-lists {A} {n} = record { bijection = f n ; bijectivity = f-is-bijec
   fg (suc .(length xs)) (x :: xs , refl .(suc (length xs)))
     | .(xs , refl (length xs))
     | refl .(xs , refl (length xs))
-    = refl (x :: xs , refl (suc (length xs)))  
-
+    = refl (x :: xs , refl (suc (length xs)))
+    
+    -- (x :: fst (f (length xs) (g (length xs) (xs , refl (length xs)))) , ap suc (snd (f (length xs) (g (length xs) (xs , refl (length xs)))))) ≡⟨ {!!} ⟩
+    -- {!!} ≡⟨ {!!} ⟩
+    -- {!!} ≡⟨ {!!} ⟩
+    -- {!!} ≡⟨ {!!} ⟩
+    -- {!!} ≡⟨ {!!} ⟩
+    -- {!!} ≡⟨ {!!} ⟩
+    -- (x :: xs , refl (suc (length xs))) ∎
+  
   f-is-bijection : (n : ℕ) → is-bijection (f n)
   f-is-bijection n = record { inverse = g n ; η = gf n ; ε = fg n }
 

@@ -12,10 +12,9 @@ private
  open import isomorphisms
 ```
 
-We will also want to use some things from the Lab and Homework sheet of Week 4:
+We will also want to use some things from the Lab sheet of Week 4:
 
 ```agda
- open import exercises.homework4-solutions
  open import exercises.lab4-solutions
 ```
 
@@ -65,21 +64,19 @@ their respective lengths. **Complete** the proof of this fact.
 
 ### Exercise 1.3
 
-Recall `≤'` from Lab Sheet 4 and `≼'` from Homework Sheet 4
+Recall `≤'` from Lab Sheet 4:
 
 ```agdacode
 _≤'_ : ℕ → ℕ → Type
 x ≤' y = Σ k ꞉ ℕ , x + k ≡ y
 ```
 
-```agdacode
-_≼'_ : {X : Type} → List X → List X → Type
-_≼'_ {X} xs ys = Σ zs ꞉ List X , xs ++ zs ≡ ys
-```
+Similarly, we now define a list-prefix relation as follows:
 
-and that `x ≤' y` expresses that the natural number `x` is less than or equal to
-the natural number `y`, while `xs ≼' ys` expresses that the list `xs` is a
-prefix of the list `ys`.
+```agda
+ _≼'_ : {X : Type} → List X → List X → Type
+ _≼'_ {X} xs ys = Σ zs ꞉ List X , xs ++ zs ≡ ys
+```
 
 **Prove** that the length of a prefix of a list `ys` is less than the length of
 `ys`, relating the two notions above.
@@ -298,14 +295,14 @@ we will prove our main result.
 
 ### Exercise 3.2
 
-**Prove** that if `is-even n` is inhabited, then `check-even n ≡ true`.
+**Prove** that if `is-even n` then `check-even n ≡ true`.
 
 ```agda
  even⇒check-even : (n : ℕ) → is-even n → check-even n ≡ true
  even⇒check-even = {!!}
 ```
 
-**Prove** that if `check-even n ≡ true` then `is-even n` is inhabited:
+**Prove** that if `check-even n ≡ true` then `is-even n`:
 
 ```agda
  check-even⇒even : (n : ℕ) → check-even n ≡ true → is-even n

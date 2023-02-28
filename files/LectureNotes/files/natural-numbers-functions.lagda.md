@@ -191,10 +191,10 @@ twin-prime-conjecture = (n : ℕ) → Σ p ꞉ ℕ , (p ≥ n)
                    y + 0       ∎
 
 +-comm (suc x) y = suc x + y   ≡⟨ refl _ ⟩
-                          suc (x + y) ≡⟨ ap suc (+-comm x y) ⟩
-                          suc (y + x) ≡⟨ refl _ ⟩
-                          suc y + x   ≡⟨ sym (+-step y x) ⟩
-                          y + suc x   ∎
+                   suc (x + y) ≡⟨ ap suc (+-comm x y) ⟩
+                   suc (y + x) ≡⟨ refl _ ⟩
+                   suc y + x   ≡⟨ sym (+-step y x) ⟩
+                   y + suc x   ∎
 ```
 
 ## Associativity of addition
@@ -281,14 +281,14 @@ twin-prime-conjecture = (n : ℕ) → Σ p ꞉ ℕ , (p ≥ n)
 ```agda
 *-assoc : (x y z : ℕ) → (x * y) * z ≡ x * (y * z)
 *-assoc zero    y z = refl _
-*-assoc (suc x) y z = (x * y + y) * z     ≡⟨ *-comm (x * y + y) z             ⟩
-                      z * (x * y + y)     ≡⟨ *-+-distrib z (x * y) y          ⟩
-                      z * (x * y) + z * y ≡⟨ ap (z * x * y +_) (*-comm z y)   ⟩
-                      z * (x * y) + y * z ≡⟨ ap (_+ y * z) (*-comm z (x * y)) ⟩
-                      (x * y) * z + y * z ≡⟨ ap (_+ y * z) (*-assoc x y z)    ⟩
-                      x * y * z + y * z   ∎
+*-assoc (suc x) y z =
+ (x * y + y) * z     ≡⟨ *-comm (x * y + y) z             ⟩
+ z * (x * y + y)     ≡⟨ *-+-distrib z (x * y) y          ⟩
+ z * (x * y) + z * y ≡⟨ ap (z * x * y +_) (*-comm z y)   ⟩
+ z * (x * y) + y * z ≡⟨ ap (_+ y * z) (*-comm z (x * y)) ⟩
+ (x * y) * z + y * z ≡⟨ ap (_+ y * z) (*-assoc x y z)    ⟩
+ x * y * z + y * z   ∎
 ```
-
 
 ## Even and odd numbers
 

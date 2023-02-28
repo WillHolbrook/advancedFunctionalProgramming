@@ -48,6 +48,10 @@ A particular case of interest is the following. The [contrapositive](https://en.
 ```agda
 contrapositive : {A B : Type} → (A → B) → (¬ B → ¬ A)
 contrapositive {A} {B} = arrow-contravariance {A} {B} {𝟘}
+
+double-contrapositive : {A B : Type} → (A → B) → (¬ (¬ A) → ¬ (¬ B))
+double-contrapositive {A} {B} f = contrapositive (contrapositive f)
+
 ```
 This can also be read as "if we have a function A → B and B is empty, then also A must be empty".
 

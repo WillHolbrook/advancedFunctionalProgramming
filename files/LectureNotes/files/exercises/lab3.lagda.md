@@ -1,7 +1,8 @@
 # Week 3 - Lab Sheet
 
 ```agda
-{-# OPTIONS --allow-unsolved-metas #-}
+{-# OPTIONS --without-K --safe #-}
+
 module exercises.lab3 where
 open import prelude hiding (𝟘-nondep-elim)
 ```

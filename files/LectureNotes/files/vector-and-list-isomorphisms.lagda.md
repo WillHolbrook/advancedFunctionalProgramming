@@ -20,16 +20,27 @@ lists-from-vectors : {A : Type} → List A ≅ (Σ n ꞉ ℕ , Vector A n)
 lists-from-vectors {A} = record { bijection = f ; bijectivity = f-is-bijection }
  where
   f : List A → Σ n ꞉ ℕ , Vector A n
-  f = {!!}
+  f [] = 0 , []
+  f (x :: xs) = goal
+   where
+    IH : Σ n ꞉ ℕ , Vector A n
+    IH = f xs
+    goal : Σ n ꞉ ℕ , Vector A n
+    goal = suc (fst IH) , x :: snd (IH)
 
   g : (Σ n ꞉ ℕ , Vector A n) → List A
-  g = {!!}
+  g (0 , []) = []
+  g (suc n , x :: xs) = x :: g (n , xs)
 
   gf : g ∘ f ∼ id
   gf = {!!}
 
   fg : f ∘ g ∼ id
-  fg = {!!}
+  fg (0 , []) = refl _
+  fg (suc n , x :: xs) = {!!}
+   where
+    IH : f (g (n , xs)) ≡ (n , xs)
+    IH = fg (n , xs)
 
   f-is-bijection : is-bijection f
   f-is-bijection = record { inverse = g ; η = gf ; ε = fg }

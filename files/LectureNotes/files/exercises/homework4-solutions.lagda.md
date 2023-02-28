@@ -3,10 +3,12 @@
 **Please finish the lab sheet before moving on to these exercises.**
 
 ```agda
+{-# OPTIONS --without-K --safe #-}
+
 module exercises.homework4-solutions where
 
 open import prelude
-open import exercises.lab3
+open import exercises.lab3-solutions
 
 private
 ```
@@ -137,14 +139,11 @@ It is the case, however, that if we had access to `LEM`, we could prove `DNE`.
  DNE' {A} ¬¬a with LEM {A}
  ... | inl a = a
  ... | inr ¬a = 𝟘-elim (¬¬a ¬a)
-
--- γ p
---   where
---    γ : A ∔ ¬ A → A
---    γ (inl a) = a
---    γ (inr q) = 𝟘-nondep-elim (p q)
-
 ```
+--open import decidability
+
+--DNE' : {A : Type} → ¬¬ A → A
+--DNE' {A} = ¬¬-elim LEM
 
 **Complete** `DNE'` using `LEM`.
 

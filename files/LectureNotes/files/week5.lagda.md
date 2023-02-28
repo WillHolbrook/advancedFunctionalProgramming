@@ -129,95 +129,34 @@ vectors-from-lists {A} {n} = record { bijection = f n ; bijectivity = f-is-bijec
  where
   f : (n : ℕ) → Vector A n → (Σ xs ꞉ List A , (length xs ≡ n))
   f zero [] = [] , refl zero
-  f (suc n) (x :: vec-xs) with f n vec-xs
-  ... | xs , refl .(length xs) = (x :: xs) , (refl (length (x :: xs)))
-
--- = (x :: fst IH) , ap suc (snd IH)
---     where
---       IH : Σ xs ꞉ List A , (length xs ≡ n)
---       IH = f n vec-xs
-
+  f (suc n) (x :: vec-xs) = (x :: fst IH) , ap suc (snd IH)
+    where
+      IH : Σ xs ꞉ List A , (length xs ≡ n)
+      IH = f n vec-xs
 
   g : (n : ℕ) → (Σ xs ꞉ List A , (length xs ≡ n)) → Vector A n
   g 0 ([] , refl 0) = []
-  g .(length (x :: xs)) (x :: xs , refl .(length (x :: xs)))
-    = x :: (g (length xs) (xs , refl (length xs)))
-  -- g zero ([] , refl zero) = []
-  -- g (suc .(length xs)) (x :: xs , refl .(suc (length xs))) = x :: (g (length xs) (xs , refl (length xs)))
-  --= x :: g n (xs , ap pred suc-eq) 
-
+  g (suc n) (x :: xs , prf) = x :: (g n (xs , ap pred prf))
+  
   gf : (n : ℕ) →  ((g n) ∘ (f n)) ∼ id
   gf zero [] = refl []
-  gf (suc n) (x :: vec-xs) with ((g n) ∘ (f n)) vec-xs | gf n vec-xs
-  gf (suc n) (x :: vec-xs) | .vec-xs | refl .vec-xs = {!!}
-
-
--- with f n vec-xs
---   gf (suc .(length xs)) (x :: vec-xs)
---     | xs , refl .(length xs)
---     with
---       g (length xs) (f (length xs) vec-xs)
---       | gf (length xs) vec-xs
---   -- gf (suc .(length xs)) (x :: vec-xs)
---   --   | xs , refl .(length xs)
---   --   | a
---   --   | b
---   gf (suc .(length xs)) (x :: vec-xs) | xs , refl .(length xs) | a | prf = ap (x ::_) {!!}
---       -- where
-      --   IH : g (length xs) (f (length xs) vec-xs) ≡ vec-xs
-      --   IH = gf (length xs) vec-xs
-
-      --   I : g (length xs) (f (length xs) vec-xs) ≡ g (length xs) (xs , refl (length xs))
-      --   I = ap (g (length xs)) {!!}
-  -- gf (suc .(length xs)) (x :: .(g (length xs) (xs , refl (length xs)))) |
-  --   xs , refl .(length xs) |
-  --   .xs , eq |
-  --   refl .(g (length xs) (.xs , refl .(length xs)))
-  --   = ap (x ::_) (ap (g (length xs)) {!!})
-    -- where
-    --  I : a ≡ g (length xs) (f (length xs) vec-xs)
-    --  I = {!!}
-
-
+  gf (suc n) (x :: vec-xs) =
+    (g (suc n) ∘ f (suc n)) (x :: vec-xs) ≡⟨ refl _ ⟩
+    g (suc n) (f (suc n) (x :: vec-xs)) ≡⟨ refl _ ⟩
+    g (suc n) (x :: fst (f n vec-xs) , ap suc (snd (f n vec-xs))) ≡⟨ refl _ ⟩
+    x :: g n (fst (f n vec-xs) , ap pred (ap suc (snd (f n vec-xs)))) ≡⟨ ap (λ a → x :: g n (fst (f n vec-xs) , a)) ap-pred-ap-suc-cancel   ⟩
+    x :: (g n ∘ f n) vec-xs ≡⟨ ap (x ::_) (gf n vec-xs) ⟩
+    id (x :: vec-xs) ∎
   
-
--- with (g (length xs) ∘ f (length xs)) vec-xs | gf (length xs) vec-xs
---   gf (suc .(length xs)) (x :: vec-xs) | xs , refl .(length xs) | .vec-xs | refl .vec-xs = {!!}
-  -- with (g n (f n vec-xs)) | gf n vec-xs
-  -- ... | .vec-xs | refl .vec-xs = {!!}
-
--- with f n vec-xs | (g n (f n vec-xs)) | gf n vec-xs
---   gf (suc .(length xs)) (x :: vec-xs) | (xs , refl .(length xs)) | .vec-xs | refl .vec-xs = ap (x ::_) {!ap (f (length xs)) (refl vec-xs)!}
-
--- with (g n (f n vec-xs)) | gf n vec-xs | f n vec-xs
---   gf (suc .(length xs)) (x :: vec-xs) | .vec-xs | refl .vec-xs | (xs , refl .(length xs)) with g (length xs) (xs , refl (length xs))
---   gf (suc .(length xs)) (x :: vec-xs) | .vec-xs | refl .vec-xs | (xs , refl .(length xs)) | f = {!f!}
-  --= ap (x ::_) {!!}
-    -- where
-    --   I : ?
-    --   I = g (suc n) (f (suc n) (x :: vec-xs) | f n vec-xs)
-  -- = ap ((_::_) x) γ
-    -- where
-    --   IH : (g n ∘ f n) vec-xs ≡ id vec-xs
-    --   IH = gf n vec-xs
-
-    --   γ : (_≡_) {Vector A n} (g n (fst (f n vec-xs) , ap pred (ap suc (snd (f n vec-xs))))) vec-xs
-    --   γ = g n (fst (f n vec-xs) , ap pred (ap suc (snd (f n vec-xs)))) ≡⟨ ap (g n) {!Σ-combine (refl (fst (f n vec-xs))) (ap-pred-ap-suc-cancel {_} {_} {snd (f n vec-xs)})!}  ⟩
-    --       g n (fst (f n vec-xs) , snd (f n vec-xs)) ≡⟨ ap (g n) (pair-eq (f n vec-xs)) ⟩
-    --       g n (f n vec-xs) ≡⟨ IH ⟩
-    --       vec-xs ∎
-
   fg : (n : ℕ) → (f n ∘ g n) ∼ id
   fg zero ([] , refl .zero) = refl ([] , refl zero)
-  fg (suc .(length xs)) (x :: xs , refl .(suc (length xs)))
-    with
-      (f (length xs) ∘ g (length xs)) (xs , refl (length xs))
-      | fg (length xs) (xs , refl (length xs))
+  fg (suc .(length xs)) (x :: xs , refl .(suc (length xs))) with
+    (f (length xs) ∘ g (length xs)) (xs , refl (length xs))
+    | fg (length xs) (xs , refl (length xs))
   fg (suc .(length xs)) (x :: xs , refl .(suc (length xs)))
     | .(xs , refl (length xs))
     | refl .(xs , refl (length xs))
-    = refl (x :: xs , refl (suc (length xs)))
-  
+    = refl (x :: xs , refl (suc (length xs)))  
 
   f-is-bijection : (n : ℕ) → is-bijection (f n)
   f-is-bijection n = record { inverse = g n ; η = gf n ; ε = fg n }

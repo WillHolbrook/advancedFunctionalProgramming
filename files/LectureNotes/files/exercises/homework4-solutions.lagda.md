@@ -134,11 +134,15 @@ It is the case, however, that if we had access to `LEM`, we could prove `DNE`.
 
 ```agda
  DNE' : {A : Type} → ¬¬ A → A
- DNE' {A} p = γ p
-  where
-   γ : A ∔ ¬ A → A
-   γ (inl a) = a
-   γ (inr q) = 𝟘-nondep-elim (p q)
+ DNE' {A} ¬¬a with LEM {A}
+ ... | inl a = a
+ ... | inr ¬a = 𝟘-elim (¬¬a ¬a)
+
+-- γ p
+--   where
+--    γ : A ∔ ¬ A → A
+--    γ (inl a) = a
+--    γ (inr q) = 𝟘-nondep-elim (p q)
 
 ```
 

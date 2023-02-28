@@ -6,11 +6,11 @@ open import isomorphisms
 open import Fin
 
 data _<_ : ℕ → ℕ → Type where
-  <-zero : (  y : ℕ) → 0 < suc y
-  <-suc : (x y : ℕ) → x < y → suc x < suc y
+  <-zero : {  y : ℕ} → 0 < suc y
+  <-suc : {x y : ℕ} → x < y → suc x < suc y
 
 pred-< : {x y : ℕ} → suc x < suc y → x < y
-pred-< {x} {y} (<-suc .x .y op) = op
+pred-< {x} {y} (<-suc op) = op
 
  -- y₀ y₁ y₂ : Fin 3
  -- y₀ = zero {2} -- 0 
@@ -21,8 +21,8 @@ iso : (n : ℕ) → Fin n ≅ Σ λ k → k < n
 iso n = record { bijection = f n; bijectivity = f-is-bijection n}
  where
   f : (n : ℕ) → Fin n → Σ λ k → k < n
-  f (suc n) (zero {n}) = zero , <-zero n
-  f (suc n) (suc {n} y) = suc (fst IH) , <-suc (fst IH) n (snd IH)
+  f (suc n) (zero {n}) = zero , <-zero
+  f (suc n) (suc {n} y) = suc (fst IH) , <-suc (snd IH)
     where
       IH : Σ λ k → k < n
       IH = f n y
@@ -31,33 +31,23 @@ iso n = record { bijection = f n; bijectivity = f-is-bijection n}
   g (suc n) (zero , proof) = zero {n}
   g (suc n) (suc witness , proof) = suc {n} (g n (witness , pred-< proof))
 
-  ee : g 3 (2 , <-suc 1 2 (<-suc zero 1 (<-zero zero))) ≡ suc (suc zero)
-  ee = refl _ 
+  check : g 3 (2 , <-suc {1} {2} (<-suc {zero} {1} (<-zero {zero}))) ≡ suc (suc zero)
+  check = refl _ 
 
   gf : (n : ℕ) → g n ∘ f n ∼ id
   gf (suc n) zero = refl zero
   gf (suc n) (suc comb) = ap suc (gf n comb)
 
   fg : (n : ℕ) → f n ∘ g n ∼ id
-  fg (suc n) (zero , <-zero .n) = refl (zero , <-zero n)
-  fg (suc n) (suc witness , <-suc .witness .n proof)
+  fg (suc n) (zero , <-zero {.n}) = refl (zero , <-zero {n})
+  fg (suc n) (suc witness , <-suc proof)
   -- Reversed arguments - cannot solve
   --with fg n (witness , proof) | (f n ∘ g n) (witness , proof)
   --... | a | b = {!a!}
   -- Correctly ordered arguments, Agda computes
     with (f n ∘ g n) (witness , proof) | fg n (witness , proof)
-  ... | .(witness , proof) | refl .(witness , proof) = refl (suc witness , <-suc witness n proof)
-
-  -- Goal: (suc (fst (f n (g n (witness , proof)))) ,
-  --      <-suc (fst (f n (g n (witness , proof)))) n
-  --      (snd (f n (g n (witness , proof)))))
-  --     ≡ (suc witness , <-suc witness n proof)(witness , proof)
-
---with fg n (witness , proof) | (f n ∘ g n) (witness , proof)
---  ... | a | fst₁ , snd₁ = {!!}
+  ... | .(witness , proof) | refl .(witness , proof) = refl (suc witness , <-suc proof)
 
   f-is-bijection : (n : ℕ) → is-bijection (f n)
   f-is-bijection n = record { inverse = g n ; η = gf n ; ε = fg n }
-
-
 ```

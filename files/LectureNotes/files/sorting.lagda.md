@@ -78,6 +78,19 @@ to the inhabitant of the second list at the position specified by the
 given isomorphism.
 
 ```agda
+-- module _ where
+--   open import List-functions
+--   private
+  
+--     --xs-≅-pos-ys-imp-len-xs-≡-len-ys
+--     pos-imp-len : {X : Type} {xs ys : List X} → (Pos xs ≅ Pos ys) → (length xs ≡ length ys)
+--     pos-imp-len {X} {[]} {[]} (Isomorphism f (Inverse g fg gf)) = refl zero
+--     pos-imp-len {X} {[]} {x :: ys} (Isomorphism f (Inverse g fg gf)) = 𝟘-elim (g (inl ⋆))
+--     pos-imp-len {X} {x :: xs} {[]} (Isomorphism f (Inverse g fg gf)) = 𝟘-elim (f (inl ⋆))
+--     pos-imp-len {X} {x :: xs} {y :: ys} (Isomorphism f (Inverse g fg gf)) = ap suc {!!}
+```
+
+```agda
 record _IsPermutationOf_ {X : Type} (xs ys : List X) : Type where
   field
     pos-iso : Pos xs ≅ Pos ys

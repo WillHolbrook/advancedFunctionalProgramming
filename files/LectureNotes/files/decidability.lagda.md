@@ -309,6 +309,18 @@ Bool-is-exhaustively-searchable X y with y true | y false
     I : (Σ X → 𝟘)
     I (true , Xt)  = ¬Xt Xt
     I (false , Xf) = ¬Xf Xf
+
+Bool-is-exhaustively-searchable' : is-exhaustively-searchable Bool
+Bool-is-exhaustively-searchable' X y = I (y true) (y false)
+  where
+    I : ((X true) ∔ (X true → 𝟘)) → ((X false) ∔ (X false → 𝟘)) → (Σ X) ∔ (Σ X → 𝟘)
+    I (inl Xt)   b        = inl (true , Xt)
+    I (inr ¬Xt) (inl Xf)  = inl (false , Xf)
+    I (inr ¬Xt) (inr ¬Xf) = inr II
+      where
+        II : (Σ X → 𝟘)
+        II (true , Xt)  = ¬Xt Xt
+        II (false , Xf) = ¬Xf Xf
 ```
 **Exercise**. Show, in Agda, that the types `𝟘`, `𝟙` , `Bool` and  `Fin n`, for any `n : ℕ`, are exhaustively searchable. The idea is that we check whether or not `A x` holds for each `x : A`, and if we find at least one, we conclude that `Σ x ꞉ X , A x`, and otherwise we conclude that `¬ (Σ x ꞉ X , A x)`. This is possible because these types are finite.
 

@@ -6,6 +6,14 @@ There is no new material this week. We will continue with the material distribut
 
 Make sure you studied the handouts for Weeks 1-5, including the things that were not discussed during the lecture, before you attend this week's lecture.
 
+### Please fill the module questionnaire
+
+Your feedback is important to us and we take it into account:
+
+ * [module questionnaire](https://forms.office.com/e/kQrnVAxzRq)
+
+For the question about the "Canvas page", please consider GitLab as part of that, as we put our material on GitLab rather than Canvas.
+
 ### Attend the lecture on Monday 5-7pm
 
 ### Attend the practice test on Tuesday 4:00-5:50pm

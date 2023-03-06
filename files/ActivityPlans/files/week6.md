@@ -22,7 +22,7 @@ For the question about the "Canvas page", please consider GitLab as part of that
 
 ### Complete the homework exercises by the end of this week
 
- * [Homework 6](/files/LectureNotes/files/homework6.lagda.md)
+ * [Homework 6](/files/LectureNotes/files/exercises/homework6.lagda.md)
 
 ### This week we will have the Practice Test
 

@@ -18,7 +18,7 @@ For the question about the "Canvas page", please consider GitLab as part of that
 
 ### Attend the practice test on Tuesday 4:00-5:50pm
 
- * If RAP with 25% extra time, please arrive to start the test at 3:30pm. We agreed with the Quantum Computing module lead that you will be allowed to leave early from the exercise class if you are attenting this module. We ask you not to leave the test venue before 4pm.
+ * If you have a RAP with 25% extra time, please arrive to start the test at 3:30pm. We agreed with the Quantum Computing module lead that you will be allowed to leave early from the exercise class if you are attending this module. We ask you not to leave the test venue before 4pm.
 
 ### Complete the homework exercises by the end of this week
 

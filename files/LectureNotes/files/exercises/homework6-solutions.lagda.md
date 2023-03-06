@@ -4,7 +4,7 @@
 module exercises.homework6-solutions where
 
 open import prelude hiding (Bool-elim)
-open import natural-numbers-functions hiding (_≤_ ; is-even ; +-assoc ; +-comm)
+open import natural-numbers-functions hiding (_≤_ ; is-even ; +-assoc)
 open import List-functions
 open import isomorphisms
 open import exercises.lab4-solutions

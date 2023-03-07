@@ -22,6 +22,19 @@ fact sufficient for many classical sorting algorithms, just the
 comparison function itself is usually not sufficient to prove nice
 properties.
 
+```agda
+data ComparisonResult : Type where
+  lt : ComparisonResult
+  eq : ComparisonResult
+  gt : ComparisonResult
+
+sortable : Type → Type
+sortable X = X → X → ComparisonResult
+
+constant-sort : (X : Type) → sortable X
+constant-sort X = λ _ _ → lt
+```
+
 In a dependently typed language such as Agda, however, we can additionally
 state the axioms we would like our ordering relation to satisfy.  Here is
 one such possible axiomatization:

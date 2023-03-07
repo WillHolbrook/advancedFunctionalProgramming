@@ -150,21 +150,25 @@ vectors-from-lists {A} {n} = record { bijection = f n ; bijectivity = f-is-bijec
   
   fg : (n : ℕ) → (f n ∘ g n) ∼ id
   fg zero ([] , refl .zero) = refl ([] , refl zero)
-  fg (suc .(length xs)) (x :: xs , refl .(suc (length xs))) with
-    (f (length xs) ∘ g (length xs)) (xs , refl (length xs))
-    | fg (length xs) (xs , refl (length xs))
-  fg (suc .(length xs)) (x :: xs , refl .(suc (length xs)))
-    | .(xs , refl (length xs))
-    | refl .(xs , refl (length xs))
-    = refl (x :: xs , refl (suc (length xs)))
-    
-    -- (x :: fst (f (length xs) (g (length xs) (xs , refl (length xs)))) , ap suc (snd (f (length xs) (g (length xs) (xs , refl (length xs)))))) ≡⟨ {!!} ⟩
-    -- {!!} ≡⟨ {!!} ⟩
-    -- {!!} ≡⟨ {!!} ⟩
-    -- {!!} ≡⟨ {!!} ⟩
-    -- {!!} ≡⟨ {!!} ⟩
-    -- {!!} ≡⟨ {!!} ⟩
-    -- (x :: xs , refl (suc (length xs))) ∎
+  fg (suc .(length xs)) (x :: xs , refl .(suc (length xs))) =
+    (f (suc (length xs)) ∘ g (suc (length xs))) (x :: xs , refl (suc (length xs))) ≡⟨ refl _ ⟩
+    f (suc (length xs)) (g (suc (length xs)) (x :: xs , refl (suc (length xs)))) ≡⟨ refl _ ⟩
+    f (suc (length xs)) (x :: (g (length xs) (xs , ap pred (refl (suc (length xs))))))  ≡⟨ refl _ ⟩
+    (x :: fst I , ap suc (snd I)) ≡⟨ ap (λ a → (x :: fst a , ap suc (snd a))) (fg (length xs) (xs , refl (length xs))) ⟩
+    (x :: xs , refl (suc (length xs))) ∎
+    where
+      I : (Σ zs ꞉ List A , (length zs ≡ length xs))
+      I = (f (length xs) (g (length xs) (xs , refl (length xs))))
+
+  -- fg : (n : ℕ) → (f n ∘ g n) ∼ id
+  -- fg zero ([] , refl .zero) = refl ([] , refl zero)
+  -- fg (suc .(length xs)) (x :: xs , refl .(suc (length xs))) with
+  --   (f (length xs) ∘ g (length xs)) (xs , refl (length xs))
+  --   | fg (length xs) (xs , refl (length xs))
+  -- fg (suc .(length xs)) (x :: xs , refl .(suc (length xs)))
+  --   | .(xs , refl (length xs))
+  --   | refl .(xs , refl (length xs))
+  --   = refl (x :: xs , refl (suc (length xs)))
   
   f-is-bijection : (n : ℕ) → is-bijection (f n)
   f-is-bijection n = record { inverse = g n ; η = gf n ; ε = fg n }

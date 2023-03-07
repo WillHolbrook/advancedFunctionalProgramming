@@ -3,7 +3,7 @@
 ```agda
 {-# OPTIONS --without-K --safe --auto-inline #-}
 
-module exercises.practice-test where
+module exercises.my-practice-test where
 
 open import prelude
 open import natural-numbers-functions
@@ -222,8 +222,8 @@ map-of-idempotent-function-is-idempotent f is-idem-f (x :: xs) = II
     II : f (f x) :: map f (map f xs) ≡ f x :: map f xs
     II = 
       f (f x) :: map f (map f xs) ≡⟨ ap (_:: (map f (map f xs))) I ⟩
-      f x :: map f (map f xs)     ≡⟨ ap (f x ::_) IH ⟩
-      f x :: map f xs ∎
+      f x     :: map f (map f xs) ≡⟨ ap (f x ::_) IH ⟩
+      f x     :: map f xs         ∎
 
 identiy-is-idempotent : {X : Type} → is-idempotent (id {X})
 identiy-is-idempotent x = refl x

@@ -3,6 +3,7 @@ Extra Translation Exercises
 module exercises.translation-exercises where
 
 open import prelude
+open import Fin
 ```
 
 For each statement, you want to define, in Agda, a type-valued function that translates the English statement. You *do not* need to prove the statement.
@@ -122,5 +123,5 @@ data _<_ : ℕ → ℕ → Type where
   <-suc : {x y : ℕ} → x < y → suc x < suc y
 
 pigeonhole-principle : Type
-pigeonhole-principle = {! !}
+pigeonhole-principle = {! Fin 0!}
 ```

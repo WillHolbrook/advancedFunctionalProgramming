@@ -41,19 +41,25 @@ It is also a good idea to submit to Canvas well before the deadline when you hav
 
 ```agda
 ite-fact₁ : (b : Bool) → if b then true else false ≡ b
-ite-fact₁ = {!!}
+ite-fact₁ true = refl true
+ite-fact₁ false = refl false 
 
 ite-fact₂ : {X : Type} {x : X} (b : Bool) → if b then x else x ≡ x
-ite-fact₂ = {!!}
+ite-fact₂ true = refl _
+ite-fact₂ false = refl _
 
 ite-fact₃ : {X : Type} {x y : X} (b : Bool)
           → if b then x else y ≡ if not b then y else x
-ite-fact₃ = {!!}
+ite-fact₃ true  = refl _
+ite-fact₃ false = refl _
 
 ite-fact₄ : {X : Type} {x y u v : X} (a b : Bool)
           → if a then (if b then x else y) else (if b then u else v)
           ≡ if b then (if a then x else u) else (if a then y else v)
-ite-fact₄ = {!!}
+ite-fact₄ true true = refl _
+ite-fact₄ true false = refl _
+ite-fact₄ false true = refl _
+ite-fact₄ false false = refl _
 ```
 
 ## Question 2
@@ -75,28 +81,42 @@ By definition, the empty list is bounded by 0.
 
 ```agda
 data _is-bounded-by_ : List ℕ → ℕ → Type where
-  zero-bounds-[] : {!!}
+  zero-bounds-[] : [] is-bounded-by 0 
   stays-bounded : {b : ℕ} → (n : ℕ) (ns : List ℕ)
-    → {!!}
+    → ns is-bounded-by b
     → n ≤₁ b
-    → {!!} is-bounded-by {!!}
+    → (n :: ns) is-bounded-by b
   bound-increases : {b : ℕ} → (n : ℕ) (ns : List ℕ)
-    → {!!}
+    → ns is-bounded-by b
     → ¬ (n ≤₁ b)
-    → {!!} is-bounded-by {!!}
+    → (n :: ns) is-bounded-by n
 ```
 
 **Prove** the following examples involving `is-bounded-by`:
 
 ```agda
 bounded-inductive-example₀ : [] is-bounded-by 0
-bounded-inductive-example₀ = {!!}
+bounded-inductive-example₀  = zero-bounds-[]
 
 bounded-inductive-example₁ : (2 :: 1 :: [ 3 ]) is-bounded-by 3
-bounded-inductive-example₁ = {!!}
+bounded-inductive-example₁  = goal
+  where
+
+    IH₂ : (3 :: []) is-bounded-by 3
+    IH₂ = bound-increases 3 [] zero-bounds-[] λ z → z
+
+    IH : (1 :: 3 :: []) is-bounded-by 3
+    IH = stays-bounded 1 (3 :: []) IH₂ ⋆
+    
+
+    goal : (2 :: 1 :: 3 :: []) is-bounded-by 3
+    goal = stays-bounded 2 (1 :: [ 3 ]) IH ⋆
+
+  
 
 bounded-inductive-example₂ : ¬ ((3 :: 2 :: [ 1 ]) is-bounded-by 2)
-bounded-inductive-example₂ = {!!}
+bounded-inductive-example₂ (stays-bounded .3 .(2 :: [ 1 ]) n x) = x
+
 ```
 
 ## Question 3
@@ -115,16 +135,24 @@ natural numbers:
         ; bijectivity = record { inverse = g ; η = section ; ε = retraction } }
   where
    f : (X ∔ 𝟙) × Y → (X × Y) ∔ Y
-   f = {!!}
+   f (inl x , y) = inl (x , y)
+   f (inr x , y) = inr y
 
    g : (X × Y) ∔ Y → (X ∔ 𝟙) × Y
-   g = {!!}
+   g (inl (x , y)) = inl x , y
+   g (inr y) = inr ⋆ , y
 
    section : g ∘ f ∼ id
-   section = {!!}
+   section (inl x , y) = refl (inl x , y)
+   section (inr one , y) = goal
+     where
+
+     goal : (g ∘ f) (inr one , y) ≡ id (inr one , y)
+     goal = refl ((inr one) , y) 
 
    retraction : f ∘ g ∼ id
-   retraction = {!!}
+   retraction (inl (x , y)) = refl (inl (x , y))
+   retraction (inr y) = refl (inr y)
 ```
 
 ## Question 4
@@ -152,7 +180,12 @@ membership*, relative to the relation `_∈_` and operation `map`.
 ```agda
 mapped-membership : Type → Type → Type
 mapped-membership X Y
- = {!!}
+ = List X → List Y
+   where
+   f : X → Y
+   f = {!!}
+
+ 
 ```
 **Translate** the statement of mapped membership to Agda code.
 
@@ -168,8 +201,8 @@ result as applying `f` once.
 `f` is idempotent, then so is `map f`.
 
 ```agda
-is-idempotent : {!!}
-is-idempotent = {!!}
+is-idempotent : {!!} 
+is-idempotent = {!!}  
 
 map-of-idempotent-function-is-idempotent : {!!}
 map-of-idempotent-function-is-idempotent = {!!}

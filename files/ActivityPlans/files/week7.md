@@ -8,7 +8,7 @@ Make sure you studied the handouts for Weeks 1-5, including the things that were
 
 ### Attend the lecture on Monday 5-7pm
 
-We will discuss the solutions of the practice test, focusing in areas that the students found challenging, as well as provide new examples of problems which apply the techniques we have developed so far.
+We will discuss the solutions of the practice test, focusing on areas that the students found challenging, as well as provide new examples of problems which apply the techniques we have developed so far.
 
 ### Attend the lab on Tuesday 4:00-5:50pm
 

@@ -142,7 +142,7 @@ For this function to be correct, it has to be the case that
 
  > `is-even x ⇔ check-even x ≡ true`
 
-**Exercise.** We believe you have learned enough Agda, try this.
+**Exercise Done.** We believe you have learned enough Agda, try this.
 
 This is possible because
 
@@ -322,9 +322,9 @@ Bool-is-exhaustively-searchable' X y = I (y true) (y false)
         II (true , Xt)  = ¬Xt Xt
         II (false , Xf) = ¬Xf Xf
 ```
-**Exercise**. Show, in Agda, that the types `𝟘`, `𝟙` , `Bool` and  `Fin n`, for any `n : ℕ`, are exhaustively searchable. The idea is that we check whether or not `A x` holds for each `x : A`, and if we find at least one, we conclude that `Σ x ꞉ X , A x`, and otherwise we conclude that `¬ (Σ x ꞉ X , A x)`. This is possible because these types are finite.
+**Exercise Done**. Show, in Agda, that the types `𝟘`, `𝟙` , `Bool` and  `Fin n`, for any `n : ℕ`, are exhaustively searchable. The idea is that we check whether or not `A x` holds for each `x : A`, and if we find at least one, we conclude that `Σ x ꞉ X , A x`, and otherwise we conclude that `¬ (Σ x ꞉ X , A x)`. This is possible because these types are finite.
 
-**Exercise**. Think why there can't be any program of type `is-exhaustively-searchable ℕ`, by reduction to the Halting Problem. No Agda code is asked in this question. In fact, the question is asking you to think why such Agda code can't exist. This is very different from proving, in Agda, that `¬ is-exhaustively-searchable ℕ`. Interestingly, this is also not provable in Agda, but explaining why this is the case is beyond the scope of this module. In any case, this is an example of a statement `A` such that neither `A` nor `¬ A` are provable in Agda. Such statements are called *independent*. It must be remarked that the reason why there isn't an Agda program of type `is-exhaustively-searchable ℕ` is *not* merely that `ℕ` is infinite, because there are, perhaps surprisingly, infinite types `A` such that a program of type `is-exhastively-searchable A` can be coded in Agda. One really does an argument such as reduction to the Halting Problem to show that there is no program that can exaustively search the set `ℕ` of natural numbers.
+**Exercise Done**. Think why there can't be any program of type `is-exhaustively-searchable ℕ`, by reduction to the Halting Problem. No Agda code is asked in this question. In fact, the question is asking you to think why such Agda code can't exist. This is very different from proving, in Agda, that `¬ is-exhaustively-searchable ℕ`. Interestingly, this is also not provable in Agda, but explaining why this is the case is beyond the scope of this module. In any case, this is an example of a statement `A` such that neither `A` nor `¬ A` are provable in Agda. Such statements are called *independent*. It must be remarked that the reason why there isn't an Agda program of type `is-exhaustively-searchable ℕ` is *not* merely that `ℕ` is infinite, because there are, perhaps surprisingly, infinite types `A` such that a program of type `is-exhastively-searchable A` can be coded in Agda. One really does an argument such as reduction to the Halting Problem to show that there is no program that can exaustively search the set `ℕ` of natural numbers.
 
 ```agda
 Π-exhaustibility : (X : Type)

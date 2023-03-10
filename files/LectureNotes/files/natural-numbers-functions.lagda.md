@@ -156,7 +156,6 @@ there-is-no-number-which-is-its-own-successor (x , e) = every-number-is-not-its-
 is-prime : ℕ → Type
 is-prime n = (n ≥ 2) × ((x y : ℕ) → x * y ≡ n → (x ≡ 1) ∔ (x ≡ n))
 ```
-**Exercise.** Show that `is-prime n` is [decidable](decidability.lagda.md) for every `n : ℕ`. Hard.
 
 The following is a conjecture that so far mathematicians haven't been able to prove or disprove. But we can still say what the conjecture is in Agda:
 ```agda

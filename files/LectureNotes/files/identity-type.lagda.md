@@ -40,7 +40,6 @@ A property of two variables like `A` above is referred to as a *relation*. The a
 
 ## Fundamental constructions with the identity type
 
-As an exercise, you may try to rewrite the following definitions to use `≡-nondep-elim` instead of pattern matching on `refl`:
 ```agda
 trans : {A : Type} {x y z : A} → x ≡ y → y ≡ z → x ≡ z
 trans p (refl y) = p

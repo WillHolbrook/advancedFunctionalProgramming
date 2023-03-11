@@ -10,7 +10,7 @@ open import general-notation
 
 # The binary-sum type former `_∔_`
 
-This is the same as (or, more precisely, [isomorphic](isomorphisms.lagda.md) to) the `Either` type defined earlier (you can try this as an exercise). The notation in type theory is `_+_`, but we want to reserve this for addition of natural numbers, and hence we use the same symbol with a dot on top:
+This is the same as (or, more precisely, [isomorphic](isomorphisms.lagda.md) to) the `Either` type defined earlier. The notation in type theory is `_+_`, but we want to reserve this for addition of natural numbers, and hence we use the same symbol with a dot on top:
 ```agda
 data _∔_ (A B : Type) : Type where
  inl : A → A ∔ B

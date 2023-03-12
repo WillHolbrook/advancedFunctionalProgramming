@@ -11,7 +11,7 @@ As an exercise, you may try to rewrite the following definitions to use `≡-non
 
 ```agda
 trans' : {A : Type} {x y z : A} → x ≡ y → y ≡ z → x ≡ z
-trans' {A} {x} {y} {z} p = ?
+trans' {A} {x} {y} {z} p = {!!}
 
 sym' : {A : Type} {x y : A} → x ≡ y → y ≡ x
 sym' p = {!!}

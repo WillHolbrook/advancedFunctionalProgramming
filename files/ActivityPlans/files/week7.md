@@ -12,7 +12,7 @@ We will discuss the solutions of the practice test, focusing on areas that the s
 
 ### Attend the lab on Tuesday 4:00-5:50pm
 
- * [Lab 7 sheet](/files/LectureNotes/files/exercises/lab7.lagda.md) to be published soon.
+ * [Lab 7 sheet](/files/LectureNotes/files/exercises/lab7.lagda.md)
 
 ### Complete the lab exercises by the end of this week
 

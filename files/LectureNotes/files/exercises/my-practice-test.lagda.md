@@ -113,7 +113,7 @@ bounded-inductive-example₁' = stays-bounded 2 _ (stays-bounded 1 _ (bound-incr
 bounded-inductive-example₁ : (2 :: 1 :: [ 3 ]) is-bounded-by 3
 bounded-inductive-example₁ = stays-bounded 2 (1 :: 3 :: [])
                                (stays-bounded 1 (3 :: [])
-                                (bound-increases 3 [] zero-bounds-[] (λ z → z)) ⋆)
+                                (bound-increases 3 [] zero-bounds-[] id) ⋆)
                                ⋆
    
 
@@ -191,6 +191,13 @@ mapped-membership X Y
 ℕ-to-ℕ-is-mapped-membership : mapped-membership ℕ ℕ
 ℕ-to-ℕ-is-mapped-membership (y :: xs) f .y (head-case .y .xs) = head-case (f y) (map f xs)
 ℕ-to-ℕ-is-mapped-membership (y :: xs) f x (tail-case .x .xs prf .y) = tail-case (f x) (map f xs) (ℕ-to-ℕ-is-mapped-membership xs f x prf) (f y)
+
+ℕ-to-𝟘-is-mapped-membership : mapped-membership ℕ 𝟘
+ℕ-to-𝟘-is-mapped-membership _ f _ _ = 𝟘-nondep-elim (f 0) 
+
+check-mapped-membership : {X Y : Type} → mapped-membership X Y
+check-mapped-membership .(x :: xs) f x (head-case .x xs) = head-case (f x) (map f xs)
+check-mapped-membership .(y :: xs) f x (tail-case .x xs ex y) = tail-case (f x) (map f xs) (check-mapped-membership xs f x ex) (f y)
 ```
 **Translate** the statement of mapped membership to Agda code.
 

@@ -163,6 +163,9 @@ result as applying `f` once.
 is-idempotent : {X : Type} → (f : X → X) → Type
 is-idempotent {X} f = (x : X) → f (f x) ≡ f x
 
+suc-proves-2≡1 : is-idempotent suc → 2 ≡ 1
+suc-proves-2≡1 suc-idem = suc-idem 0
+
 map-of-idempotent-function-is-idempotent : {X : Type} → (f : X → X) → is-idempotent f → is-idempotent (map f)
 map-of-idempotent-function-is-idempotent f f-idem [] = refl []
 map-of-idempotent-function-is-idempotent f f-idem (x :: xs) =
@@ -170,6 +173,6 @@ map-of-idempotent-function-is-idempotent f f-idem (x :: xs) =
   f (f x) :: map f (map f xs) ≡⟨ ap (_::  map f (map f xs)) (f-idem x) ⟩
   f x :: map f (map f xs)     ≡⟨ ap (f x ::_) (map-of-idempotent-function-is-idempotent f f-idem xs) ⟩
   f x :: map f xs             ≡⟨ refl _ ⟩
-  map f (x :: xs) ∎
+  map f (x :: xs)             ∎
 
 ```

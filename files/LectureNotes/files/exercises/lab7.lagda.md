@@ -8,6 +8,7 @@ open import isomorphisms
 open import natural-numbers-functions
 open import Fin
 open import Vector
+open import List-functions
 ```
 
 ## Part I: Isomorphisms

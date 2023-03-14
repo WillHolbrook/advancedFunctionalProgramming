@@ -188,10 +188,60 @@ is-monotone = {!!}
 State and prove that if `ns : List ℕ` is an increasing list, then for any
 monotone function `f`, `map f ns` is *also* an increasing list.
 
+### Exercise 3.6
+
+Consider the type of binary trees with nodes labeled by the elements
+of some type `X`:
+
+```agda
+data Bin (X : Type) : Type where
+  lf : Bin X 
+  nd : X → Bin X → Bin X → Bin X
+```
+
+In analogy with the case of lists above, define predicates
+`_<-all-Bin_ : ℕ → Bin ℕ → Type` and `_all-<-Bin_ : Bin ℕ → ℕ → Type`
+(both inductively and recursively) stating that a given element `n :
+ℕ` is less than (respectively greater than) every element appearing in
+some binary tree of natural numbers.
+
+### Exercise 3.7
+
+Use the relations of the previous exercise to define a predicate
+`is-bst : Bin ℕ → Type` stating that a given tree is a [binary search
+tree](https://en.wikipedia.org/wiki/Binary_search_tree).
+
+Additionally define the *type* of all binary search trees.
+
+```agda
+BST : Type
+BST = {!!} 
+```
+
+### Exercise 3.8 - Hard!!
+
+To complete this exercise, you will need to use all the material
+above, and possibly additional definitions and lemmas.  So while the
+result is intuitively clear, it will take some work to finish. Try to
+break it into steps which seem clear to you and work on the individual
+steps.  Be creative!
+
+Consider the function:
+
+```agda
+flatten : Bin ℕ → List ℕ
+flatten lf = []
+flatten (nd n l r) = flatten l ++ (n :: flatten r) 
+```
+
+taking a tree to its list of nodes.  State and prove that if the input
+tree is a binary search tree, then the result is an increasing list.
+
 ## Part IV: Making statements as types:
 
 You can use all of the following statements to practice writing
-predicates and theorems as types:
+predicates and theorems as types.  You may wish to try proving some of
+the statements.
 
 1. If we reverse a list twice, we get back the original list.
 2. If we map a function to a list, the resulting list will have the same length as the original list.

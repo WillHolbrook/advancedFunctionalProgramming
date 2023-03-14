@@ -89,7 +89,22 @@ Y`. **Prove** this by constructing the following isomorphism:
 sigma-curry-iso : (X Y : Type)
                 → (A : X → Y → Type)
                 → (Σ x ꞉ X , Σ y ꞉ Y , A x y) ≅ (Σ (x , y) ꞉ X × Y , A x y)
-sigma-curry-iso = {!!} 
+sigma-curry-iso X Y A = record { bijection = f ; bijectivity = f-is-bijection }
+ where
+  f : (Σ x ꞉ X , Σ y ꞉ Y , A x y) → (Σ (x , y) ꞉ X × Y , A x y)
+  f (x , (y , Axy)) = (x , y) , Axy
+
+  g : ((Σ (x , y) ꞉ X × Y , A x y)) → (Σ x ꞉ X , Σ y ꞉ Y , A x y)
+  g ((x , y) , Axy) = x , (y , Axy)
+
+  gf : g ∘ f ∼ id
+  gf (x , (y , Axy)) = refl (x , y , Axy)
+
+  fg : f ∘ g ∼ id
+  fg ((x , y) , Axy) = refl ((x , y) , Axy)
+
+  f-is-bijection : is-bijection f
+  f-is-bijection = record { inverse = g ; η = gf ; ε = fg }
 ```
 
 
@@ -184,13 +199,21 @@ following skeleton:
 
 ```agda
 data _<_ : ℕ → ℕ → Type where
+  <-zero : {  y : ℕ} → 0 < suc y
+  <-suc : {x y : ℕ} → x < y → suc x < suc y
+
+<-asymmetric : {x y : ℕ} → x < y → ¬ (y < x)
+<-asymmetric {.0} {.(suc _)} <-zero ()
+<-asymmetric {suc x} {suc y} (<-suc prf) (<-suc prf2) = <-asymmetric prf prf2
 ```
 
 and now as a recursive definition:
 
 ```agda
 _<'_ : ℕ → ℕ → Type
-_<'_ = {!!}
+x     <' zero  = 𝟘
+zero  <' suc y = 𝟙
+suc x <' suc y = x <' y
 ```
 
 ### Exercise 3.2
@@ -203,9 +226,24 @@ definition:
 
 ```agda
 data is-<-inc : List ℕ → Type where
+  []-is-<-inc : is-<-inc []
+  append-empty-is-<-inc : (x : ℕ) → is-<-inc (x :: [])
+  append-non-empty-is-<-inc : (x n : ℕ) (ns : List ℕ)
+    → is-<-inc (n :: ns)
+    → x < n
+    → is-<-inc (x :: n :: ns)
 
+-- func : (7 : ℕ) -...... 
 is-<-inc' : List ℕ → Type
-is-<-inc' = {!!} 
+is-<-inc' [] = 𝟙
+is-<-inc' (x :: []) = 𝟙
+is-<-inc' (x :: y :: ns) = is-<-inc' (y :: ns) × (x < y)
+-- with x <' x₁
+-- is-<-inc' (x :: x₁ :: ns) | a = {!!}
+
+contra : is-<-inc' (4 :: 2 :: 7 :: []) → 𝟘
+-- contra (_ , <-suc (<-suc ()))
+contra (_ , 4<2) = <-asymmetric (<-suc (<-suc <-zero)) 4<2
 ```
 
 ### Exercise 3.3
@@ -218,6 +256,45 @@ a list is less than some give element.  For example we should have:
 `7 <-all (10 :: 14 :: 23 :: [])`
 
 `(2 :: 1 :: 4 :: []) all-< 10`
+
+```agda
+data _<-all_ : ℕ → List ℕ → Type where
+  any-<-all-[] : (n : ℕ) → n <-all []
+  prepend-<-all : {b : ℕ}(n : ℕ)(ns : List ℕ)
+    → b <-all ns
+    → b < n
+    → b <-all (n :: ns)
+  
+_<-all'_ : ℕ → List ℕ → Type
+x <-all' [] = 𝟙
+x <-all' (y :: xs) = x < y × x <-all' xs
+
+check : 7 <-all (10 :: 14 :: 23 :: [])
+check = prepend-<-all 10 (14 :: 23 :: [])
+          (prepend-<-all 14 (23 :: [])
+           (prepend-<-all 23 [] (any-<-all-[] 7)
+            (<-suc (<-suc (<-suc (<-suc (<-suc (<-suc (<-suc <-zero))))))))
+           (<-suc (<-suc (<-suc (<-suc (<-suc (<-suc (<-suc <-zero))))))))
+          (<-suc (<-suc (<-suc (<-suc (<-suc (<-suc (<-suc <-zero)))))))
+
+check' : ¬ (11 <-all (10 :: 14 :: 23 :: []))
+check' (prepend-<-all .10 .(14 :: 23 :: [])
+  a
+  (<-suc (<-suc (<-suc (<-suc (<-suc (<-suc (<-suc (<-suc (<-suc (<-suc ())))))))))))
+
+check''' : 7 <-all' (10 :: 14 :: 23 :: [])
+check''' = <-suc (<-suc (<-suc (<-suc (<-suc (<-suc (<-suc <-zero)))))) ,
+             <-suc (<-suc (<-suc (<-suc (<-suc (<-suc (<-suc <-zero)))))) ,
+             <-suc (<-suc (<-suc (<-suc (<-suc (<-suc (<-suc <-zero)))))) , ⋆
+
+check'''' : ¬ (11 <-all' (10 :: 14 :: 23 :: []))
+check'''' (<-suc (<-suc (<-suc (<-suc (<-suc (<-suc (<-suc (<-suc (<-suc (<-suc ()))))))))) , _)
+
+data _all-<_ : List ℕ → ℕ → Type where
+  
+_all-<'_ : List ℕ → ℕ → Type
+xs all-<' x = {!!}
+```
 
 and so on.  Again, express these predicates both inductively and
 recursively.

@@ -159,13 +159,13 @@ _all-<'_ : (l : List ℕ) (n : ℕ)  → Type
 [] all-<' n = 𝟙
 (m :: l) all-<' n = (m < n) × (l all-<' n)
 
-
 append-<-inc : (n : ℕ) (ns : List ℕ)
   → n <-all ns
   → is-<-inc ns
   → is-<-inc (n :: ns)
 append-<-inc n .[] n<ns []-is-<-inc = n-is-<-inc _
-append-<-inc n .(m :: []) n<ns (n-is-<-inc m) = {!!}
-append-<-inc n .(_ :: _ :: ms) n<ns (::-is-<-inc ms ns-inc x) = {!!}
+append-<-inc n .(m :: []) (<-all-:: .n .m .[] n<m n<ns) (n-is-<-inc m) = ::-is-<-inc [] (n-is-<-inc m) n<m
+append-<-inc n .(_ :: _ :: ms) (<-all-:: .n _ .(_ :: ms) x₁ n<ns) (::-is-<-inc ms ns-inc x) =
+  ::-is-<-inc (_ :: ms) (::-is-<-inc ms ns-inc x) x₁
 
 ```

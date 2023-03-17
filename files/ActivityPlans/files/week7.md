@@ -20,8 +20,7 @@ We will discuss the solutions of the practice test, focusing on areas that the s
 
 Test 1 is in Week 8 in the UG04 lab on Tuesday 4:00-5:50pm.
 
-  1. We will use real Test 1 that the students took last year.
-  1. There are 5 questions of increasing difficulty.
+  1. There are 5 questions of increasing difficulty, similar to the practice test.
   1. We will run it in strict exam conditions.
      1. Mobile phones should be put on silent mode and away from your desk after you enter the attendance code.
      1. You must bring your university ID card.

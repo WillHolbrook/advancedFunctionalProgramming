@@ -164,8 +164,52 @@ append-<-inc : (n : ℕ) (ns : List ℕ)
   → is-<-inc ns
   → is-<-inc (n :: ns)
 append-<-inc n .[] n<ns []-is-<-inc = n-is-<-inc _
-append-<-inc n .(m :: []) (<-all-:: .n .m .[] n<m n<ns) (n-is-<-inc m) = ::-is-<-inc [] (n-is-<-inc m) n<m
+append-<-inc n .(m :: []) (<-all-:: .n .m .[] n<m n<ns) (n-is-<-inc m) =
+  ::-is-<-inc [] (n-is-<-inc m) n<m
 append-<-inc n .(_ :: _ :: ms) (<-all-:: .n _ .(_ :: ms) x₁ n<ns) (::-is-<-inc ms ns-inc x) =
   ::-is-<-inc (_ :: ms) (::-is-<-inc ms ns-inc x) x₁
 
+is-monotone : (f : ℕ → ℕ) → Type 
+is-monotone f = (m n : ℕ) → m < n → f m < f n
+
+monotone-preserves-inc : (f : ℕ → ℕ) (ns : List ℕ)
+  → is-monotone f
+  → is-<-inc ns
+  → is-<-inc (map f ns)
+monotone-preserves-inc f [] f-mono ns-inc = []-is-<-inc
+monotone-preserves-inc f (n :: []) f-mono ns-inc = n-is-<-inc (f n)
+monotone-preserves-inc f (m :: n :: ns) f-mono (::-is-<-inc .ns ns-inc m<n) =
+  ::-is-<-inc (map f ns) (monotone-preserves-inc f (n :: ns) f-mono ns-inc)
+              (f-mono m n m<n)
+
+data Bin (X : Type) : Type where
+  lf : Bin X 
+  nd : X → Bin X → Bin X → Bin X
+
+data _<-all-bin_ : ℕ → Bin ℕ → Type where
+  <-all-bin-lf : {n : ℕ} → n <-all-bin lf
+  <-all-bin-nd : {n : ℕ} {k : ℕ} {l : Bin ℕ} {r : Bin ℕ}
+    → n <-all-bin l
+    → n <-all-bin r
+    → n < k
+    → n <-all-bin (nd k l r)
+
+data _all-bin-<_ : Bin ℕ → ℕ → Type where
+  all-bin-<-lf : {n : ℕ} → lf all-bin-< n
+  all-bin-<-nd : {n : ℕ} {k : ℕ} {l : Bin ℕ} {r : Bin ℕ}
+    → l all-bin-< n
+    → r all-bin-< n
+    → k < n
+    → (nd k l r) all-bin-< n 
+
+data is-bst : Bin ℕ → Type where
+  lf-is-bst : is-bst lf
+  nd-is-bst : {n : ℕ} {l : Bin ℕ} {r : Bin ℕ}
+    → (l<n : l all-bin-< n)
+    → (n<r : n <-all-bin r)
+    → (l-bst : is-bst l)
+    → (r-bst : is-bst r)
+    → is-bst (nd n l r)
+
 ```
+

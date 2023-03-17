@@ -505,8 +505,73 @@ flatten : Bin ℕ → List ℕ
 flatten lf = []
 flatten (nd n l r) = flatten l ++ (n :: flatten r)
 
+all-<-prepend : {b : ℕ}(y : ℕ)(xs : List ℕ)
+  → (y :: xs) all-< b
+  → xs all-< b
+all-<-prepend {b} y [] allxs = []-all-<-any b
+all-<-prepend {b} y (x :: xs) (prepend-all-< .y (prepend-all-< .x allxs x<b) y<b)
+  = prepend-all-< x allxs x<b
+
+inc-lemma : (xs ys : List ℕ)(n : ℕ)
+  → xs all-< n
+  → n <-all ys
+  → is-<-inc xs
+  → is-<-inc ys
+  → is-<-inc (xs ++ (n :: ys))
+inc-lemma [] [] n xsless lessys incxs incys
+  = append-empty-is-<-inc n
+inc-lemma [] (y :: ys) n xsless (prepend-<-all .y .ys lessys n<y) incxs incys
+  = append-non-empty-is-<-inc n y ys incys n<y
+inc-lemma (x :: []) [] n (prepend-all-< .x xsless x<n) lessys incxs incys
+  = append-non-empty-is-<-inc x n [] (append-empty-is-<-inc n) x<n
+inc-lemma (x :: []) (y :: ys) n (prepend-all-< .x xsless x<n) (prepend-<-all .y .ys lessys n<y) incxs incys
+  = append-non-empty-is-<-inc x n (y :: ys) (append-non-empty-is-<-inc n y ys incys n<y) x<n
+inc-lemma (x :: x₁ :: xs) ys n xsless lessys (append-non-empty-is-<-inc .x .x₁ .xs incxs x<x₁) incys
+  = append-non-empty-is-<-inc x x₁ (xs ++ (n :: ys)) IH x<x₁
+  where
+    IH : is-<-inc (x₁ :: xs ++ (n :: ys))
+    IH = inc-lemma (x₁ :: xs) ys n (all-<-prepend x (x₁ :: xs) xsless) lessys incxs incys
+
+all-<-++ : {b : ℕ}(xs ys : List ℕ) → xs all-< b → ys all-< b → (xs ++ ys) all-< b
+all-<-++ {b} [] ys allxs allys = allys
+all-<-++ {b} (x :: xs) ys (prepend-all-< .x allxs x<b) allys
+  = prepend-all-< x (all-<-++ xs ys allxs allys) x<b
+
+all-<-Bin-imp-all-< : {b : ℕ}(bin : Bin ℕ) → bin all-<-Bin b → (flatten bin) all-< b
+all-<-Bin-imp-all-< {b} lf binless = []-all-<-any b
+all-<-Bin-imp-all-< {b} (nd x l r) (nd-all-< .x .l .r lless rless x<b)
+  = all-<-++ (flatten l) (x :: flatten r) IHL (prepend-all-< x IHR x<b)
+  where
+    IHL : flatten l all-< b
+    IHL = all-<-Bin-imp-all-< l lless
+
+    IHR : flatten r all-< b
+    IHR = all-<-Bin-imp-all-< r rless
+
+<-all-++ : {b : ℕ}(xs ys : List ℕ) → b <-all xs → b <-all ys → b <-all (xs ++ ys)
+<-all-++ {b} [] ys allxs allys = allys
+<-all-++ {b} (x :: xs) ys (prepend-<-all .x .xs allxs b<x) allys
+  = prepend-<-all x (xs ++ ys) (<-all-++ xs ys allxs allys) b<x
+
+<-all-Bin-imp-<-all : {b : ℕ}(bin : Bin ℕ) → b <-all-Bin bin → b <-all (flatten bin)
+<-all-Bin-imp-<-all {b} lf binless = any-<-all-[] b
+<-all-Bin-imp-<-all {b} (nd x l r) (nd-<-all .x .l .r lless rless b<x) = <-all-++ (flatten l) (x :: flatten r) IHL (prepend-<-all x (flatten r) (<-all-Bin-imp-<-all r rless) b<x)
+  where
+    IHL : b <-all (flatten l)
+    IHL = <-all-Bin-imp-<-all l lless
+
+    IHR : b <-all (flatten r)
+    IHR = <-all-Bin-imp-<-all r rless
+
 flattened-bst-is-inc : (bt : Bin ℕ) → is-bst bt → is-<-inc (flatten bt)
-flattened-bst-is-inc = {!!}
+flattened-bst-is-inc lf bst = []-is-<-inc
+flattened-bst-is-inc (nd x l r) (nd-is-bst .x .l .r l<x x<r bstl bstr) = inc-lemma (flatten l) (flatten r) x (all-<-Bin-imp-all-< l l<x) (<-all-Bin-imp-<-all r x<r) IHL IHR
+  where
+    IHL : is-<-inc (flatten l)
+    IHL = flattened-bst-is-inc l bstl
+
+    IHR : is-<-inc (flatten r)
+    IHR = flattened-bst-is-inc r bstr 
 ```
 
 taking a tree to its list of nodes.  State and prove that if the input
@@ -521,8 +586,8 @@ the statements.
 If we reverse a list twice, we get back the original list.
 
 ```agda
-twice-rev-list-eq-list : Type
-twice-rev-list-eq-list = {!!}
+twice-rev-list-eq-list : {X : Type} → Type
+twice-rev-list-eq-list {X} = (xs : List X) → reverse (reverse xs) ≡ xs
 ```
 	
 If we map a function to a list, the resulting list will have the same length as the original list.

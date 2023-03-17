@@ -593,46 +593,54 @@ twice-rev-list-eq-list {X} = (xs : List X) → reverse (reverse xs) ≡ xs
 If we map a function to a list, the resulting list will have the same length as the original list.
 
 ```agda
-len-map-list-eq-len-list : Type
-len-map-list-eq-len-list = {!!}
+len-map-list-eq-len-list : {X Y : Type} → Type
+len-map-list-eq-len-list {X} {Y} = (xs : List X)(f : X → Y) → length (map f xs) ≡ length xs
 ```
 	
 If we add a new head to a list, the length of the resulting list will be one plus the length of the original list.
 
 ```agda
-len-prepend-list-equals-len-list-plus-one : Type
-len-prepend-list-equals-len-list-plus-one = {!!}
+len-prepend-list-equals-len-list-plus-one : {X : Type} → Type
+len-prepend-list-equals-len-list-plus-one {X} = (xs : List X)(x : X) → length (x :: xs) ≡ 1 + length xs
 ```
 	
 If we sort a list (say of natural numbers), its length will be the same as that of the original list.
 
 ```agda
-sort : {X : Type} → List X → List X
-sort = {!!}
+open import strict-total-order
+open import sorting
 
-len-sort-list-eq-len-list : Type
-len-sort-list-eq-len-list = {!!}
+len-sort-list-eq-len-list : {X : Type} → (τ : StrictTotalOrder X) → SortingAlgorithm τ → Type
+len-sort-list-eq-len-list {X} τ θ = (xs : List X) → length (sort xs) ≡ length xs
+  where open SortingAlgorithm θ
 ```
 	
 If we sort a list twice, this is the same as sorting it once.
 
 ```agda
-sort-sort-list-eq-sort-list : Type
-sort-sort-list-eq-sort-list = {!!}
+sort-sort-list-eq-sort-list : {X : Type} → (τ : StrictTotalOrder X) → SortingAlgorithm τ → Type
+sort-sort-list-eq-sort-list {X} τ θ = (xs : List X) → sort (sort xs) ≡ sort xs
+  where open SortingAlgorithm θ
 ```
 	
 If we filter a list, the resulting list has a smaller-or-equal lengt.
 
 ```agda
-len-filter-list-lteq-len-list : Type
-len-filter-list-lteq-len-list = {!!}
+filter : {A : Type} → (A → Bool) → List A → List A
+filter p []        = []
+filter p (x :: xs) = if (p x) then x :: ys else ys
+ where
+  ys = filter p xs
+
+len-filter-list-lteq-len-list : {X : Type} → Type
+len-filter-list-lteq-len-list {X} = (xs : List X)(f : X → Bool) → length (filter f xs) ≤ length xs 
 ```
 	
 If we filter a list twice with the same predicate, this gives the same thing as filtering it once with that predicate.
 
 ```agda
-filter-filter-list-eq-filter-list : Type
-filter-filter-list-eq-filter-list = {!!}
+filter-filter-list-eq-filter-list : {X : Type} → Type
+filter-filter-list-eq-filter-list {X} = (xs : List X)(f : X → Bool) → filter f (filter f xs) ≡ filter f xs
 ```
 	
 Every element that occurs in a list also occurs in the sorted list. (Use the \in function defined in the practice test.)
@@ -642,45 +650,45 @@ data _∈_ {X : Type} : X → List X → Type where
   head-case : (x : X) (xs : List X) → x ∈ (x :: xs)
   tail-case : (x : X) (xs : List X) → x ∈ xs → (y : X) → x ∈ (y :: xs)
 
-every-element-in-list-in-sorted-list : Type
-every-element-in-list-in-sorted-list = {!!}
+every-element-in-list-in-sorted-list : {X : Type} → (τ : StrictTotalOrder X) → SortingAlgorithm τ → Type
+every-element-in-list-in-sorted-list {X} τ θ = (x : X)(xs : List X) → x ∈ xs → x ∈ sort xs
+  where open SortingAlgorithm θ
 ```
 	
 Every element that occurs in a list after sorting it already occurs in the given list.
 
 ```agda
-every-element-in-sorted-list-in-list : Type
-every-element-in-sorted-list-in-list = {!!}
+every-element-in-sorted-list-in-list : {X : Type} → (τ : StrictTotalOrder X) → SortingAlgorithm τ → Type
+every-element-in-sorted-list-in-list {X} τ θ = (x : X)(xs : List X) → x ∈ sort xs → x ∈ xs
+  where open SortingAlgorithm θ
 ```
 	
 It doesn't make a difference if we first filter and then sort, or if we first sort and then filter.
 (It does make a difference in terms of performance, though - which order is more efficient?)
 
 ```agda
-num-steps : Type → ℕ
-num-steps = {!!}
-
-filter-sort-faster-sort-filter : Type
-filter-sort-faster-sort-filter = {!!}
+filter-sort-eq-sort-filter : {X : Type} → (τ : StrictTotalOrder X) → SortingAlgorithm τ → Type
+filter-sort-eq-sort-filter {X} τ θ = (xs : List X)(f : X → Bool) → sort (filter f xs) ≡ filter f (sort xs)
+  where open SortingAlgorithm θ
 ```
 	
 A function f : X -> Y is called injective if f x = f y implies x = y.
 
 ```agda
-is-injective : {A : Type} (F : A → Type) → Type
-is-injective = {!!}
+is-injective : {X Y : Type} (f : X → Y) → Type
+is-injective {X} f = (x y : X) → f x ≡ f y → x ≡ y
 ```
 	
 It is called surjective if for every y:Y there is some x with f x = y.
 
 ```agda
-is-surjective : {A : Type} (F : A → Type) → Type
-is-surjective = {!!}
+is-surjective : {X Y : Type} (f : X → Y) → Type
+is-surjective {X} {Y} f = (y : Y) → Σ x ꞉ X , f x ≡ y
 ```
 	
 Harder. The pigeonhole principle. If we put n pigeons into k holes, and n > k, then some hole will have more than one pigeon. Formalize this condition for functions f: Fin n -> Fin k, where we think of f as putting pigeons into holes.
 
 ```agda
-pigeonhole-principle : Type
-pigeonhole-principle = {! Fin 0!}
+pigeonhole-principle : (n k : ℕ) → k < n → (f : Fin n → Fin k) → Type
+pigeonhole-principle n k prf f = Σ (finn1 , finn2) ꞉ Fin n × Fin n , ¬ (finn1 ≡ finn2) × (f finn1 ≡ f finn2)
 ```

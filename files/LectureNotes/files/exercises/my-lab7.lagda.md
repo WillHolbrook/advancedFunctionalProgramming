@@ -433,16 +433,29 @@ data Bin (X : Type) : Type where
   nd : X → Bin X → Bin X → Bin X
 
 data _<-all-Bin_ : ℕ → Bin ℕ → Type where
+  lf-<-all : {b : ℕ} → b <-all-Bin lf
+  nd-<-all : {b : ℕ}(n : ℕ)(l r : Bin ℕ)
+    → b <-all-Bin l
+    → b <-all-Bin r
+    → b < n
+    → b <-all-Bin (nd n l r)
   
 
 _<-all-Bin'_ : ℕ → Bin ℕ → Type
-_<-all-Bin'_ = {!!}
+b <-all-Bin' lf = 𝟙
+b <-all-Bin' nd x l r = b < x × (b <-all-Bin' l ) × (b <-all-Bin' r)
 
 data _all-<-Bin_ : Bin ℕ → ℕ → Type where
-  
+  lf-all-< : {b : ℕ} → lf all-<-Bin b
+  nd-all-< : {b : ℕ}(n : ℕ)(l r : Bin ℕ)
+    → l all-<-Bin b
+    → r all-<-Bin b
+    → n < b
+    → (nd n l r) all-<-Bin b
  
 _all-<-Bin'_ : Bin ℕ → ℕ → Type
-_all-<-Bin'_ = {!!}
+lf all-<-Bin' b = 𝟙
+(nd x l r) all-<-Bin' b = x < b × l all-<-Bin' b × r all-<-Bin' b
 ```
 
 In analogy with the case of lists above, define predicates
@@ -461,9 +474,17 @@ Additionally define the *type* of all binary search trees.
 
 ```agda
 data is-bst : Bin ℕ → Type where
+  lf-is-bst : is-bst lf
+  nd-is-bst : (x : ℕ)(l r : Bin ℕ)
+    → l all-<-Bin x
+    → x <-all-Bin r
+    → is-bst l
+    → is-bst r
+    → is-bst (nd x l r)
 
 is-bst' : Bin ℕ → Type
-is-bst' = {!!}
+is-bst' lf = 𝟙
+is-bst' (nd x l r) = l all-<-Bin x × x <-all-Bin r × is-bst' l × is-bst' r
 
 BST : Type
 BST = {!!} 

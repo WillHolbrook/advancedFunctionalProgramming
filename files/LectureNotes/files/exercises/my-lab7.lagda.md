@@ -487,7 +487,7 @@ is-bst' lf = 𝟙
 is-bst' (nd x l r) = l all-<-Bin x × x <-all-Bin r × is-bst' l × is-bst' r
 
 BST : Type
-BST = {!!} 
+BST = Σ b ꞉ Bin ℕ , is-bst b 
 ```
 
 ### Exercise 3.8 - Hard!!
@@ -689,6 +689,6 @@ is-surjective {X} {Y} f = (y : Y) → Σ x ꞉ X , f x ≡ y
 Harder. The pigeonhole principle. If we put n pigeons into k holes, and n > k, then some hole will have more than one pigeon. Formalize this condition for functions f: Fin n -> Fin k, where we think of f as putting pigeons into holes.
 
 ```agda
-pigeonhole-principle : (n k : ℕ) → k < n → (f : Fin n → Fin k) → Type
-pigeonhole-principle n k prf f = Σ (finn1 , finn2) ꞉ Fin n × Fin n , ¬ (finn1 ≡ finn2) × (f finn1 ≡ f finn2)
+pigeonhole-principle : Type
+pigeonhole-principle = (n k : ℕ) → k < n → (f : Fin n → Fin k) → Σ (finn1 , finn2) ꞉ Fin n × Fin n , ¬ (finn1 ≡ finn2) × (f finn1 ≡ f finn2)
 ```

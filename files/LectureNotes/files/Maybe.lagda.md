@@ -100,6 +100,13 @@ As we will see later, the monad structure consists of `return` and `>>=`. Anothe
 ```
 Here `∘` is function composition and `id` is the identity function.
 
+The following function is useful when making monadic computations with `Maybe`:
+```agda
+ _orElse_ : {A : Type} → Maybe A → Maybe A → Maybe A
+ nothing orElse n = n
+ (just x) orElse n = just x
+```
+
 Here are some facts about these functions, which could have been used as definitions by pattern matching, if we wished:
 ```agda
  extend-nothing : {X Y : Type} (f : X → Maybe Y) → extend f nothing ≡ nothing

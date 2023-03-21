@@ -1,4 +1,6 @@
-
+<!--
+```agda
+{-# OPTIONS --without-K --safe #-}
 module regexp where
 
 open import prelude
@@ -9,7 +11,18 @@ open import Maybe
 open import decidability
 
 open Maybe-Monad
+```
+-->
 
+# Regular Expressions
+
+We start by defining our basic regular expressions.  The type `A` here
+will serve as the alphabet.  Because we will want to compare elements
+of `A` for equality later on, we also assume that `A` has decidable
+equality.
+
+
+```agda
 module Regexp (A : Type) (compare : has-decidable-equality A) where
 
   data RegExp : Type where
@@ -19,6 +32,9 @@ module Regexp (A : Type) (compare : has-decidable-equality A) where
     _∪_ : RegExp → RegExp → RegExp
     _+ : RegExp → RegExp
 
+```
+
+```agda
   data _accepts_ : RegExp → List A → Type where
 
     acc-` : (a : A) → (` a) accepts (a :: [])
@@ -139,7 +155,4 @@ module Example where
   example = acc-+-many (acc-∪-inl (acc-` A))
             (acc-+-many ((acc-∪-inl (acc-` A)))
             (acc-+-one (acc-∪-inr (acc-` B))))
-
-
-
-
+```

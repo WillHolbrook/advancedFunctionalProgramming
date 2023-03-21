@@ -46,6 +46,8 @@ Under construction and constant revision for improvement until the end of term.
  1. **Some functional programs and proofs of some of their properties**
     1. The previous sections give a mini library implementing the basic theory.
     1. We now put this in practice to do something useful.
+ 1. **Regular Expressions**
+    1. [A Regular Expression Matcher](files/regexp.lagda.md)
  1. **Sorting Algorithms**
     1. [Strict Total Orders](files/strict-total-order.lagda.md)
 	1. [A Specification of Sorting](files/sorting.lagda.md)

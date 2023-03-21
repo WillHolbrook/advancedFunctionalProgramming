@@ -41,25 +41,19 @@ It is also a good idea to submit to Canvas well before the deadline when you hav
 
 ```agda
 ite-fact₁ : (b : Bool) → if b then true else false ≡ b
-ite-fact₁ true = refl true
-ite-fact₁ false = refl false
+ite-fact₁ = {!!}
 
 ite-fact₂ : {X : Type} {x : X} (b : Bool) → if b then x else x ≡ x
-ite-fact₂ {X} {x} true = refl x
-ite-fact₂ {X} {x} false = refl x
+ite-fact₂ = {!!}
 
 ite-fact₃ : {X : Type} {x y : X} (b : Bool)
           → if b then x else y ≡ if not b then y else x
-ite-fact₃ {X} {x} {y} true = refl x
-ite-fact₃ {X} {x} {y} false = refl y
+ite-fact₃ = {!!}
 
 ite-fact₄ : {X : Type} {x y u v : X} (a b : Bool)
           → if a then (if b then x else y) else (if b then u else v)
           ≡ if b then (if a then x else u) else (if a then y else v)
-ite-fact₄ true true = refl _
-ite-fact₄ true false = refl _
-ite-fact₄ false true = refl _
-ite-fact₄ false false = refl _
+ite-fact₄ = {!!}
 ```
 
 ## Question 2
@@ -81,44 +75,28 @@ By definition, the empty list is bounded by 0.
 
 ```agda
 data _is-bounded-by_ : List ℕ → ℕ → Type where
-  zero-bounds-[] : [] is-bounded-by 0
+  zero-bounds-[] : {!!}
   stays-bounded : {b : ℕ} → (n : ℕ) (ns : List ℕ)
-    → ns is-bounded-by b
+    → {!!}
     → n ≤₁ b
-    → (n :: ns) is-bounded-by b
+    → {!!} is-bounded-by {!!}
   bound-increases : {b : ℕ} → (n : ℕ) (ns : List ℕ)
-    → ns is-bounded-by b
+    → {!!}
     → ¬ (n ≤₁ b)
-    → (n :: ns) is-bounded-by n
+    → {!!} is-bounded-by {!!}
 ```
 
 **Prove** the following examples involving `is-bounded-by`:
 
 ```agda
 bounded-inductive-example₀ : [] is-bounded-by 0
-bounded-inductive-example₀ = zero-bounds-[]
-
-3-not-≤-0 : ¬ (3 ≤₁ 0)
-3-not-≤-0 ()
-
-2-≤-3 : 2 ≤₁ 3
-2-≤-3 = ⋆
-
-1-≤-3 : 1 ≤₁ 3
-1-≤-3 = ⋆
-
-bounded-inductive-example₁' : (2 :: 1 :: [ 3 ]) is-bounded-by 3
-bounded-inductive-example₁' = stays-bounded 2 _ (stays-bounded 1 _ (bound-increases 3 [] zero-bounds-[] 3-not-≤-0) 1-≤-3) 2-≤-3
+bounded-inductive-example₀ = {!!}
 
 bounded-inductive-example₁ : (2 :: 1 :: [ 3 ]) is-bounded-by 3
-bounded-inductive-example₁ = stays-bounded 2 (1 :: 3 :: [])
-                               (stays-bounded 1 (3 :: [])
-                                (bound-increases 3 [] zero-bounds-[] (λ z → z)) ⋆)
-                               ⋆
-   
+bounded-inductive-example₁ = {!!}
 
 bounded-inductive-example₂ : ¬ ((3 :: 2 :: [ 1 ]) is-bounded-by 2)
-bounded-inductive-example₂ (stays-bounded .3 .(2 :: [ 1 ]) x y) = y
+bounded-inductive-example₂ = {!!}
 ```
 
 ## Question 3
@@ -137,20 +115,16 @@ natural numbers:
         ; bijectivity = record { inverse = g ; η = section ; ε = retraction } }
   where
    f : (X ∔ 𝟙) × Y → (X × Y) ∔ Y
-   f (inl x , y) = inl (x , y)
-   f (inr ⋆ , y) = inr y
+   f = {!!}
 
    g : (X × Y) ∔ Y → (X ∔ 𝟙) × Y
-   g (inl (x , y)) = (inl x) , y
-   g (inr y) = inr ⋆ , y
+   g = {!!}
 
    section : g ∘ f ∼ id
-   section (inl x , y) = refl (inl x , y)
-   section (inr ⋆ , y) = refl (inr ⋆ , y)
+   section = {!!}
 
    retraction : f ∘ g ∼ id
-   retraction (inl (x , y)) = refl (inl (x , y))
-   retraction (inr y) = refl (inr y)
+   retraction = {!!}
 ```
 
 ## Question 4
@@ -178,19 +152,7 @@ membership*, relative to the relation `_∈_` and operation `map`.
 ```agda
 mapped-membership : Type → Type → Type
 mapped-membership X Y
- = (xs : List X) → (f : X → Y) → (x : X) → x ∈ xs → (f x) ∈ (map f xs)
-
---for every list xs of type X
---for every f of type X → Y
---for all x of type X
---when x ∈ xs (belongs to xs)
---f x ∈ (map f xs)
-
---to check this do a test function of say adding 1 to a number
-
-ℕ-to-ℕ-is-mapped-membership : mapped-membership ℕ ℕ
-ℕ-to-ℕ-is-mapped-membership (y :: xs) f .y (head-case .y .xs) = head-case (f y) (map f xs)
-ℕ-to-ℕ-is-mapped-membership (y :: xs) f x (tail-case .x .xs prf .y) = tail-case (f x) (map f xs) (ℕ-to-ℕ-is-mapped-membership xs f x prf) (f y)
+ = {!!}
 ```
 **Translate** the statement of mapped membership to Agda code.
 
@@ -206,29 +168,9 @@ result as applying `f` once.
 `f` is idempotent, then so is `map f`.
 
 ```agda
-is-idempotent : {X : Type} → (f : X → X) → Type
-is-idempotent {X} f = (x : X) → f (f x) ≡ f x
+is-idempotent : {!!}
+is-idempotent = {!!}
 
-map-of-idempotent-function-is-idempotent : {X : Type} → (f : X → X) → is-idempotent f → is-idempotent (map f)
-map-of-idempotent-function-is-idempotent f is-idem-f [] = refl []
-map-of-idempotent-function-is-idempotent f is-idem-f (x :: xs) = II
-  where
-    IH : map f (map f xs) ≡ map f xs
-    IH = map-of-idempotent-function-is-idempotent f is-idem-f xs
-
-    I : f (f x) ≡ f x
-    I = is-idem-f x
-
-    II : f (f x) :: map f (map f xs) ≡ f x :: map f xs
-    II = 
-      f (f x) :: map f (map f xs) ≡⟨ ap (_:: (map f (map f xs))) I ⟩
-      f x :: map f (map f xs)     ≡⟨ ap (f x ::_) IH ⟩
-      f x :: map f xs ∎
-
-identiy-is-idempotent : {X : Type} → is-idempotent (id {X})
-identiy-is-idempotent x = refl x
+map-of-idempotent-function-is-idempotent : {!!}
+map-of-idempotent-function-is-idempotent = {!!}
 ```
-
-
-Goal: f (f x) :: map f (map f xs) ≡ f x :: map f xs
-Have: f (f x) ≡ f x

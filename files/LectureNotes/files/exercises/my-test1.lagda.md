@@ -205,33 +205,96 @@ every member of the list.
 filter-property : (X : Type) (P : X → Bool) (xs : List X) → Type
 filter-property X P xs = filter P xs ≡ xs → (x : X) → x ∈ xs → P x ≡ true
 
--- check-filter-property-int : (P : ℕ → Bool)(xs : List ℕ) → filter-property ℕ P xs
--- check-filter-property-int P (x :: []) eq .x (head-case .x .[]) with P x
--- check-filter-property-int P (x :: []) eq .x (head-case .x .[]) | true = refl true
--- check-filter-property-int P (y :: z :: xs) eq .y (head-case .y .(z :: xs)) with P y
--- check-filter-property-int P (y :: z :: xs) eq .y (head-case .y .(z :: xs)) | true = refl true
--- check-filter-property-int P (y :: z :: xs) eq .y (head-case .y .(z :: xs)) | false = {!!}
--- check-filter-property-int P (y :: z :: xs) eq x (tail-case .x .(z :: xs) xinxs .y) with P y
--- check-filter-property-int P (y :: z :: xs) eq x (tail-case .x .(z :: xs) xinxs .y) | true = check-filter-property-int P (z :: xs) {!!} x xinxs
--- check-filter-property-int P (y :: z :: xs) eq x (tail-case .x .(z :: xs) xinxs .y) | false = {!!}
--- -- 
+data _<_ : ℕ → ℕ → Type where
+  <-zero : {  y : ℕ} → 0 < suc y
+  <-suc : {x y : ℕ} → x < y → suc x < suc y
 
--- --Think this needs decidable equality to solve
--- lemma : {X : Type}(x : X)(xs ys : List X) → _≡_ {List X} (x :: xs) (x :: ys) → xs ≡ ys
--- lemma x [] [] eq = refl []
--- lemma x (x₁ :: xs) (x₂ :: ys) eq = {!x₁!}
+pop-list : {X : Type} → List X → List X
+pop-list [] = []
+pop-list (x :: xs) = xs
 
+lemma : {X : Type}{x : X}{xs ys : List X} → _≡_ {List X} (x :: xs) (x :: ys) → xs ≡ ys
+lemma eq = ap pop-list eq
 
--- check-filter-property : {X : Type}(P : X → Bool)(xs : List X) → filter-property X P xs
--- check-filter-property P (x :: []) eq .x (head-case .x .[]) with P x
--- check-filter-property P (x :: []) eq .x (head-case .x .[]) | true = refl true
--- check-filter-property P (y :: z :: xs) eq .y (head-case .y .(z :: xs)) with P y
--- check-filter-property P (y :: z :: xs) eq .y (head-case .y .(z :: xs)) | true = refl true
--- check-filter-property P (y :: z :: xs) eq .y (head-case .y .(z :: xs)) | false = {!!}
--- check-filter-property P (y :: z :: xs) eq x (tail-case .x .(z :: xs) xinxs .y) with P y
--- check-filter-property P (y :: z :: xs) eq x (tail-case .x .(z :: xs) xinxs .y) | true = {!!}
--- check-filter-property P (y :: z :: xs) eq x (tail-case .x .(z :: xs) xinxs .y) | false = {!!}
+suc-≤-imp-< : {x y : ℕ} → x ≤ y → x < suc y
+suc-≤-imp-< {0} {y} x≤y = <-zero
+suc-≤-imp-< {suc x} {suc y} x≤y = <-suc (suc-≤-imp-< (suc-reflects-≤ x≤y))
 
+<-imp-¬eq : {x y : ℕ} → x < y → ¬ (x ≡ y)
+<-imp-¬eq {1} {.1} (<-suc ()) (refl .1)
+<-imp-¬eq {.(suc (suc _))} {.(suc (suc _))} (<-suc (<-suc x<y)) (refl .(suc (suc _))) = <-imp-¬eq x<y (refl _)
+
+≤-suc-lemma : (n : ℕ) → n ≤ (1 + n)
+≤-suc-lemma 0       = 0-smallest 
+≤-suc-lemma (suc n) = goal
+ where
+  IH : n ≤ (1 + n)
+  IH = ≤-suc-lemma n
+  goal : suc n ≤ suc (suc n)
+  goal = suc-preserves-≤ IH
+
+≤-trans : (x y z : ℕ) → x ≤ y → y ≤ z → x ≤ z
+≤-trans zero y z p q  = 0-smallest
+≤-trans (suc x) (suc y) (suc z) (suc-preserves-≤ p) (suc-preserves-≤ q)
+ = suc-preserves-≤ (≤-trans x y z p q)
+
+length-of-filter : {A : Type} (P : A → Bool) (xs : List A)
+                 → length (filter P xs) ≤ length xs
+length-of-filter P []        = 0-smallest
+length-of-filter P (x :: xs) = Bool-elim goal-statement true-case false-case (P x)
+ where
+  ys = filter P xs
+  
+  goal-statement : Bool → Type
+  goal-statement b = length (if b then (x :: ys) else ys) ≤ length (x :: xs)
+
+  IH : length ys ≤ length xs
+  IH = length-of-filter P xs
+
+  false-case : length ys ≤ length (x :: xs)
+  false-case = ≤-trans (length ys) (length xs) (length (x :: xs))
+                 IH (≤-suc-lemma (length xs))
+
+  true-case : length (x :: ys) ≤ length (x :: xs)
+  true-case = suc-preserves-≤ IH
+
+suc-on-right-≤ : {x y : ℕ} → x ≤ y → x ≤ suc y
+suc-on-right-≤ {zero} {zero} x≤y = 0-smallest
+suc-on-right-≤ {zero} {suc y} x≤y = 0-smallest
+suc-on-right-≤ {suc x} {suc y} (suc-preserves-≤ x≤y) = suc-preserves-≤ (suc-on-right-≤ x≤y)
+
+lemma2 : {X : Type}(x : X)(xs : List X)(P : X → Bool) → filter P (x :: xs) ≡ x :: xs → filter P xs ≡ xs
+lemma2 x [] P eq = refl []
+lemma2 x (y :: xs) P eq with P x
+lemma2 x (y :: xs) P eq | true = ap pop-list eq
+lemma2 x (y :: xs) P eq | false with P y
+lemma2 x (y :: xs) P eq | false | true
+  = 𝟘-elim (<-imp-¬eq (suc-≤-imp-< (length-of-filter P xs)) (ap (pred ∘ length) eq))
+lemma2 x (y :: xs) P eq | false | false = 𝟘-elim (<-imp-¬eq (suc-≤-imp-< (suc-on-right-≤ (length-of-filter P xs))) (ap length eq))
+
+check-filter-property : {X : Type}(P : X → Bool)(xs : List X) → filter-property X P xs
+check-filter-property P (x :: []) eq .x (head-case .x .[]) with P x
+check-filter-property P (x :: []) eq .x (head-case .x .[]) | true = refl true
+check-filter-property P (y :: z :: xs) eq .y (head-case .y .(z :: xs)) with P y
+check-filter-property P (y :: z :: xs) eq .y (head-case .y .(z :: xs)) | true = refl true
+check-filter-property P (y :: z :: xs) eq .y (head-case .y .(z :: xs)) | false with P z
+check-filter-property {X} P (y :: z :: xs) eq .y (head-case .y .(z :: xs)) | false | true
+  = 𝟘-elim (<-imp-¬eq (suc-≤-imp-< (length-of-filter P xs)) (ap (pred ∘ length) eq))
+check-filter-property P (y :: z :: xs) eq .y (head-case .y .(z :: xs)) | false | false
+  = 𝟘-elim (<-imp-¬eq (suc-≤-imp-< (suc-on-right-≤ (length-of-filter P xs))) (ap length eq))
+check-filter-property P (y :: z :: xs) eq x (tail-case .x .(z :: xs) xinxs .y) with P y
+check-filter-property P (y :: z :: xs) eq x (tail-case .x .(z :: xs) xinxs .y) | true
+  = check-filter-property P (z :: xs) (ap pop-list eq) x xinxs
+check-filter-property P (y :: z :: xs) eq x (tail-case .x .(z :: xs) xinxs .y) | false with P x
+check-filter-property P (y :: z :: xs) eq x (tail-case .x .(z :: xs) xinxs .y) | false | true = refl true
+check-filter-property P (y :: z :: xs) eq x (tail-case .x .(z :: xs) xinxs .y) | false | false with P z
+check-filter-property P (y :: z :: xs) eq x (tail-case .x .(z :: xs) xinxs .y) | false | false | true
+  = 𝟘-elim (<-imp-¬eq (suc-≤-imp-< (length-of-filter P xs)) (ap (pred ∘ length) eq))
+check-filter-property P (y :: z :: xs) eq x (tail-case .x .(z :: xs) xinxs .y) | false | false | false
+  = 𝟘-elim (<-imp-¬eq (suc-≤-imp-< (suc-on-right-≤ (length-of-filter P xs))) (ap length eq))
+
+check-filter-property-int : (P : ℕ → Bool)(xs : List ℕ) → filter-property ℕ P xs
+check-filter-property-int P xs = check-filter-property P xs
 --TODO prove filter property for ints
 --check-filter-property P (z :: xs) {!!} x xinxs
 ```

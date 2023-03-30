@@ -37,5 +37,5 @@ Test 1 is in Week 8 in the UG04 lab on Tuesday 4:00-5:50pm.
   1. You may import any handout or solution given in our teaching material (even the ones that are available and we haven't taught yet). You may also copy-and-paste and modify any existing code in the GitLab repository if you find this useful.
   1. You may write helper functions and definitions if you wish.
   1. You **must not** modify the type of any question.
-  1. The test will be marked manually jointly by the lecturers and TA's, and we will award marks for partial correctness. The questions are based on your lab exercises and homework. The marks don't contribute to your module grade, as this is only a practice test, and are produced only for the sake of giving you feedback.
+  1. The test will be marked manually jointly by the lecturers and TA's, and we will award marks for partial correctness. The questions are based on your lab exercises and homework.
   1. Test 1 will cover the material of Weeks 1-5.

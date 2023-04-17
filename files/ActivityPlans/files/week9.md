@@ -35,8 +35,9 @@ We'll do insertion sort this week and QuickSort next week.
  1. [Lemmas for QuickSort](/files/LectureNotes/files/quick-sort-lemmas.lagda.md)
  1. [QuickSort](/files/LectureNotes/files/quick-sort.lagda.md)
 
-### Do the homework for Week 9
+### See the lecture file and do the homework for Week 9
 
+ * [Lecture](/files/LectureNotes/files/insertion-sort-lecture.lagda.md)
  * [Homework 9](/files/LectureNotes/files/exercises/homework9.lagda.md)
 
 ### Get ready for Week 10

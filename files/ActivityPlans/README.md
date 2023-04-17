@@ -7,3 +7,5 @@
  * [Week 5](files/week5.md) - Induction, new types, and their isomorphisms with old types
  * [Week 6](files/week6.md) - We continue with the material of Week 5
  * [Week 7](files/week7.md) - Revision week
+ * [Week 8](/files/LectureNotes/files/regexp.lagda.md) - Regular expressions and Test 1
+ * [Week 9](files/week9.md) - Sorting

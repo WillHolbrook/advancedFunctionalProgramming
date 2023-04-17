@@ -15,7 +15,7 @@ Su Mo Tu We Th Fr Sa
 Su Mo Tu We Th Fr Sa
 26 27 28  1  2  3  4   M Week  5
  5  6  7  8  9 10 11   M Week  6 Practice Test on Tuesday 4:00-5:50pm
-12 13 14 15 16 17 18   E Week  7
+12 13 14 15 16 17 18   E Week  7 Revision week
 19 20 21 22 23 24 25   E Week  8 Test 1 on Tuesday 4:00-5:50m
 26 27 28 29 30 31  1     Easter vacation
 

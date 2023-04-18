@@ -19,10 +19,11 @@ These are the videos for Weeks 9-10. We'll do insertion sort this week and Quick
  1. [Specifying sorting](https://bham.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=b9bac8a8-998d-467f-9493-af9e010666b6) (15:07min)
  1. [Insertion sort](https://bham.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=279824e1-d4fe-4ba5-a00a-af9e01066759) (6:43min)
  1. [Insertion sort sorts](https://bham.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=16f2d773-3445-4eac-a669-af9e01066027) (21:33min)
+ 1. [Insertion permutation](https://bham.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=bfd6cfab-5656-46a7-9a9b-af9e01066734) (14:44min)
  1. [Insertion inhabitant equality](https://bham.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=e268a761-d1b3-4ee3-91f7-af9e01066054) (22:13min)
  1. [Insertion sorting algorithm](https://bham.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=0e41c384-313b-4280-b721-af9e010667c0) (9:46min)
  1. [Quick sort and well-founded induction](https://bham.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=a9ee9df0-5b1a-4dcf-b9cc-af9e0106682b) (29:15min)
- 1. [Quick sort](https://bham.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=bc40652c-1e11-43ff-9a7d-af9e010660ae) (27:53)
+ 1. [Quick sort](https://bham.cloud.panopto.eu/Panopto/Pages/Viewer.aspx?id=bc40652c-1e11-43ff-9a7d-af9e010660ae) (27:53min)
 
 ### Read the handouts
 

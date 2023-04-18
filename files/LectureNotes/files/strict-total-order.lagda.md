@@ -59,13 +59,24 @@ that any such relation is antisymmetric:
 ```
 and that the trichotomoy holds: either `x < y` or `y < x` or `x ≡ y`.
 
-```
+```agda
   trichotomy : (x y : X) → (x < y) ∔ ((x ≡ y) ∔ (y < x))
   trichotomy x y with decidable x y
   trichotomy x y | inl x≡y = inr (inl x≡y)
   trichotomy x y | inr ¬x≡y with connected ¬x≡y
   trichotomy x y | inr ¬x≡y | inl x<y = inl x<y
   trichotomy x y | inr ¬x≡y | inr y<x = inr (inr y<x)
+
+  trichotomy' : (x y : X) → (x < y) ∔ ((x ≡ y) ∔ (y < x))
+  trichotomy' x y = h (decidable x y)
+   where
+    h : (x ≡ y) ∔ ¬ (x ≡ y) → (x < y) ∔ (x ≡ y) ∔ (y < x)
+    h (inl x≡y)  = inr (inl x≡y)
+    h (inr ¬x≡y) = g (connected ¬x≡y)
+     where
+      g : (x < y) ∔ (y < x) → (x < y) ∔ (x ≡ y) ∔ (y < x)
+      g (inl x<y) = inl x<y
+      g (inr y<x) = inr (inr y<x)
 ```
 
 Being able to calculate which of these cases we are in is a key

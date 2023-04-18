@@ -275,3 +275,8 @@ Finally, **complete** the definition of the non-strict total order on `X`.
  non-strict-total-order-from-strict-total-order : NonStrictTotalOrder X
  non-strict-total-order-from-strict-total-order = {!!}
 ```
+
+## Insertion Sort Exercises
+
+Now study and complete the holes from [Tuesday's lecture sheet](/files/LectureNotes/files/insertion-sort-lecture.lagda.md).
+Chiefly, you should prove that insertion sort is a sorting algorithm.

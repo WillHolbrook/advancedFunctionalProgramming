@@ -232,15 +232,17 @@ _<ₗ_ : ℕ² → ℕ² → Type
 
 ```agda
 <ₗ-is-transitive : {p q r : ℕ²} → p <ₗ q → q <ₗ r → p <ₗ r
-<ₗ-is-transitive = {!!}
--- <ₗ-is-transitive {zero , zero}     {zero , suc snd₂} {zero , suc snd₃} p<q q<r = ⋆
--- <ₗ-is-transitive {zero , zero}     {zero , suc snd₂} {suc fst₃ , snd₃} p<q q<r = ⋆
--- <ₗ-is-transitive {zero , suc snd₁} {zero , suc snd₂} {zero , suc snd₃} p<q q<r = <ₗ-is-transitive {zero , snd₁} {zero , snd₂} {zero , snd₃} p<q q<r
--- <ₗ-is-transitive {zero , suc snd₁} {zero , suc snd₂} {suc fst₃ , snd₃} p<q q<r = ⋆
--- <ₗ-is-transitive {zero , snd₁}     {suc fst₂ , snd₂} {suc fst₃ , snd₃} p<q q<r = ⋆
--- <ₗ-is-transitive {suc fst₁ , snd₁} {zero , snd₂}     {zero , snd₃}     p<q q<r = p<q
--- <ₗ-is-transitive {suc fst₁ , snd₁} {suc fst₂ , snd₂} {zero , snd₃}     p<q q<r = q<r
--- <ₗ-is-transitive {suc fst₁ , snd₁} {suc fst₂ , snd₂} {suc fst₃ , snd₃} p<q q<r = <ₗ-is-transitive {fst₁ , snd₁} {fst₂ , snd₂} {fst₃ , snd₃} p<q q<r
+<ₗ-is-transitive {zero , zero}     {zero , suc snd₂} {zero , suc snd₃} p<q q<r = ⋆
+<ₗ-is-transitive {zero , zero}     {zero , suc snd₂} {suc fst₃ , snd₃} p<q q<r = ⋆
+<ₗ-is-transitive {zero , suc snd₁} {zero , suc snd₂} {zero , suc snd₃} p<q q<r = <ₗ-is-transitive {zero , snd₁} {zero , snd₂} {zero , snd₃} p<q q<r
+<ₗ-is-transitive {zero , suc snd₁} {zero , suc snd₂} {suc fst₃ , snd₃} p<q q<r = ⋆
+<ₗ-is-transitive {zero , zero} {suc fst₁ , zero} {suc fst₂ , snd₁} p<q q<r = ⋆
+<ₗ-is-transitive {zero , zero} {suc fst₁ , suc snd₁} {suc fst₂ , snd₂} p<q q<r = ⋆
+<ₗ-is-transitive {zero , suc snd₁} {suc fst₁ , zero} {suc fst₂ , snd₂} p<q q<r = ⋆
+<ₗ-is-transitive {zero , suc snd₁} {suc fst₁ , suc snd₂} {suc fst₂ , snd₃} p<q q<r = ⋆
+<ₗ-is-transitive {suc fst₁ , snd₁} {zero , snd₂}     {zero , snd₃}     p<q q<r = p<q
+<ₗ-is-transitive {suc fst₁ , snd₁} {suc fst₂ , snd₂} {zero , snd₃}     p<q q<r = q<r
+<ₗ-is-transitive {suc fst₁ , snd₁} {suc fst₂ , snd₂} {suc fst₃ , snd₃} p<q q<r = <ₗ-is-transitive {fst₁ , snd₁} {fst₂ , snd₂} {fst₃ , snd₃} p<q q<r
 ```
 
 ### Exercise 4.4
@@ -253,7 +255,10 @@ _<ₗ_ : ℕ² → ℕ² → Type
 <ₗ-is-connected {zero , zero} {zero , suc snd₂} ¬peqq = inl ⋆
 <ₗ-is-connected {zero , suc snd₁} {zero , zero} ¬peqq = inr ⋆
 <ₗ-is-connected {zero , suc snd₁} {zero , suc snd₂} ¬peqq = <ₗ-is-connected {zero , snd₁} {zero , snd₂} (λ prf → ¬peqq (ap (λ x → zero , suc (snd x)) prf))
-<ₗ-is-connected {zero , snd₁} {suc fst₂ , snd₂} ¬peqq = inl ⋆
+<ₗ-is-connected {zero , zero} {suc fst₁ , zero} x = inl ⋆
+<ₗ-is-connected {zero , zero} {suc fst₁ , suc snd₁} x = inl ⋆
+<ₗ-is-connected {zero , suc snd₁} {suc fst₁ , zero} x = inl ⋆
+<ₗ-is-connected {zero , suc snd₁} {suc fst₁ , suc snd₂} x = inl ⋆
 <ₗ-is-connected {suc fst₁ , snd₁} {zero , zero} ¬peqq = inr ⋆
 <ₗ-is-connected {suc fst₁ , snd₁} {zero , suc snd₂} ¬peqq = inr ⋆
 <ₗ-is-connected {suc fst₁ , snd₁} {suc fst₂ , snd₂} ¬peqq = <ₗ-is-connected {fst₁ , snd₁} {fst₂ , snd₂} (λ prf → ¬peqq (ap (λ p → suc (fst p) , snd p) prf))
@@ -268,7 +273,7 @@ strict-total-order-on-ℕ² : StrictTotalOrder ℕ²
 strict-total-order-on-ℕ² = record
                              { _<_ = _<ₗ_
                              ; irreflexive = <ₗ-is-irreflexive
-                             ; transitive = <ₗ-is-transitive 
+                             ; transitive = λ {p} {q} {r} → <ₗ-is-transitive {p} {q} {r}
                              ; connected = <ₗ-is-connected
                              ; decidable = ℕ²-has-decidable-equality
                              }

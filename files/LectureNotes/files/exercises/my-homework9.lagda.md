@@ -1,17 +1,17 @@
 # Week 9 - Homework Sheet
 
 ```agda
-{-# OPTIONS --without-K --allow-unsolved-metas #-}
+{-# OPTIONS --without-K --safe #-}
 
 module exercises.my-homework9 where
 
 open import prelude
-open import natural-numbers-functions hiding (_≤_)
+open import natural-numbers-functions hiding (_≤_ ; _<_)
 open import List-functions
 open import strict-total-order
 open import sorting
 open import decidability
-open import exercises.my-lab9 hiding (_≤_)
+open import exercises.lab9-solutions hiding (_≤_)
 ```
 
 For all of the following questions we will work with a type `X` that
@@ -43,7 +43,9 @@ positions.
 
 ```agda
  _<[Pos]_ : {X : Type} {xs : List X} → Pos xs → Pos xs → Type
- _<[Pos]_ = {!!}
+ _<[Pos]_ {X} {x :: xs} pos1 (inl ⋆) = 𝟘
+ _<[Pos]_ {X} {x :: xs} (inl ⋆) (inr pos2) = 𝟙
+ _<[Pos]_ {X} {x :: xs} (inr pos1) (inr pos2) = pos1 <[Pos] pos2
 ```
 
 ## Exercise 2
@@ -81,7 +83,18 @@ Using the facts above, **prove** that if both `Y` and `Z` have
                           → has-decidable-equality Y
                           → has-decidable-equality Z
                           → has-decidable-equality (Y ∔ Z)
- +-has-decidable-equality = {!!}
+ +-has-decidable-equality deceqy deceqz (inl y1) (inl y2) = I (deceqy y1 y2)
+   where
+     I : is-decidable (y1 ≡ y2) → is-decidable (inl y1 ≡ inl y2)
+     I (inl (refl .y1)) = inl (refl _)
+     I (inr ¬eq) = inr (λ inleq → ¬eq (inl-lc inleq))
+ +-has-decidable-equality deceqy deceqz (inl y1) (inr z2) = inr inl-is-not-inr
+ +-has-decidable-equality deceqy deceqz (inr z1) (inl y2) = inr inr-is-not-inl
+ +-has-decidable-equality deceqy deceqz (inr z1) (inr z2) = I (deceqz z1 z2)
+   where
+     I : is-decidable (z1 ≡ z2) → is-decidable (inr z1 ≡ inr z2)
+     I (inl (refl .z1)) = inl (refl _)
+     I (inr ¬eq) = inr (λ inreq → ¬eq (inr-lc inreq))
 ```
 
 ## Exercise 3
@@ -97,21 +110,34 @@ properties of a strict total order:
 
 ```agda
  𝟙-has-decidable-equality : has-decidable-equality 𝟙
- 𝟙-has-decidable-equality = {!!}
+ 𝟙-has-decidable-equality ⋆ ⋆ = inl (refl ⋆)
  
  <[Pos]-decidable : {xs : List X} → has-decidable-equality (Pos xs)
- <[Pos]-decidable = {!!}
+ <[Pos]-decidable {x :: xs} pos1 pos2
+   = +-has-decidable-equality
+     𝟙-has-decidable-equality
+     (<[Pos]-decidable {xs})
+     pos1
+     pos2
 
  <[Pos]-irreflexive : {xs : List X} → (x : Pos xs) → ¬ (x <[Pos] x)
- <[Pos]-irreflexive = {!!}
+ <[Pos]-irreflexive {x :: xs} (inl ⋆) ()
+ <[Pos]-irreflexive {x :: xs} (inr pos) pos<pos
+   = <[Pos]-irreflexive {xs} pos pos<pos
 
  <[Pos]-transitive : {xs : List X} → {n m o : Pos xs}
                    → n <[Pos] m → m <[Pos] o → n <[Pos] o
- <[Pos]-transitive = {!!}
+ <[Pos]-transitive {x :: xs} {inl ⋆} {inr m} {inr o} n<m m<o = ⋆
+ <[Pos]-transitive {x :: xs} {inr n} {inr m} {inr o} n<m m<o
+   = <[Pos]-transitive {xs} {n} {m} {o} n<m m<o
  
  <[Pos]-connected : {xs : List X} → {n m : Pos xs}
                   → ¬ (n ≡ m) → (n <[Pos] m) ∔ (m <[Pos] n)
- <[Pos]-connected = {!!}
+ <[Pos]-connected {x :: xs} {inl ⋆} {inl ⋆} ¬n≡m = 𝟘-elim (¬n≡m (refl _))
+ <[Pos]-connected {x :: xs} {inl ⋆} {inr m} ¬n≡m = inl ⋆
+ <[Pos]-connected {x :: xs} {inr n} {inl ⋆} ¬n≡m = inr ⋆
+ <[Pos]-connected {x :: xs} {inr n} {inr m} ¬n≡m
+   = <[Pos]-connected {xs} {n} {m} (λ n≡m → ¬n≡m (ap inr n≡m))
 
  STO : (xs : List X) → StrictTotalOrder (Pos xs)
  STO xs = record
@@ -189,8 +215,9 @@ also sorted.
 ```agda
  tail-sorted : (x : X) (xs : List X)
              → Sorted sto (x :: xs)
-             → Sorted sto       xs            
- tail-sorted = {!!}
+             → Sorted sto       xs
+ tail-sorted x [] sing-sorted = nil-sorted
+ tail-sorted x (y :: xs) (adj-sorted srtdy::xs _) = srtdy::xs
 ```
 
 ### Exercise 4.2
@@ -202,7 +229,9 @@ also sorted.
  drop-one-sorted : (x y : X) (xs : List X)
                  → Sorted sto (x :: y :: xs)
                  → Sorted sto (x      :: xs)
- drop-one-sorted = {!!}
+ drop-one-sorted x y [] srtd = sing-sorted
+ drop-one-sorted x y (z :: xs) (adj-sorted (adj-sorted srtd y≤z) x≤y)
+   = adj-sorted srtd (≤-transitive x≤y y≤z)
 ```
 
 ### Exercise 4.3
@@ -210,7 +239,40 @@ also sorted.
 **Prove** that, given a sorted list `xs`, `Inhab xs` is monotonic.
 
 ```agda
+ Inhab-lemma : (x : X)(xs : List X)(n : Pos (x :: xs)) → Sorted sto (x :: xs) → (x ≡ Inhab (x :: xs) n) ∔ (x < Inhab (x :: xs) n)
+ Inhab-lemma x xs (inl ⋆) srtd = inl (refl x)
+ Inhab-lemma x (.x :: xs) (inr (inl ⋆)) (adj-sorted srtd (inl (refl .x))) = {!Inhab-monotonic!}
+ Inhab-lemma x (.x :: xs) (inr (inr x₁)) (adj-sorted srtd (inl (refl .x))) = {!!}
+ Inhab-lemma x (y :: xs) (inr n) (adj-sorted srtd (inr x₂)) = {!!}
+  
  Inhab-monotonic : (xs : List X) → Sorted sto xs
-                   → monotonic (NSTO xs) nsto (Inhab xs)                   
- Inhab-monotonic = {!!}
+                   → monotonic (NSTO xs) nsto (Inhab xs)
+ Inhab-monotonic (x :: []) srtd (inl ⋆) (inl ⋆) n≤m = inl (refl x)
+ Inhab-monotonic (x :: .x :: xs) (adj-sorted srtd (inl (refl .x))) (inl ⋆) (inl ⋆) n≤m = inl (refl x)
+ Inhab-monotonic (x :: .x :: xs) (adj-sorted srtd (inl (refl .x))) (inl ⋆) (inr x₂) n≤m = {!!}
+ Inhab-monotonic (x :: .x :: xs) (adj-sorted srtd (inl (refl .x))) (inr x₁) (inl ⋆) n≤m = {!!}
+ Inhab-monotonic (x :: .x :: xs) (adj-sorted srtd (inl (refl .x))) (inr x₁) (inr x₂) n≤m = Inhab-monotonic (x :: xs) srtd x₁ {!x₂!} {!!}
+ Inhab-monotonic (x :: y :: xs) (adj-sorted srtd (inr x<y)) n m n≤m = {!!}
+ -- Inhab-monotonic (x :: xs) (drop-one-sorted x y xs srtd)
+ -- Inhab-monotonic (x :: .[]) sing-sorted n .n (inl (refl .n)) = inl (refl _)
+ -- Inhab-monotonic (x :: .[]) sing-sorted (inl ⋆) (inl ⋆) (inr ())
+ -- Inhab-monotonic (x :: .[]) sing-sorted (inl ⋆) (inr ()) (inr n<m)
+ -- Inhab-monotonic (x :: .x :: xs) (adj-sorted srtd (inl (refl .x))) n m n≤m = {!!}
+ -- Inhab-monotonic (x :: y :: xs) (adj-sorted srtd (inr x<y)) (inl ⋆) (inl ⋆) n≤m = inl (refl _)
+ -- Inhab-monotonic (x :: y :: xs) (adj-sorted srtd (inr x<y)) (inl ⋆) (inr m) (inr ⋆) = inr {!Inhab !}
+ -- Inhab-monotonic (x :: y :: xs) (adj-sorted srtd (inr x<y)) (inr n) (inl ⋆) (inl ())
+ -- Inhab-monotonic (x :: y :: xs) (adj-sorted srtd (inr x<y)) (inr n) (inl ⋆) (inr ())
+ -- Inhab-monotonic (x :: y :: xs) (adj-sorted srtd (inr x<y)) (inr n) (inr .n) (inl (refl .(inr n))) = Inhab-monotonic (y :: xs) srtd n n (inl (refl n))
+ -- Inhab-monotonic (x :: y :: xs) (adj-sorted srtd (inr x<y)) (inr n) (inr m) (inr n<m) = Inhab-monotonic (y :: xs) srtd n m (inr n<m)
+ 
+ -- Inhab-monotonic (x :: .[]) sing-sorted n m (inr x₂) = {!!}
+ -- -- Inhab-monotonic (x :: xs) strd n .n (inl (refl .n)) = inl (refl _)
+ -- Inhab-monotonic (x :: y :: xs) (adj-sorted srtd x₁) (inl ⋆) (inr m) (inr ⋆) = {!!}
+ -- -- Inhab-monotonic (x :: xs) (drop-one-sorted x y xs srtd) {!m!} {!m!} {!!}
+ -- Inhab-monotonic (x :: y :: xs) strd (inr n) (inr m) (inr n<m) = Inhab-monotonic (y :: xs) (tail-sorted x (y :: xs) strd) n m (inr n<m)
+ 
+ -- Inhab-monotonic (x :: xs) srtd (inl ⋆) (inl ⋆) (inl (refl _)) = inl (refl x)
+ -- Inhab-monotonic (x :: y :: xs) (adj-sorted srtd x₁) (inl ⋆) (inr m) (inr ⋆) = inr {!!}
+ -- Inhab-monotonic (x :: xs) srtd (inr x₁) (inl ⋆) n≤m = {!!}
+ -- Inhab-monotonic (x :: xs) srtd (inr x₁) (inr x₂) n≤m = {!!}
 ```

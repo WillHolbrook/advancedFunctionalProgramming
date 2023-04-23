@@ -6,7 +6,7 @@ module strict-total-order where
 
 open import prelude
 open import decidability
-open import natural-numbers-functions hiding (_<_)
+open import natural-numbers-functions
 open import List-functions
 ```
 -->

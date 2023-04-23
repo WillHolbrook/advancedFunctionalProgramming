@@ -251,8 +251,9 @@ also sorted.
  Inhab-monotonic (x :: .x :: xs) (adj-sorted srtd (inl (refl .x))) (inl ⋆) (inl ⋆) n≤m = inl (refl x)
  Inhab-monotonic (x :: .x :: xs) (adj-sorted srtd (inl (refl .x))) (inl ⋆) (inr x₂) n≤m = {!!}
  Inhab-monotonic (x :: .x :: xs) (adj-sorted srtd (inl (refl .x))) (inr x₁) (inl ⋆) n≤m = {!!}
- Inhab-monotonic (x :: .x :: xs) (adj-sorted srtd (inl (refl .x))) (inr x₁) (inr x₂) n≤m = Inhab-monotonic (x :: xs) srtd x₁ {!x₂!} {!!}
+ Inhab-monotonic (x :: .x :: xs) (adj-sorted srtd (inl (refl .x))) (inr x₁) (inr x₂) n≤m = Inhab-monotonic (x :: xs) srtd x₁ x₂ {!!}
  Inhab-monotonic (x :: y :: xs) (adj-sorted srtd (inr x<y)) n m n≤m = {!!}
+ 
  -- Inhab-monotonic (x :: xs) (drop-one-sorted x y xs srtd)
  -- Inhab-monotonic (x :: .[]) sing-sorted n .n (inl (refl .n)) = inl (refl _)
  -- Inhab-monotonic (x :: .[]) sing-sorted (inl ⋆) (inl ⋆) (inr ())

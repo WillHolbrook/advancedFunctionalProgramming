@@ -430,32 +430,32 @@ suc-on-right-≤ {zero} {zero} x≤y = 0-smallest
 suc-on-right-≤ {zero} {suc y} x≤y = 0-smallest
 suc-on-right-≤ {suc x} {suc y} (suc-preserves-≤ x≤y) = suc-preserves-≤ (suc-on-right-≤ x≤y)
 
-data _<_ : ℕ → ℕ → Type where
-  <-zero : {  y : ℕ} → 0 < suc y
-  <-suc : {x y : ℕ} → x < y → suc x < suc y
+-- data _<_ : ℕ → ℕ → Type where
+--   <-zero : {  y : ℕ} → 0 < suc y
+--   <-suc : {x y : ℕ} → x < y → suc x < suc y
 
-suc-≤-imp-< : {x y : ℕ} → x ≤ y → x < suc y
-suc-≤-imp-< {0} {y} x≤y = <-zero
-suc-≤-imp-< {suc x} {suc y} x≤y = <-suc (suc-≤-imp-< (suc-reflects-≤ x≤y))
+-- suc-≤-imp-< : {x y : ℕ} → x ≤ y → x < suc y
+-- suc-≤-imp-< {0} {y} x≤y = <-zero
+-- suc-≤-imp-< {suc x} {suc y} x≤y = <-suc (suc-≤-imp-< (suc-reflects-≤ x≤y))
 
-<-imp-¬eq : {x y : ℕ} → x < y → ¬ (x ≡ y)
-<-imp-¬eq {1} {.1} (<-suc ()) (refl .1)
-<-imp-¬eq {.(suc (suc _))} {.(suc (suc _))} (<-suc (<-suc x<y)) (refl .(suc (suc _))) = <-imp-¬eq x<y (refl _)
+-- <-imp-¬eq : {x y : ℕ} → x < y → ¬ (x ≡ y)
+-- <-imp-¬eq {1} {.1} (<-suc ()) (refl .1)
+-- <-imp-¬eq {.(suc (suc _))} {.(suc (suc _))} (<-suc (<-suc x<y)) (refl .(suc (suc _))) = <-imp-¬eq x<y (refl _)
 
 
-≤-suc-lemma : (n : ℕ) → n ≤ (1 + n)
-≤-suc-lemma 0       = 0-smallest 
-≤-suc-lemma (suc n) = goal
- where
-  IH : n ≤ (1 + n)
-  IH = ≤-suc-lemma n
-  goal : suc n ≤ suc (suc n)
-  goal = suc-preserves-≤ IH
+-- ≤-suc-lemma : (n : ℕ) → n ≤ (1 + n)
+-- ≤-suc-lemma 0       = 0-smallest 
+-- ≤-suc-lemma (suc n) = goal
+--  where
+--   IH : n ≤ (1 + n)
+--   IH = ≤-suc-lemma n
+--   goal : suc n ≤ suc (suc n)
+--   goal = suc-preserves-≤ IH
 
-≤-trans : (x y z : ℕ) → x ≤ y → y ≤ z → x ≤ z
-≤-trans zero y z p q  = 0-smallest
-≤-trans (suc x) (suc y) (suc z) (suc-preserves-≤ p) (suc-preserves-≤ q)
- = suc-preserves-≤ (≤-trans x y z p q)
+-- ≤-trans : (x y z : ℕ) → x ≤ y → y ≤ z → x ≤ z
+-- ≤-trans zero y z p q  = 0-smallest
+-- ≤-trans (suc x) (suc y) (suc z) (suc-preserves-≤ p) (suc-preserves-≤ q)
+--  = suc-preserves-≤ (≤-trans x y z p q)
 
 
 ```

@@ -612,7 +612,7 @@ height-equation-r = {!!}
 
 ```
 
-Now use these thre equations to show that height (2ⁿ-1) ≡ n.
+Now use these three equations to show that height (2ⁿ-1) ≡ n.
 
 ```agda
 power2 : ℕ → ℕ

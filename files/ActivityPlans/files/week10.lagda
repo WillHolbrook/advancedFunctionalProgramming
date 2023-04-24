@@ -4,7 +4,7 @@ In Weeks 9-10 we will discuss strict total orders, well-founded orders and sorti
 
 ### Attend the lecture on Monday 5-7pm
 
-No previous preparation is needed, but you may wish to watch some of the pre-recorded videos.
+Watch some of the pre-recorded videos if you haven't watched them already, for the sake of preparation.
 
 ### Attend the lab on Tuesday 4-6pm
 

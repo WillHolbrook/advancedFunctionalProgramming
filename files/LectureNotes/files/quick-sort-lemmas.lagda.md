@@ -184,9 +184,9 @@ a list `xs` and `xs` is sorted, then the extended list `x :: xs` is also sorted.
   ::-sorted : {x : X} {xs : List X}
     → (lte : (p : Pos xs) → (Inhab xs p ≡ x) ∔ (x < Inhab xs p))  -- x ≤ Inhab xs p
     → Sorted τ xs → Sorted τ (x :: xs)
-  ::-sorted lt nil-sorted = sing-sorted
-  ::-sorted lt sing-sorted = adj-sorted sing-sorted (lt (inl ⋆))
-  ::-sorted lt (adj-sorted s y≤z) = adj-sorted (adj-sorted s y≤z) (lt (inl ⋆))
+  ::-sorted lte nil-sorted = sing-sorted
+  ::-sorted lte sing-sorted = adj-sorted sing-sorted (lte (inl ⋆))
+  ::-sorted lte (adj-sorted s y≤z) = adj-sorted (adj-sorted s y≤z) (lte (inl ⋆))
 ```
 
 A slight variation on the previous lemma is that, if we have two

@@ -598,7 +598,7 @@ height-examples = refl _ , refl _ , refl _ , refl _ , refl _ , refl _ , refl _ ,
                   refl _ , refl _ , refl _ , refl _ , refl _ , refl _ , refl _ , refl _ , refl _
 ```
 
-The above diagrams give the following equations for the functino height.
+The above diagrams give the following equations for the function height.
 
 ```agda
 height-equation₀ : height 0 ≡ 0

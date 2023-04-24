@@ -623,6 +623,8 @@ height-power2-equation : (n : ℕ) → height (pred (power2 n)) ≡ n
 height-power2-equation = {!!}
 ```
 
+This means that `height` computes an approximation of the logarithm function in base 2.
+
 ### Define addition of binary natural numbers
 
 ### Prove that it is correct

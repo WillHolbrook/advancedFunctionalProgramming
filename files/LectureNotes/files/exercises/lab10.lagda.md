@@ -476,22 +476,18 @@ data 𝔹 : Type where
 The successor function n ↦ n+1 on 𝔹:
 
 ```agda
-
 Suc : 𝔹 → 𝔹
 Suc = {!!}
-
 ```
 
 Conversion between the two renderings:
 
 ```agda
-
 unary : 𝔹 → ℕ
 unary = {!!}
 
 binary : ℕ → 𝔹
 binary = {!!}
-
 ```
 
 HINT. Use the functions `left`, `right` and `Suc`.
@@ -508,7 +504,7 @@ First some commutation properties:
    binary │            │ binary       (ldiagram)
           │            │
           ▼            ▼
-          𝔹─────────► 𝔹
+          𝔹──────────► 𝔹
                 L
 
 
@@ -518,7 +514,7 @@ First some commutation properties:
    binary │            │ binary       (rdiagram)
           │            │
           ▼            ▼
-          𝔹─────────► 𝔹
+          𝔹──────────► 𝔹
                 R
 
 
@@ -534,7 +530,6 @@ First some commutation properties:
 
 
 ```agda
-
 ldiagram : (n : ℕ) → binary (left n) ≡ L (binary n)
 ldiagram = {!!}
 
@@ -543,14 +538,12 @@ rdiagram = {!!}
 
 sdiagram : (m : 𝔹) → unary (Suc m) ≡ suc (unary m)
 sdiagram = {!!}
-
 ```
 
 The functions unary and binary are mutually inverse, using the above
 diagrams:
 
 ```agda
-
 unary-binary : (n : ℕ) → unary (binary n) ≡ n
 unary-binary = {!!}
 
@@ -572,7 +565,6 @@ The height of a number is its height in the following infinite tree:
 
                        0
 ```agda
-
 size : 𝔹 → ℕ
 size Z     = 0
 size (L m) = suc (size m)
@@ -606,7 +598,6 @@ height-examples = refl _ , refl _ , refl _ , refl _ , refl _ , refl _ , refl _ ,
 The above diagrams give the following equations for the functino height.
 
 ```agda
-
 height-equation₀ : height 0 ≡ 0
 height-equation₀ = {!!}
 
@@ -621,7 +612,6 @@ height-equation-r = {!!}
 Now use these thre equations to show that height (2ⁿ-1) ≡ n.
 
 ```agda
-
 power2 : ℕ → ℕ
 power2 0       = 1
 power2 (suc n) = double (power2 n)
@@ -629,3 +619,7 @@ power2 (suc n) = double (power2 n)
 height-power2-equation : (n : ℕ) → height (pred (power2 n)) ≡ n
 height-power2-equation = {!!}
 ```
+
+### Define addition of binary natural numbers
+
+### Prove that it is correct

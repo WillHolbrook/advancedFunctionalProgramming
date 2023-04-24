@@ -379,7 +379,7 @@ Given a type `X` with a strict total order, we ask you to **define** a predicate
 
 *Hint:* You will find it helpful to use the predicates from the previous part, even if you did not finish defining them.
 
-### Write your solutions for 4.1 and 4.2 here
+### Write your solutions here.
 
 For both parts, you can use `data` or instead a recursive definition, as you prefer.
 
@@ -453,7 +453,6 @@ following tree:
               \                /
 
                        0
-
 
 Define the above two functions:
 
@@ -615,7 +614,7 @@ height-equation-r = {!!}
 
 ```
 
-Now use these threww equations to show that height (2ⁿ-1) ≡ n.
+Now use these thre equations to show that height (2ⁿ-1) ≡ n.
 
 ```agda
 

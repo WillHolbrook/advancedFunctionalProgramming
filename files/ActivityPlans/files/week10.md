@@ -8,7 +8,7 @@ Watch some of the pre-recorded videos if you haven't watched them already, for t
 
 ### Attend the lab on Tuesday 4-6pm
 
- * [Lab 10 sheet](/files/LectureNotes/files/exercises/lab9.lagda.md)
+ * [Lab 10 sheet](/files/LectureNotes/files/exercises/lab10.lagda.md)
 
 ### Watch videos
 
@@ -41,5 +41,5 @@ This is included at the end of the Week 10 lab sheet.
 ### Get ready for the test
 
 We have given you a lot of exercises this week. We will provide sample
-solutions on Wednesday. Attempt as many as you can for preparation
+solutions on Wednesday. As a preparation for the test, attempt as many as you can for preparation
 before checking the sample solutions.

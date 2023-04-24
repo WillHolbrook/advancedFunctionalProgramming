@@ -504,7 +504,7 @@ First some commutation properties:
    binary │            │ binary       (ldiagram)
           │            │
           ▼            ▼
-          𝔹──────────► 𝔹
+          𝔹 ─────────► 𝔹
                 L
 
 
@@ -514,7 +514,7 @@ First some commutation properties:
    binary │            │ binary       (rdiagram)
           │            │
           ▼            ▼
-          𝔹──────────► 𝔹
+          𝔹 ─────────► 𝔹
                 R
 
 

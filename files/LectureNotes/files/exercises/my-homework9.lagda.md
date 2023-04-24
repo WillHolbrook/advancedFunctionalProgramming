@@ -6,7 +6,7 @@
 module exercises.my-homework9 where
 
 open import prelude
-open import natural-numbers-functions hiding (_≤_ ; _<_)
+open import natural-numbers-functions hiding (_≤_ )
 open import List-functions
 open import strict-total-order
 open import sorting
@@ -239,41 +239,14 @@ also sorted.
 **Prove** that, given a sorted list `xs`, `Inhab xs` is monotonic.
 
 ```agda
- Inhab-lemma : (x : X)(xs : List X)(n : Pos (x :: xs)) → Sorted sto (x :: xs) → (x ≡ Inhab (x :: xs) n) ∔ (x < Inhab (x :: xs) n)
- Inhab-lemma x xs (inl ⋆) srtd = inl (refl x)
- Inhab-lemma x (.x :: xs) (inr (inl ⋆)) (adj-sorted srtd (inl (refl .x))) = {!Inhab-monotonic!}
- Inhab-lemma x (.x :: xs) (inr (inr x₁)) (adj-sorted srtd (inl (refl .x))) = {!!}
- Inhab-lemma x (y :: xs) (inr n) (adj-sorted srtd (inr x₂)) = {!!}
-  
  Inhab-monotonic : (xs : List X) → Sorted sto xs
                    → monotonic (NSTO xs) nsto (Inhab xs)
- Inhab-monotonic (x :: []) srtd (inl ⋆) (inl ⋆) n≤m = inl (refl x)
- Inhab-monotonic (x :: .x :: xs) (adj-sorted srtd (inl (refl .x))) (inl ⋆) (inl ⋆) n≤m = inl (refl x)
- Inhab-monotonic (x :: .x :: xs) (adj-sorted srtd (inl (refl .x))) (inl ⋆) (inr x₂) n≤m = {!!}
- Inhab-monotonic (x :: .x :: xs) (adj-sorted srtd (inl (refl .x))) (inr x₁) (inl ⋆) n≤m = {!!}
- Inhab-monotonic (x :: .x :: xs) (adj-sorted srtd (inl (refl .x))) (inr x₁) (inr x₂) n≤m = Inhab-monotonic (x :: xs) srtd x₁ x₂ {!!}
- Inhab-monotonic (x :: y :: xs) (adj-sorted srtd (inr x<y)) n m n≤m = {!!}
- 
- -- Inhab-monotonic (x :: xs) (drop-one-sorted x y xs srtd)
- -- Inhab-monotonic (x :: .[]) sing-sorted n .n (inl (refl .n)) = inl (refl _)
- -- Inhab-monotonic (x :: .[]) sing-sorted (inl ⋆) (inl ⋆) (inr ())
- -- Inhab-monotonic (x :: .[]) sing-sorted (inl ⋆) (inr ()) (inr n<m)
- -- Inhab-monotonic (x :: .x :: xs) (adj-sorted srtd (inl (refl .x))) n m n≤m = {!!}
- -- Inhab-monotonic (x :: y :: xs) (adj-sorted srtd (inr x<y)) (inl ⋆) (inl ⋆) n≤m = inl (refl _)
- -- Inhab-monotonic (x :: y :: xs) (adj-sorted srtd (inr x<y)) (inl ⋆) (inr m) (inr ⋆) = inr {!Inhab !}
- -- Inhab-monotonic (x :: y :: xs) (adj-sorted srtd (inr x<y)) (inr n) (inl ⋆) (inl ())
- -- Inhab-monotonic (x :: y :: xs) (adj-sorted srtd (inr x<y)) (inr n) (inl ⋆) (inr ())
- -- Inhab-monotonic (x :: y :: xs) (adj-sorted srtd (inr x<y)) (inr n) (inr .n) (inl (refl .(inr n))) = Inhab-monotonic (y :: xs) srtd n n (inl (refl n))
- -- Inhab-monotonic (x :: y :: xs) (adj-sorted srtd (inr x<y)) (inr n) (inr m) (inr n<m) = Inhab-monotonic (y :: xs) srtd n m (inr n<m)
- 
- -- Inhab-monotonic (x :: .[]) sing-sorted n m (inr x₂) = {!!}
- -- -- Inhab-monotonic (x :: xs) strd n .n (inl (refl .n)) = inl (refl _)
- -- Inhab-monotonic (x :: y :: xs) (adj-sorted srtd x₁) (inl ⋆) (inr m) (inr ⋆) = {!!}
- -- -- Inhab-monotonic (x :: xs) (drop-one-sorted x y xs srtd) {!m!} {!m!} {!!}
- -- Inhab-monotonic (x :: y :: xs) strd (inr n) (inr m) (inr n<m) = Inhab-monotonic (y :: xs) (tail-sorted x (y :: xs) strd) n m (inr n<m)
- 
- -- Inhab-monotonic (x :: xs) srtd (inl ⋆) (inl ⋆) (inl (refl _)) = inl (refl x)
- -- Inhab-monotonic (x :: y :: xs) (adj-sorted srtd x₁) (inl ⋆) (inr m) (inr ⋆) = inr {!!}
- -- Inhab-monotonic (x :: xs) srtd (inr x₁) (inl ⋆) n≤m = {!!}
- -- Inhab-monotonic (x :: xs) srtd (inr x₁) (inr x₂) n≤m = {!!}
+ Inhab-monotonic (x :: xs) srtd n .n (inl (refl .n))
+  = inl (refl _)
+ Inhab-monotonic (x :: y :: xs) (adj-sorted srtd x≤y) (inl ⋆) (inr (inl ⋆)) (inr ⋆)
+  = x≤y
+ Inhab-monotonic (x :: y :: xs) (adj-sorted srtd x≤y) (inl ⋆) (inr (inr m)) (inr ⋆)
+  = Inhab-monotonic (x :: xs) (drop-one-sorted x y xs (adj-sorted srtd x≤y)) (inl ⋆) (inr m) (inr ⋆)
+ Inhab-monotonic (x :: y :: xs) (adj-sorted srtd x≤y) (inr n) (inr m) (inr n<m)
+  = Inhab-monotonic (y :: xs) (tail-sorted x (y :: xs) (adj-sorted srtd x≤y)) n m (inr n<m)
 ```

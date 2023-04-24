@@ -186,9 +186,12 @@ add-bounds {X} sto = record
   connected↑ = {!!}
 ```
 
-# Additional exercises
+# Homework exercises
 
-Some, but not all, of these exercises occurred in Test 2 in previous years. Some of them are rather hard.
+The exercises here include the 5 exercises of Test 2 last year, and
+many more that could potentially occur in a Test 2. Some of them are
+rather hard. But rest reassured that there will be only one rather
+hard exercise in Test 2, on just hard, and three easy and medium.
 
 ## Prove an isomorphism
 

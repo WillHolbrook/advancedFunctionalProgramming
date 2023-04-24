@@ -555,6 +555,7 @@ Example. We define a function height such that height (2ⁿ-1) = n.
 
 The height of a number is its height in the following infinite tree:
 
+```text
   ...   ...   ...  ...  ...  ...  ...   ...
    7     8     9    10  11   12    13   14
      \  /       \  /      \ /        \ /
@@ -564,6 +565,8 @@ The height of a number is its height in the following infinite tree:
               \                /
 
                        0
+```
+
 ```agda
 size : 𝔹 → ℕ
 size Z     = 0

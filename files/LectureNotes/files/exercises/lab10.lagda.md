@@ -444,6 +444,7 @@ The isomorphic copy is formally constructed from 0 by iterating the
 functions left(n)=2n+1 and right(n)=2n+2. This is illustrated by the
 following tree:
 
+```text
   ...   ...   ...  ...  ...  ...  ...   ...
    7     8     9    10  11   12    13   14
      \  /       \  /      \ /        \ /
@@ -453,7 +454,7 @@ following tree:
               \                /
 
                        0
-
+```
 Define the above two functions:
 
 ```agda

@@ -9,3 +9,4 @@
  * [Week 7](files/week7.md) - Revision week
  * [Week 8](/files/LectureNotes/files/regexp.lagda.md) - Regular expressions and Test 1
  * [Week 9](files/week9.md) - Sorting
+ * [Week 10](files/week10.md) - Sorting

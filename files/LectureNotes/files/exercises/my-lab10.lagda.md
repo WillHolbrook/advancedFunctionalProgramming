@@ -1,7 +1,7 @@
 # Week 10 - Lab Sheet
 
 ```agda
-module exercises.lab10 where
+module exercises.my-lab10 where
 
 open import prelude
 
@@ -31,10 +31,20 @@ For any `n : ℕ`, the type `Fin n` has decidable equality.
 [Fin_]-suc-is-injective : (n : ℕ) (x y : Fin n)
                         → _≡_ {Fin _} (suc x) (suc y) -- suc x ≡ suc y
                         → x ≡ y
-[Fin n ]-suc-is-injective x y = {!!}
+[Fin n ]-suc-is-injective x .x (refl .(suc x)) = refl x
 
 [Fin_]-decidable : (n : ℕ) → has-decidable-equality (Fin n)
-[Fin n ]-decidable x y = {!!}
+[Fin (suc n) ]-decidable zero zero = inl (refl zero)
+[Fin (suc n) ]-decidable zero (suc y) = inr (λ {()})
+[Fin (suc n) ]-decidable (suc x) zero = inr (λ {()})
+[Fin (suc n) ]-decidable (suc x) (suc y) with IH
+  where
+    IH : is-decidable (x ≡ y)
+    IH = [Fin n ]-decidable x y
+[Fin suc n ]-decidable (suc x) (suc y) | inl x=y
+ = inl (ap suc x=y)
+[Fin suc n ]-decidable (suc x) (suc y) | inr ¬x=y
+ = inr (λ sx=sy → ¬x=y ([Fin n ]-suc-is-injective x y sx=sy))
 ```
 
 ### Exercise 1.2
@@ -44,18 +54,27 @@ transitive and connected.
 
 ```agda
 [Fin_]_<_ : (n : ℕ) → (x y : Fin n) → Type
-[Fin n ] x < y = {!!}
+[Fin suc n ] x < zero = 𝟘
+[Fin suc n ] zero < suc y = 𝟙
+[Fin suc n ] suc x < suc y = [Fin n ] x < y
 
 [Fin_]-irreflexive : (n : ℕ) → (x : Fin n) → ¬ ([Fin n ] x < x)
-[Fin n ]-irreflexive = {!!}
+[Fin suc n ]-irreflexive zero ()
+[Fin suc n ]-irreflexive (suc x) l = [Fin n ]-irreflexive x l
 
 [Fin_]-transitive : (n : ℕ) → {x y z : Fin n}
                   → [Fin n ] x < y → [Fin n ] y < z → [Fin n ] x < z
-[Fin n ]-transitive = {!!}
+[Fin suc n ]-transitive {zero} {y} {suc z} x<y y<z = ⋆
+[Fin suc n ]-transitive {suc x} {suc y} {suc z} x<y y<z
+ = [Fin n ]-transitive {x} {y} {z} x<y y<z
 
 [Fin_]-connected : (n : ℕ) → {x y : Fin n}
                  → ¬ (x ≡ y) → ([Fin n ] x < y) ∔ ([Fin n ] y < x)
-[Fin n ]-connected = {!!}
+[Fin suc n ]-connected {zero} {zero} ¬x=y = inl (¬x=y (refl zero)) 
+[Fin suc n ]-connected {zero} {suc y} ¬x=y = inl ⋆
+[Fin suc n ]-connected {suc x} {zero} ¬x=y = inr ⋆
+[Fin suc n ]-connected {suc x} {suc y} ¬sx=sy
+ = [Fin n ]-connected {x} {y} (λ x=y → ¬sx=sy (ap suc x=y))
 
 Fin-STO : (n : ℕ) → StrictTotalOrder (Fin n)
 Fin-STO n = record
@@ -100,7 +119,13 @@ module _
 ```agda
  Pos-iso-same-length : {A : Type} (xs ys : List A)
                      → Pos xs ≅ Pos ys → length xs ≡ length ys
- Pos-iso-same-length = {!!}
+ Pos-iso-same-length [] [] iso = refl zero
+ Pos-iso-same-length [] (x :: ys) (Isomorphism f (Inverse g η ε))
+  = 𝟘-elim (g (inl ⋆))
+ Pos-iso-same-length (x :: xs) [] (Isomorphism f (Inverse g η ε))
+  = 𝟘-elim (f (inl ⋆))
+ Pos-iso-same-length (x :: xs) (y :: ys) iso
+  = ap suc (Pos-iso-same-length xs ys (fact iso))
 ```
 
 ### Exercise 2.2
@@ -111,7 +136,9 @@ same length.
 ```agda
  permutations-have-same-length : {A : Type} (xs ys : List A)
                                → xs IsPermutationOf ys → length xs ≡ length ys
- permutations-have-same-length = {!!}
+ permutations-have-same-length xs ys
+  record { pos-iso = pos-iso ; inhab-eq = inhab-eq }
+  = Pos-iso-same-length xs ys pos-iso
 ```
 
 ## Adding minimal and maximal elements to an order
@@ -136,7 +163,15 @@ Bool` containing min and max.
 
 ```agda
 lift : {X : Type} → (_<_ : X → X → Type) → X ∔ Bool → X ∔ Bool → Type
-lift _<_ = {!!}
+lift _<_ (inl x)     (inl y)     = x < y
+lift _<_ (inr true)  (inl y)     = 𝟘
+lift _<_ (inr false) (inl y)     = 𝟙
+lift _<_ (inl x)     (inr true)  = 𝟙
+lift _<_ (inr true)  (inr true)  = 𝟘
+lift _<_ (inr false) (inr true)  = 𝟙
+lift _<_ (inl x)     (inr false) = 𝟘
+lift _<_ (inr true)  (inr false) = 𝟘
+lift _<_ (inr false) (inr false) = 𝟘
 ```
 
 You should ensure that, under your definition of `lift`, `min < x` for all `x`
@@ -155,6 +190,12 @@ minimum and maximum elements.
  week 9's homework sheet, the solutions of which are already imported for you.
 
 ```agda
+bool-has-decidable-equality : has-decidable-equality Bool
+bool-has-decidable-equality true  true  = inl (refl true)
+bool-has-decidable-equality true  false = inr (λ ())
+bool-has-decidable-equality false true  = inr (λ ())
+bool-has-decidable-equality false false = inl (refl false)
+
 add-bounds : {X : Type} → StrictTotalOrder X → StrictTotalOrder (X ∔ Bool)
 add-bounds {X} sto = record
                       { _<_         = _<↑_
@@ -174,16 +215,60 @@ add-bounds {X} sto = record
   _<↑_ = lift _<_
 
   decidable↑ : has-decidable-equality (X ∔ Bool)
-  decidable↑ = {!!}
+  decidable↑ (inl x) (inl y) with decidable x y
+  decidable↑ (inl x) (inl y) | inl x=y
+   = inl (ap inl x=y)
+  decidable↑ (inl x) (inl y) | inr ¬x=y
+   = inr (λ { (refl .(inl x)) → ¬x=y (refl x)})
+  decidable↑ (inl x) (inr y) = inr (λ {()})
+  decidable↑ (inr x) (inl y) = inr (λ {()})
+  decidable↑ (inr x) (inr y) with bool-has-decidable-equality x y
+  decidable↑ (inr x) (inr .x) | inl (refl .x)
+   = inl (refl (inr x))
+  decidable↑ (inr x) (inr y)  | inr ¬x=y
+   = inr (λ {(refl .(inr x)) → ¬x=y (refl x)})
 
   irreflexive↑ : (x : X ∔ Bool) → ¬ (x <↑ x)
-  irreflexive↑ = {!!}
+  irreflexive↑ (inl x) l = irreflexive x l
+  irreflexive↑ (inr true) ()
+  irreflexive↑ (inr false) ()
 
   transitive↑ : {x y z : X ∔ Bool} → x <↑ y → y <↑ z → x <↑ z
-  transitive↑ = {!!}
+  transitive↑ {inl x}     {inl y}     {inl z}     x<y y<z = transitive x<y y<z
+  transitive↑ {inl x}     {inl y}     {inr true}  x<y y<z = ⋆
+  transitive↑ {inl x}     {inr true}  {inl z}     x<y ()
+  transitive↑ {inl x}     {inr false} {inl z}     ()  y<z
+  transitive↑ {inl x}     {inr true}  {inr false} x<y ()
+  transitive↑ {inl x}     {inr false} {inr false} x<y ()
+  transitive↑ {inr false} {inl y}     {inl z}     x<y y<z = ⋆
+  transitive↑ {inr false} {inl y}     {inr true}  x<y y<z = ⋆
+  transitive↑ {inr true}  {inr true}  {inl z}     x<y ()
+  transitive↑ {inr true}  {inr false} {inl z}     ()  y<z
+  transitive↑ {inr false} {inr y}     {inl z}     x<y y<z = ⋆
+  transitive↑ {inr true}  {inr true}  {inr true}  x<y ()
+  transitive↑ {inr true}  {inr false} {inr true}  ()  y<z
+  transitive↑ {inr false} {inr y}     {inr true}  x<y y<z = ⋆
+  transitive↑ {inr true}  {inr true}  {inr false} x<y ()
+  transitive↑ {inr true}  {inr false} {inr false} x<y ()
+  transitive↑ {inr false} {inr true}  {inr false} x<y ()
+  transitive↑ {inr false} {inr false} {inr false} x<y ()
 
   connected↑ : {x y : X ∔ Bool} → ¬ (x ≡ y) → (x <↑ y) ∔ (y <↑ x)
-  connected↑ = {!!}
+  connected↑ {inl x} {inl y} ¬lx=ly with trichotomy x y
+  connected↑ {inl x} {inl y} ¬lx=ly | inl x<y
+   = inl x<y
+  connected↑ {inl x} {inl y} ¬lx=ly | inr (inl x=y)
+   = 𝟘-elim (¬lx=ly (ap inl x=y))
+  connected↑ {inl x} {inl y} ¬lx=ly | inr (inr y<x)
+   = inr y<x
+  connected↑ {inl x} {inr true} ¬x=y = inl ⋆
+  connected↑ {inl x} {inr false} ¬x=y = inr ⋆
+  connected↑ {inr true} {inl y} ¬x=y = inr ⋆
+  connected↑ {inr false} {inl y} ¬x=y = inl ⋆
+  connected↑ {inr true} {inr true} ¬x=y = inl (¬x=y (refl (inr true)))
+  connected↑ {inr true} {inr false} ¬x=y = inr ⋆
+  connected↑ {inr false} {inr true} ¬x=y = inl ⋆
+  connected↑ {inr false} {inr false} ¬x=y = inl (¬x=y (refl (inr false)))
 ```
 
 # Homework exercises
@@ -459,8 +544,8 @@ Define the above two functions:
 
 ```agda
 left right : ℕ → ℕ
-left = {!!}
-right = {!!}
+left  n = suc n + n
+right n = suc (suc n) + n
 ```
 
 
@@ -477,17 +562,22 @@ The successor function n ↦ n+1 on 𝔹:
 
 ```agda
 Suc : 𝔹 → 𝔹
-Suc = {!!}
+Suc Z = L Z
+Suc (L b) = R b
+Suc (R b) = L (Suc b)
 ```
 
 Conversion between the two renderings:
 
 ```agda
 unary : 𝔹 → ℕ
-unary = {!!}
+unary Z = 0
+unary (L b) = left (unary b)
+unary (R b) = right (unary b)
 
 binary : ℕ → 𝔹
-binary = {!!}
+binary zero = Z
+binary (suc n) = Suc (binary n)
 ```
 
 HINT. Use the functions `left`, `right` and `Suc`.
@@ -531,13 +621,37 @@ First some commutation properties:
 
 ```agda
 ldiagram : (n : ℕ) → binary (left n) ≡ L (binary n)
-ldiagram = {!!}
+ldiagram zero = refl (L Z)
+ldiagram (suc n) =
+   Suc (Suc (binary (n + suc n))) ≡⟨ ap (Suc ∘ Suc) (
+     binary (n + suc n) ≡⟨ ap binary (+-step n n) ⟩
+     binary (suc n + n) ≡⟨ refl _ ⟩
+     Suc (binary (n + n)) ∎)
+   ⟩
+   Suc (Suc (Suc (binary (n + n)))) ≡⟨ ap (Suc ∘ Suc) (ldiagram n) ⟩
+   Suc (R (binary n)) ≡⟨ refl (L (Suc (binary n))) ⟩
+   L (Suc (binary n)) ∎
+
 
 rdiagram : (n : ℕ) → binary (right n) ≡ R (binary n)
-rdiagram = {!!}
+rdiagram zero = refl (R Z)
+rdiagram (suc n) =
+   Suc (Suc (Suc (binary (n + suc n)))) ≡⟨
+    ap
+    (Suc ∘ (Suc ∘ Suc))
+    (ap binary (+-step n n))
+   ⟩
+   Suc (Suc (Suc (Suc (binary (n + n))))) ≡⟨ ap (Suc ∘ Suc) (rdiagram n) ⟩
+   R (Suc (binary n)) ∎
 
 sdiagram : (m : 𝔹) → unary (Suc m) ≡ suc (unary m)
-sdiagram = {!!}
+sdiagram Z = refl 1
+sdiagram (L m) = refl (suc (suc (unary m + unary m)))
+sdiagram (R m) = ap suc (
+   unary (Suc m) + unary (Suc m) ≡⟨ ap (λ x → x + x) (sdiagram m) ⟩
+   suc (unary m) + suc (unary m) ≡⟨ ap suc (+-step (unary m) (unary m)) ⟩
+   suc (suc (unary m + unary m)) ∎
+   )
 ```
 
 The functions unary and binary are mutually inverse, using the above
@@ -545,13 +659,25 @@ diagrams:
 
 ```agda
 unary-binary : (n : ℕ) → unary (binary n) ≡ n
-unary-binary = {!!}
+unary-binary zero = refl zero
+unary-binary (suc n) = 
+   unary (Suc (binary n)) ≡⟨ sdiagram (binary n) ⟩
+   suc (unary (binary n)) ≡⟨ ap suc (unary-binary n) ⟩
+   suc n ∎
 
 binary-unary : (m : 𝔹) → binary (unary m) ≡ m
-binary-unary = {!!}
+binary-unary Z = refl Z
+binary-unary (L m) = 
+   Suc (binary (unary m + unary m)) ≡⟨ ldiagram (unary m) ⟩
+   L (binary (unary m)) ≡⟨ ap L (binary-unary m) ⟩
+   L m ∎
+binary-unary (R m) = 
+   Suc (Suc (binary (unary m + unary m))) ≡⟨ rdiagram (unary m) ⟩
+   R (binary (unary m)) ≡⟨ ap R (binary-unary m) ⟩
+   R m ∎
 ```
 
-Example. We define a function height such that height (2ⁿ-1) = n.
+Example. We define a function height such that `height (2ⁿ-1) = n`.
 
 The height of a number is its height in the following infinite tree:
 
@@ -602,13 +728,16 @@ The above diagrams give the following equations for the function height.
 
 ```agda
 height-equation₀ : height 0 ≡ 0
-height-equation₀ = {!!}
+height-equation₀ = refl zero
 
 height-equation-l : (n : ℕ) → height (left n) ≡ suc (height n)
-height-equation-l n = {!!}
+height-equation-l zero = refl 1
+height-equation-l (suc n) = {!!}
+
 
 height-equation-r : (n : ℕ) → height (right n) ≡ suc (height n)
-height-equation-r = {!!}
+height-equation-r zero = refl 1
+height-equation-r (suc n) = {!!}
 
 ```
 
@@ -620,7 +749,8 @@ power2 0       = 1
 power2 (suc n) = double (power2 n)
 
 height-power2-equation : (n : ℕ) → height (pred (power2 n)) ≡ n
-height-power2-equation = {!!}
+height-power2-equation zero = height-equation₀
+height-power2-equation (suc n) = {!n!}
 ```
 
 This means that `height` computes an approximation of the logarithm function in base 2.
@@ -628,3 +758,11 @@ This means that `height` computes an approximation of the logarithm function in 
 ### Define addition of binary natural numbers
 
 ### Prove that it is correct
+
+```agda
+_+𝔹_ : 𝔹 → 𝔹 → 𝔹
+_+𝔹_ = {!!}
+
++𝔹-correct : (x y : 𝔹) → unary (x +𝔹 y) ≡ unary x + unary y
++𝔹-correct = {!!}
+```

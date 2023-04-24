@@ -71,6 +71,10 @@ accessible.  This takes the form of the following definition:
 
 ```agda
 module _ {X : Type} (_<_ : X → X → Type) where
+  -- This is an agda definition for "course of values induction" which states that
+  -- to prove a statement you need to prove the base case "P 0" and then prove a
+  -- function that says ∀k.P0, P1, ... Pk-1 → Pk. (i.e. that if I have proofs of all
+  -- Pn such that n<k then I can prove Pk. Combining this I can prove P for all k
 
   data Acc (x : X) : Type where
     acc : (ϕ : ∀ y → y < x → Acc y) → Acc x

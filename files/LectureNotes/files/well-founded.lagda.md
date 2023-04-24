@@ -21,7 +21,7 @@ sorting algoritm: quicksort.
 <!--
 ```agda
 module _ (X : Type) (τ : StrictTotalOrder X) where
-  open StrictTotalOrder τ 
+  open StrictTotalOrder τ
   private
 ```
 -->
@@ -41,12 +41,13 @@ And now it is tempting to continue directly to the definition of
 quicksort as in the following:
 
 ```agda
-    -- quicksort : List X → List X
-    -- quicksort [] = []
-    -- quicksort (x :: l) with partition x l 
-    -- quicksort (x :: l) | left , right =
-    --   (quicksort left) ++
-    --   (x :: quicksort right) 
+{-
+    quicksort : List X → List X
+    quicksort [] = []
+    quicksort (x :: l) with partition x l
+    quicksort (x :: l) | left , right =
+      (quicksort left) ++ (x :: quicksort right)
+-}
 ```
 
 However, if you uncomment this code, you will find that Agda complains
@@ -85,14 +86,14 @@ elimination principle for accessible elements:
 ```agda
   acc-elim : (P : (x : X) → Type)
     → (p : (x : X) (ϕ : ∀ y → y < x → P y) → P x)
-    → (x : X) (a : Acc x) → P x 
+    → (x : X) (a : Acc x) → P x
   acc-elim P r x (acc ϕ) = r x (λ y y<x → acc-elim P r y (ϕ y y<x))
 ```
 
 The idea here is that we want to prove some predicate `P x`.  Suppose
 we can show that for any `x`, if the predicate holds on all `y` such
 that `y < x`, then it also holds for `x`.  Then the predicate holds
-for any `x` which is accessible. 
+for any `x` which is accessible.
 
 The most useful case will be when we have a predicate for which *every*
 element is accessible.  In this case, we say the relation is **well-founded**:
@@ -108,14 +109,49 @@ us that we can prove a predicate `P x` by showing that `P x` holds whenever
 
 ```agda
   wf-ind : (P : X → Type) (ω : WF)
-    → (p : (x : X) (ϕ : ∀ y → (y < x) → P y) → P x)
-    → (x : X) → P x 
+         → (p : (x : X) (ϕ : ∀ y → (y < x) → P y) → P x)
+         → (x : X) → P x
   wf-ind P ω p x = acc-elim P p x (ω x)
 ```
 ## The Well-foundedness of the total order on ℕ
 
 Let's show that the strict total order on ℕ is well-founded.  First a
 quick lemma: if m < n + 1 then either m < n or m = n.
+
+First some examples:
+
+```agda
+nothing-is-less-than-0 : (x : ℕ) → ¬ (x <ₙ 0)
+nothing-is-less-than-0 x ()
+
+0-is-accessible : Acc _<ₙ_ 0
+0-is-accessible = acc h
+ where
+  h : (y : ℕ) → y <ₙ 0 → Acc _<ₙ_ y
+  h y ()
+
+1-is-accessible : Acc _<ₙ_ 1
+1-is-accessible = acc h
+ where
+  h : (y : ℕ) → y <ₙ 1 → Acc _<ₙ_ y
+  h 0 <-zero = 0-is-accessible
+
+2-is-accessible : Acc _<ₙ_ 2
+2-is-accessible = acc h
+ where
+  h : (y : ℕ) → y <ₙ 2 → Acc _<ₙ_ y
+  h 0 <-zero = 0-is-accessible
+  h 1 (<-suc <-zero) = 1-is-accessible
+
+3-is-accessible : Acc _<ₙ_ 3
+3-is-accessible = acc h
+ where
+  h : (y : ℕ) → y <ₙ 3 → Acc _<ₙ_ y
+  h 0 <-zero = 0-is-accessible
+  h 1 (<-suc <-zero) = 1-is-accessible
+  h 2 (<-suc (<-suc <-zero)) = 2-is-accessible
+```
+
 
 ```agda
 <ₙ-suc-lemma : ∀ {m n} → m <ₙ suc n → (m <ₙ n) ∔ (m ≡ n)
@@ -130,16 +166,21 @@ Now we can obtain our desired result:
 
 ```agda
 <ₙ-WF : WF _<ₙ_
-<ₙ-WF zero = acc (λ { n () })
+<ₙ-WF zero    = acc (λ { n () })
 <ₙ-WF (suc n) = acc IH
 
   where ϕ : ∀ m → m <ₙ n → Acc _<ₙ_ m
-        ϕ = acc-ev _<ₙ_ (<ₙ-WF n) 
+        ϕ = acc-ev _<ₙ_ (<ₙ-WF n)
 
         IH : ∀ m → m <ₙ suc n → Acc _<ₙ_ m
         IH m m<n+1 with <ₙ-suc-lemma m<n+1
-        IH m m<n+1 | inl m<n = ϕ m m<n
+        IH m m<n+1 | inl m<n      = ϕ m m<n
         IH .n _    | inr (refl _) = <ₙ-WF n
+
+course-of-values-induction : (P : ℕ → Type)
+                           → ((x : ℕ) → ((y : ℕ) → (y <ₙ x) → P y) → P x)
+                           → (x : ℕ) → P x
+course-of-values-induction P p x = wf-ind (_<ₙ_) P (<ₙ-WF) p x
 ```
 
 ## Well-foundedness of the length of a list
@@ -150,7 +191,7 @@ saying that the length of one is less that the length of another:
 module <ₗ-wf (X : Type) where
 
   _<ₗ_ : List X → List X → Type
-  l <ₗ r = length l <ₙ length r 
+  l <ₗ r = length l <ₙ length r
 ```
 
 Now we can show that this relation is well-founded.  As a result, we
@@ -165,4 +206,3 @@ section.
   <ₗ-WF : WF _<ₗ_
   <ₗ-WF l = lift l (<ₙ-WF (length l))
 ```
-

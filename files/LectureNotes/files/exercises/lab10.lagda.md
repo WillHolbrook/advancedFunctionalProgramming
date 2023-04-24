@@ -500,6 +500,7 @@ inverse, after we formulate and prove some lemmas for that.
 
 First some commutation properties:
 
+```text
                left
           ℕ ─────────► ℕ
           │            │
@@ -528,6 +529,8 @@ First some commutation properties:
           ▼            ▼
           ℕ ─────────► ℕ
               succ
+```
+
 
 ```agda
 

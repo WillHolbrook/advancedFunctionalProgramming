@@ -291,16 +291,20 @@ these types are actually isomorphic.
 ℕ-is-isomorphic-to-𝟙∔ℕ = record { bijection = f ; bijectivity = f-is-bijection }
  where
   f : ℕ → 𝟙 ∔ ℕ
-  f = {!!}
+  f zero    = inl ⋆
+  f (suc n) = inr n
 
   g : 𝟙 ∔ ℕ → ℕ
-  g = {!!}
+  g (inl ⋆) = zero
+  g (inr n) = suc n
 
   gf : (g ∘ f) ∼ id
-  gf = {!!}
+  gf zero    = refl zero
+  gf (suc n) = refl (suc n)
 
   fg : (f ∘ g) ∼ id
-  fg = {!!}
+  fg (inl ⋆) = refl (inl ⋆)
+  fg (inr n) = refl (inr n)
 
   f-is-bijection : is-bijection f
   f-is-bijection = record { inverse = g ; η = gf ; ε = fg }
@@ -337,7 +341,11 @@ length-tail-rec xs = length-aux xs 0
 ```agda
 length-aux-lemma : {A : Type} (xs : List A) (k : ℕ)
                  → length-aux xs k ≡ length xs + k
-length-aux-lemma = {!!}
+length-aux-lemma [] k = refl k
+length-aux-lemma (x :: xs) k = 
+   length-aux xs (suc k) ≡⟨ length-aux-lemma xs (suc k) ⟩
+   length xs + suc k     ≡⟨ +-step (length xs) k ⟩
+   suc (length xs + k)   ∎
 ```
 
 and use it to **conclude** that `length-tail-rec` is correct (in the sense that
@@ -345,7 +353,11 @@ it computes the same thing as `length`):
 
 ```agda
 length-tail-rec-is-correct : {A : Type} (xs : List A) → length-tail-rec xs ≡ length xs
-length-tail-rec-is-correct = {!!}
+length-tail-rec-is-correct xs = 
+   length-aux xs 0  ≡⟨ length-aux-lemma xs 0 ⟩
+   length xs + zero ≡⟨ +-comm (length xs) zero ⟩
+   length xs        ∎
+
 ```
 
 *Hint*: You can use `length-aux-lemma` in solving `length-is-correct`, even if
@@ -386,9 +398,12 @@ whenever the input list `xs` is sorted:
  map-of-non-decreasing-preserves-sorted : (f : X → Y) → is-non-decreasing f
                                         → (xs : List X) → Sorted σ xs
                                         → Sorted τ (map f xs)
- map-of-non-decreasing-preserves-sorted f m []              nil-sorted       = {!!}
- map-of-non-decreasing-preserves-sorted f m (x :: [])       sing-sorted      = {!!}
- map-of-non-decreasing-preserves-sorted f m (x :: x' :: xs) (adj-sorted s t) = {!!}
+ map-of-non-decreasing-preserves-sorted f m []              nil-sorted       = nil-sorted
+ map-of-non-decreasing-preserves-sorted f m (x :: [])       sing-sorted      = sing-sorted
+ map-of-non-decreasing-preserves-sorted f m (x :: .x :: xs) (adj-sorted s (inl (refl .x)))
+  = adj-sorted (map-of-non-decreasing-preserves-sorted f m (x :: xs) s) (inl (refl (f x)))
+ map-of-non-decreasing-preserves-sorted f m (x :: x' :: xs) (adj-sorted s (inr x<x'))
+  = adj-sorted (map-of-non-decreasing-preserves-sorted f m (x' :: xs) s) (m x x' x<x')
 ```
 
 ## Properties of trees
@@ -455,6 +470,26 @@ stricly smaller than `x`.
 1. We have that `all-bigger t x` if all the nodes in the binary tree `t` are
 strictly bigger than `x`.
 
+```agda
+all-smaller : {X : Type} (τ : StrictTotalOrder X) → BinTree X → X → Type
+all-smaller τ Leaf x = 𝟙
+all-smaller {X} τ (Node l y r) x = all-smaller τ l x × (y <x x) × all-smaller τ r x
+ where
+  open StrictTotalOrder
+
+  _<x_ : X → X → Type
+  _<x_ = _<_ τ
+
+all-bigger : {X : Type} (τ : StrictTotalOrder X) → BinTree X → X → Type
+all-bigger τ Leaf x = 𝟙
+all-bigger {X} τ (Node l y r) x = all-bigger τ l x × (x <x y) × all-bigger τ r x
+ where
+  open StrictTotalOrder
+
+  _<x_ : X → X → Type
+  _<x_ = _<_ τ
+```
+
 
 ### Binary search trees
 
@@ -476,6 +511,9 @@ module _
 
  open StrictTotalOrder σ
 
+ is-bst : BinTree X → Type
+ is-bst Leaf = 𝟙
+ is-bst (Node l x r) = is-bst l × is-bst r × all-smaller σ l x × all-bigger σ r x
 ```
 
 ## Cantor's diagonalization
@@ -500,14 +538,18 @@ Your task is, given `s : ℕ → (ℕ → Bool)`, produce a sequence `diag s : �
 
 ```agda
 diag : (ℕ → (ℕ → Bool)) → (ℕ → Bool)
-diag s = {!!}
+diag s n = not (s n n)
 ```
 
 Now prove that this works:
 ```agda
+not-not-equal : (b : Bool) → ¬ (not b ≡ b)
+not-not-equal true  = λ {()}
+not-not-equal false = λ {()}
+
 diag-correct : (s : ℕ → (ℕ → Bool))
              → (n : ℕ) → ¬ (diag s ∼ s n)
-diag-correct s n = {!!}
+diag-correct s n x = not-not-equal (s n n) (x n)
 ```
 
 ## Use it to prove the following impossibility result
@@ -517,7 +559,8 @@ proof that there can be no isomorphism between `ℕ` and `ℕ → Bool`.
 
 ```agda
 ℕ≃ℕ→Bool-is-impossible : ¬ (ℕ ≅ (ℕ → Bool))
-ℕ≃ℕ→Bool-is-impossible = {!!}
+ℕ≃ℕ→Bool-is-impossible (Isomorphism f (Inverse g gf fg))
+ = diag-correct f (g (diag f)) (λ n → sym (ap (λ x → x n) (fg (diag f))))
 ```
 
 ## Binary numbers
@@ -759,9 +802,20 @@ This means that `height` computes an approximation of the logarithm function in 
 
 ### Prove that it is correct
 
+7 = 111 = left  left  left
+
+4 = 100 =       right left
+3 = 011 =       left  left
+
+1 = 001 =             left
+
+2 = 010 =             right
+
+6 = 110 =       right right
+
 ```agda
 _+𝔹_ : 𝔹 → 𝔹 → 𝔹
-_+𝔹_ = {!!}
+n +𝔹 m = {!!}
 
 +𝔹-correct : (x y : 𝔹) → unary (x +𝔹 y) ≡ unary x + unary y
 +𝔹-correct = {!!}

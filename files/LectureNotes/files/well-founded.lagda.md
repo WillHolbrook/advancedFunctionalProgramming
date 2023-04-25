@@ -76,8 +76,8 @@ module _ {X : Type} (_<_ : X → X → Type) where
   data Acc (x : X) : Type where
     acc : (ϕ : ∀ y → y < x → Acc y) → Acc x
 
-  acc-ev : {x : X} → Acc x → ∀ y → y < x → Acc y
-  acc-ev (acc ϕ) = ϕ
+  acc⁻¹ : {x : X} → Acc x → ∀ y → y < x → Acc y
+  acc⁻¹ (acc ϕ) = ϕ
 ```
 
 The usefulness of this definition is that it allows us to define the following
@@ -140,42 +140,40 @@ nothing-is-less-than-0 x ()
 2-is-accessible = acc h
  where
   h : (y : ℕ) → y <ₙ 2 → Acc _<ₙ_ y
-  h 0 <-zero = 0-is-accessible
+  h 0 <-zero         = 0-is-accessible
   h 1 (<-suc <-zero) = 1-is-accessible
 
 3-is-accessible : Acc _<ₙ_ 3
 3-is-accessible = acc h
  where
   h : (y : ℕ) → y <ₙ 3 → Acc _<ₙ_ y
-  h 0 <-zero = 0-is-accessible
-  h 1 (<-suc <-zero) = 1-is-accessible
+  h 0 <-zero                 = 0-is-accessible
+  h 1 (<-suc <-zero)         = 1-is-accessible
   h 2 (<-suc (<-suc <-zero)) = 2-is-accessible
 ```
 
 
 ```agda
-<ₙ-suc-lemma : ∀ {m n} → m <ₙ suc n → (m <ₙ n) ∔ (m ≡ n)
-<ₙ-suc-lemma {n = zero} <-zero = inr (refl zero)
-<ₙ-suc-lemma {n = suc n} <-zero = inl <-zero
-<ₙ-suc-lemma {n = suc n} (<-suc {m} m<n+1) with <ₙ-suc-lemma m<n+1
-<ₙ-suc-lemma {_} {suc n} (<-suc {_} m<n+1) | inl m<n = inl (<-suc m<n)
-<ₙ-suc-lemma {_} {suc n} (<-suc {_} m<n+1) | inr m≡n = inr (ap suc m≡n)
-```
+<ₙ-suc-lemma : ∀ {m} n → m <ₙ suc n → (m <ₙ n) ∔ (m ≡ n)
+<ₙ-suc-lemma zero <-zero = inr (refl zero)
+<ₙ-suc-lemma (suc n) <-zero = inl <-zero
+<ₙ-suc-lemma (suc n) (<-suc {m} m<n+1) with <ₙ-suc-lemma n m<n+1
+<ₙ-suc-lemma (suc n) (<-suc {_} m<n+1) | inl m<n = inl (<-suc m<n)
+<ₙ-suc-lemma (suc n) (<-suc {_} m<n+1) | inr m≡n = inr (ap suc m≡n)
 
-Now we can obtain our desired result:
+suc-is-accessible : (n : ℕ) → Acc _<ₙ_ n → Acc _<ₙ_ (suc n)
+suc-is-accessible n a@(acc ϕ) = acc h
+ where
+  g : ∀ m → (m <ₙ n) ∔ (m ≡ n) → Acc _<ₙ_ m
+  g m (inl l)          = ϕ m l
+  g .n (inr (refl .n)) = a
 
-```agda
+  h : (m : ℕ) → m <ₙ suc n → Acc _<ₙ_ m
+  h m l = g m (<ₙ-suc-lemma n l)
+
 <ₙ-WF : WF _<ₙ_
-<ₙ-WF zero    = acc (λ { n () })
-<ₙ-WF (suc n) = acc IH
-
-  where ϕ : ∀ m → m <ₙ n → Acc _<ₙ_ m
-        ϕ = acc-ev _<ₙ_ (<ₙ-WF n)
-
-        IH : ∀ m → m <ₙ suc n → Acc _<ₙ_ m
-        IH m m<n+1 with <ₙ-suc-lemma m<n+1
-        IH m m<n+1 | inl m<n      = ϕ m m<n
-        IH .n _    | inr (refl _) = <ₙ-WF n
+<ₙ-WF zero    = 0-is-accessible
+<ₙ-WF (suc n) = suc-is-accessible n (<ₙ-WF n)
 
 course-of-values-induction : (P : ℕ → Type)
                            → ((x : ℕ) → ((y : ℕ) → (y <ₙ x) → P y) → P x)

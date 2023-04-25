@@ -33,7 +33,7 @@ easily enough as follows:
     partition : X → List X → List X × List X
     partition x [] = [] , []
     partition x (y :: l) with trichotomy x y | partition x l
-    partition x (y :: l) | inl x<y | (left , right) = left , y :: right
+    partition x (y :: l) | inl x<y  | (left , right) = left , y :: right
     partition x (y :: l) | inr ¬x<y | (left , right) = y :: left , right
 ```
 
@@ -51,16 +51,17 @@ quicksort as in the following:
 ```
 
 However, if you uncomment this code, you will find that Agda complains
-that it can not see that it terminates.  The reason for this is that
-we have made a recursive call but **not to a structurally smaller**
-piece of the data we have matched on.  Instead, we have called out to
-the "partition" function and made a recursive call on the resulting
-pair of lists.  For all Agda knows, perhaps this function quadruples
-the size of the input list (there are certainly functions which will
-do this ...) in which case the algorithm will never terminate.
+that it cannot see that it terminates.  The reason for this is that we
+have made a recursive call but **not to a structurally smaller** piece
+of the data we have matched on.  Instead, we have called out to the
+"partition" function and made a recursive call on the resulting pair
+of lists.  For all Agda knows, perhaps this function quadruples the
+size of the input list (there are certainly functions which will do
+this ...) in which case the algorithm will never terminate.
 
-On the other hand, **we** know that partitioning the list into two pieces
-will not increase its size.  We need a way to justify this to Agda.
+On the other hand, **we** know that partitioning the list into two
+pieces will not increase its size.  We need a way to justify this to
+Agda.
 
 One such tool is called *well-founded induction*.
 
@@ -85,9 +86,9 @@ elimination principle for accessible elements:
 
 ```agda
   acc-elim : (P : (x : X) → Type)
-    → (p : (x : X) (ϕ : ∀ y → y < x → P y) → P x)
-    → (x : X) (a : Acc x) → P x
-  acc-elim P r x (acc ϕ) = r x (λ y y<x → acc-elim P r y (ϕ y y<x))
+           → (p : (x : X) (ϕ : ∀ y → y < x → P y) → P x)
+           → (x : X) (a : Acc x) → P x
+  acc-elim P r x (acc ϕ) = r x (λ y (l : y < x) → acc-elim P r y (ϕ y l))
 ```
 
 The idea here is that we want to prove some predicate `P x`.  Suppose
@@ -152,6 +153,8 @@ nothing-is-less-than-0 x ()
   h 2 (<-suc (<-suc <-zero)) = 2-is-accessible
 ```
 
+In order to prove that all natural numbers are accessible, we use the
+following two lemmas:
 
 ```agda
 <ₙ-suc-lemma : ∀ {m} n → m <ₙ suc n → (m <ₙ n) ∔ (m ≡ n)
@@ -172,13 +175,18 @@ suc-is-accessible n a@(acc ϕ) = acc h
   h m l = g m (<ₙ-suc-lemma n l)
 
 <ₙ-WF : WF _<ₙ_
-<ₙ-WF zero    = 0-is-accessible
+<ₙ-WF 0       = 0-is-accessible
 <ₙ-WF (suc n) = suc-is-accessible n (<ₙ-WF n)
+```
 
+With this we can prove the following alternative induction principle
+for natural numbers, also known as strong induction:
+
+```agda
 course-of-values-induction : (P : ℕ → Type)
-                           → ((x : ℕ) → ((y : ℕ) → (y <ₙ x) → P y) → P x)
-                           → (x : ℕ) → P x
-course-of-values-induction P p x = wf-ind (_<ₙ_) P (<ₙ-WF) p x
+                           → ((n : ℕ) → ((k : ℕ) → (k <ₙ n) → P k) → P n)
+                           → (n : ℕ) → P n
+course-of-values-induction P = wf-ind (_<ₙ_) P (<ₙ-WF)
 ```
 
 ## Well-foundedness of the length of a list

@@ -518,14 +518,14 @@ First some commutation properties:
                 R
 
 
-               Succ
+               Suc
           𝔹 ─────────► 𝔹
           │            │
     unary │            │ unary       (sdiagram)
           │            │
           ▼            ▼
           ℕ ─────────► ℕ
-              succ
+              suc
 ```
 
 
@@ -628,3 +628,172 @@ This means that `height` computes an approximation of the logarithm function in 
 ### Define addition of binary natural numbers
 
 ### Prove that it is correct
+
+# Challenging exercises on well-founded orders and sorting
+
+```agda
+open import strict-total-order
+open import sorting
+open import well-founded
+```
+
+In this set of exercises, we will practice using well-founded
+recursion to define the beginning of the merge sort.
+
+The central idea of the merge sort is the idea of "merging" two lists.
+The process of merging can be described as follows: if either of the
+lists is empty, then the merge is simply the other list.  If they are
+both non-empty, we inspect the head and use `trichotomy` to decide
+which is the smaller.  We keep the smaller of the two and now
+recursively merge the tail of list from which we kept the smaller
+element with the other list.
+
+To make this idea into a sorting algorithm, we first write a function
+to split a list into two, for example keeping the even-indexed elements
+in the first list and the odd-indexed ones in the second.  Now we recursively
+merge-sort these two sublists and merge the results.
+
+Let tackle this idea of splitting first:
+
+## Splitting by evens and odds
+
+Write functions
+
+```agda
+evens : {X : Type} → List X → List X
+odds : {X : Type} → List X → List X
+
+evens = {!!}
+odds = {!!}
+```
+
+which keep the even-indexed elements and odd-indexed elements respectively.
+
+Note that by declaring the types first, before given the definitions,
+Agda allows us to define these functions mutually recursively (that
+is, the definition of `evens` may use `odds` and vice versa).  You may
+wish to use this in your definition, though it is not necessary.
+
+As an example, we should have
+  * `evens (0 :: 1 :: 2 :: 3 :: []) = 0 :: 2 :: []`
+  * `odds (0 :: 1 :: 2 :: 3 :: []) = 1 :: 3 :: []`
+
+Later we will need to that when we apply these funtions to a list
+with at least two elements, then the result is always shorter.  Let's
+prove that now:
+
+```agda
+
+module _ {X : Type} where
+
+  open <ₗ-wf X
+
+  evens-shorter : (x y : X) (xs : List X) → evens (x :: y :: xs) <ₗ (x :: y :: xs)
+  odds-shorter : (x y : X) (xs : List X) → odds (x :: y :: xs) <ₗ (x :: y :: xs)
+
+  evens-shorter = {!!}
+  odds-shorter = {!!}
+```
+
+## Merging
+
+Now let's implement the idea of merging two lists.  A naive attempt might look
+as follows:
+
+```agda
+module _ {X : Type} (τ : StrictTotalOrder X) where
+  open StrictTotalOrder τ
+
+  -- merge-bad : List X × List X → List X
+  -- merge-bad ([] , ys) = ys
+  -- merge-bad (x :: xs , []) = x :: xs
+  -- merge-bad (x :: xs , y :: ys) with trichotomy x y
+  -- merge-bad (x :: xs , y :: ys) | inl x<y = x :: merge-bad (xs , y :: xs)
+  -- merge-bad (x :: xs , y :: ys) | inr y≤x = y :: merge-bad (x :: xs , ys)
+```
+
+But if you uncomment this code, you will find that Agda cannot see that it
+terminates.  Let's try to use well-founded induction to fix this (since we
+can clearly see that in each recursive call **one** of the two lists does
+indeed get shorter).
+
+Since the argument to our function is a *pair* of lists, we first need
+to extend our `_<ₗ_` relation to pairs.  This can be done using the
+**lexicographic** ordering, which we define here for any pair of relations.
+
+```agda
+module Lex-wf
+  {X : Type} {Y : Type}
+  (_<[X]_ : X → X → Type)
+  (_<[Y]_ : Y → Y → Type) where
+
+  data _<[Lex]_ : X × Y → X × Y → Type where
+    lex-left : {x₀ x₁ : X} {y₀ y₁ : Y} → x₀ <[X] x₁ → (x₀ , y₀) <[Lex] (x₁ , y₁)
+    lex-right : {x₀ : X} {y₀ y₁ : Y} → y₀ <[Y] y₁ → (x₀ , y₀) <[Lex] (x₀ , y₁)
+```
+
+The key fact now is that if both of the relations are well-founded, so is their
+lexicographic pairing:
+
+```agda
+  WF-Lex : WF _<[X]_ → WF _<[Y]_ → WF _<[Lex]_
+  WF-Lex wfx wfy (x , y) = acc (lexAcc (wfx x) (wfy y))
+
+    where lexAcc : ∀ {x y} → Acc _<[X]_ x → Acc _<[Y]_ y
+            → (xy : X × Y) → xy <[Lex] (x , y) → Acc _<[Lex]_ xy
+          lexAcc {x} {y} (acc ϕX) accy (x₀ , y₀) (lex-left x₀<x) = acc (lexAcc (ϕX x₀ x₀<x) (wfy y₀))
+          lexAcc {x} {y} accx (acc ϕY) (x₀ , y₀) (lex-right y₀<y) = acc (lexAcc accx (ϕY y₀ y₀<y))
+```
+
+With these tools in hand, write a terminating version of the merge of two lists:
+
+```agda
+module _ (X : Type) (τ : StrictTotalOrder X) where
+
+  open StrictTotalOrder τ
+  open <ₗ-wf X
+  open Lex-wf _<ₗ_ _<ₗ_
+
+  wf-merge : List X × List X → List X
+  wf-merge = {!!}
+```
+
+There are often other ways to rewrite a definition in an equivalent
+way that Agda can indeed see terminates.  This is the case with the
+merge function: we can split it into a pair of mutually defined
+functions so that `merge-left` always consumes its left argument and
+`merge-right` always consumes its right one (while keeping an
+auxillary element in scope).  See if you can figure out how this works:
+
+```agda
+  merge-left : List X → List X → List X
+  merge-right : X → List X → List X → List X
+
+  merge-left = {!!}
+  merge-right = {!!}
+```
+
+## Merge Sort
+
+The naive implementation of merge sort now looks like this:
+
+```agda
+  -- merge-sort-bad : List X → List X
+  -- merge-sort-bad [] = []
+  -- merge-sort-bad (x :: []) = x :: []
+  -- merge-sort-bad (x :: y :: xs) =
+  --   wf-merge (merge-sort-bad (evens (x :: y :: xs)) ,
+  --             merge-sort-bad (odds (x :: y :: xs)))
+```
+
+Again you will see that Agda cannot see that this functions
+terminates.  Rewrite it using well-founded recursion.
+
+```agda
+  merge-sort : List X → List X
+  merge-sort = {!!}
+```
+
+For more of a challenge, try to construct the rest of the sorting
+algorithm.  You will probably want to follow the style of
+[quick-sort](../quick-sort.lagda.md).

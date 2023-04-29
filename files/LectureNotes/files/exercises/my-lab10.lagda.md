@@ -163,15 +163,13 @@ Bool` containing min and max.
 
 ```agda
 lift : {X : Type} → (_<_ : X → X → Type) → X ∔ Bool → X ∔ Bool → Type
+lift _<_ x           (inr false) = 𝟘
 lift _<_ (inl x)     (inl y)     = x < y
 lift _<_ (inr true)  (inl y)     = 𝟘
 lift _<_ (inr false) (inl y)     = 𝟙
 lift _<_ (inl x)     (inr true)  = 𝟙
 lift _<_ (inr true)  (inr true)  = 𝟘
 lift _<_ (inr false) (inr true)  = 𝟙
-lift _<_ (inl x)     (inr false) = 𝟘
-lift _<_ (inr true)  (inr false) = 𝟘
-lift _<_ (inr false) (inr false) = 𝟘
 ```
 
 You should ensure that, under your definition of `lift`, `min < x` for all `x`
@@ -774,13 +772,11 @@ height-equation₀ : height 0 ≡ 0
 height-equation₀ = refl zero
 
 height-equation-l : (n : ℕ) → height (left n) ≡ suc (height n)
-height-equation-l zero = refl 1
-height-equation-l (suc n) = {!!}
+height-equation-l n = ap size (ldiagram n)
 
 
 height-equation-r : (n : ℕ) → height (right n) ≡ suc (height n)
-height-equation-r zero = refl 1
-height-equation-r (suc n) = {!!}
+height-equation-r n = ap size (rdiagram n)
 
 ```
 
@@ -815,8 +811,325 @@ This means that `height` computes an approximation of the logarithm function in 
 
 ```agda
 _+𝔹_ : 𝔹 → 𝔹 → 𝔹
-n +𝔹 m = {!!}
+Z   +𝔹 m   = m
+L n +𝔹 Z   = L n
+L n +𝔹 L m = R (n +𝔹 m)
+L n +𝔹 R m = L (Suc (n +𝔹 m))
+R n +𝔹 Z   = R n
+R n +𝔹 L m = L (Suc (n +𝔹 m))
+R n +𝔹 R m = R (Suc (n +𝔹 m))
+
++order-lemma : (a b : ℕ) → (a + b) + a + b ≡ (a + a) + b + b
++order-lemma zero b = refl _
++order-lemma (suc a) b = ap suc (
+   (a + b) + suc (a + b)   ≡⟨ +-step (a + b) (a + b) ⟩
+   suc ((a + b) + (a + b)) ≡⟨ ap suc (+order-lemma a b) ⟩
+   suc (a + a) + (b + b)   ≡⟨ ap (_+ b + b) (sym (+-step a a)) ⟩
+   (a + suc a) + b + b     ∎
+ )
+
++-step2 : (x y : ℕ) → x + suc (suc y) ≡ suc (suc (x + y))
++-step2 zero y = refl (suc (suc y))
++-step2 (suc zero) y = refl _
++-step2 (suc (suc x)) y = ap suc (ap suc (+-step2 x y))
+
+lemma : (x y : ℕ) → x + x ≡ y + y → x ≡ y
+lemma zero zero eq = refl zero
+lemma (suc x) (suc y) eq = ap suc (lemma x y (ap pred II))
+  where
+    I : x + suc x ≡ y + suc y
+    I = ap pred eq
+
+    II : suc x + x ≡ suc y + y
+    II = 
+      suc x + x ≡⟨ +-comm (suc x) x ⟩
+      x + suc x ≡⟨ I ⟩
+      y + suc y ≡⟨ +-comm y (suc y) ⟩
+      suc y + y ∎
+
+ap-+ : (x y : ℕ)(f : ℕ → ℕ) → x + x ≡ y + y → f x + f x ≡ f y + f y
+ap-+ x y f eq = ap (λ n → f n + f n) (lemma x y eq)
+
+ap-+2 : (x y : ℕ)(f : ℕ → ℕ) → x ≡ y → f x + f x ≡ f y + f y
+ap-+2 x y f eq = ap (λ n → f n + f n) eq
+
+ap-+3 : (x y : ℕ) → x ≡ y → x + x ≡ y + y
+ap-+3 x .x (refl .x) = refl _
+
+suc-unary-lemma : (x : 𝔹) → unary (Suc x) ≡ suc (unary x)
+suc-unary-lemma Z = refl 1
+suc-unary-lemma (L x) = refl (suc (suc (unary x + unary x)))
+suc-unary-lemma (R x) = ap suc (
+   unary (Suc x) + unary (Suc x) ≡⟨ ap-+3 (unary (Suc x)) (suc (unary x)) (suc-unary-lemma x) ⟩
+   suc (unary x) + suc (unary x) ≡⟨ ap suc (+-step (unary x) (unary x)) ⟩
+   suc (suc (unary x + unary x)) ∎
+ )
 
 +𝔹-correct : (x y : 𝔹) → unary (x +𝔹 y) ≡ unary x + unary y
-+𝔹-correct = {!!}
++𝔹-correct Z y = refl (unary y)
++𝔹-correct (L x) Z = +-comm zero (suc (unary x + unary x))
++𝔹-correct (L x) (L y) = ap suc (
+   suc (unary (x +𝔹 y) + unary (x +𝔹 y))           ≡⟨ ap suc (ap (λ z → z + z) (+𝔹-correct x y)) ⟩
+   suc ((unary x + unary y) + unary x + unary y)   ≡⟨ ap suc (+order-lemma (unary x) (unary y)) ⟩
+   suc ((unary x + unary x) + (unary y + unary y)) ≡⟨ sym (+-step _ _) ⟩
+   (unary x + unary x) + suc (unary y + unary y)   ∎
+ )
++𝔹-correct (L x) (R y) = ap suc ( 
+   unary (Suc (x +𝔹 y)) + unary (Suc (x +𝔹 y))   ≡⟨ ap-+3 (unary (Suc (x +𝔹 y))) (suc (unary (x +𝔹 y))) (suc-unary-lemma (x +𝔹 y)) ⟩
+   suc (unary (x +𝔹 y)) + suc (unary (x +𝔹 y))   ≡⟨ ap suc (+-step (unary (x +𝔹 y)) (unary (x +𝔹 y))) ⟩
+   suc (suc (unary (x +𝔹 y)) + (unary (x +𝔹 y))) ≡⟨ ap suc (ap suc (
+       unary (x +𝔹 y) + unary (x +𝔹 y)         ≡⟨ ap-+3 (unary (x +𝔹 y)) (unary x + unary y) (+𝔹-correct x y) ⟩
+       (unary x + unary y) + unary x + unary y ≡⟨ +order-lemma (unary x) (unary y) ⟩
+       (unary x + unary x) + unary y + unary y ∎
+   )) ⟩
+   suc (suc ((unary x + unary x) + (unary y + unary y)))  ≡⟨ sym (+-step2 (unary x + unary x) (unary y + unary y)) ⟩
+   (unary x + unary x) + suc (suc (unary y + unary y)) ∎
+ )
++𝔹-correct (R x) Z = +-comm zero (suc (suc (unary x + unary x)))
++𝔹-correct (R x) (L y) = ap suc (
+   unary (Suc (x +𝔹 y)) + unary (Suc (x +𝔹 y))           ≡⟨ ap-+3 (unary (Suc (x +𝔹 y))) (suc (unary (x +𝔹 y))) (suc-unary-lemma (x +𝔹 y)) ⟩
+   suc (unary (x +𝔹 y)) + suc (unary (x +𝔹 y))           ≡⟨ ap suc (+-step (unary (x +𝔹 y)) (unary (x +𝔹 y))) ⟩
+   suc (suc (unary (x +𝔹 y)) + (unary (x +𝔹 y)))         ≡⟨ ap suc (ap suc (
+       unary (x +𝔹 y) + unary (x +𝔹 y)         ≡⟨ ap-+3 (unary (x +𝔹 y)) (unary x + unary y) (+𝔹-correct x y) ⟩
+       (unary x + unary y) + unary x + unary y ≡⟨ +order-lemma (unary x) (unary y) ⟩
+       (unary x + unary x) + unary y + unary y ∎
+   )) ⟩
+   suc (suc ((unary x + unary x) + (unary y + unary y))) ≡⟨ ap suc (sym (+-step (unary x + unary x) (unary y + unary y))) ⟩
+   suc ((unary x + unary x) + suc (unary y + unary y))   ≡⟨ ap suc (ap ((unary x + unary x) +_) (ap suc (refl (unary y + unary y)))) ⟩
+   suc ((unary x + unary x) + left (unary y)) ∎
+ )
++𝔹-correct (R x) (R y) = ap suc (ap suc (
+   unary (Suc (x +𝔹 y)) + unary (Suc (x +𝔹 y))           ≡⟨ ap-+3 (unary (Suc (x +𝔹 y))) (suc (unary (x +𝔹 y))) (suc-unary-lemma (x +𝔹 y)) ⟩
+   suc (unary (x +𝔹 y)) + suc (unary (x +𝔹 y))           ≡⟨ ap suc (+-step (unary (x +𝔹 y)) (unary (x +𝔹 y))) ⟩
+   suc (suc (unary (x +𝔹 y)) + (unary (x +𝔹 y)))         ≡⟨  ap suc (ap suc (
+       unary (x +𝔹 y) + unary (x +𝔹 y)         ≡⟨ ap-+3 (unary (x +𝔹 y)) (unary x + unary y) (+𝔹-correct x y) ⟩
+       (unary x + unary y) + unary x + unary y ≡⟨ +order-lemma (unary x) (unary y) ⟩
+       (unary x + unary x) + unary y + unary y ∎
+   )) ⟩
+   suc (suc ((unary x + unary x) + (unary y + unary y))) ≡⟨ sym (+-step2 (unary x + unary x) (unary y + unary y)) ⟩
+   (unary x + unary x) + suc (suc (unary y + unary y))   ≡⟨ ap ((unary x + unary x) +_) (refl _) ⟩
+   (unary x + unary x) + right (unary y) ∎
+ ))
 ```
+
+# Challenging exercises on well-founded orders and sorting
+
+```agda
+open import strict-total-order
+open import sorting
+open import well-founded
+```
+
+In this set of exercises, we will practice using well-founded
+recursion to define the beginning of the merge sort.
+
+The central idea of the merge sort is the idea of "merging" two lists.
+The process of merging can be described as follows: if either of the
+lists is empty, then the merge is simply the other list.  If they are
+both non-empty, we inspect the head and use `trichotomy` to decide
+which is the smaller.  We keep the smaller of the two and now
+recursively merge the tail of list from which we kept the smaller
+element with the other list.
+
+To make this idea into a sorting algorithm, we first write a function
+to split a list into two, for example keeping the even-indexed elements
+in the first list and the odd-indexed ones in the second.  Now we recursively
+merge-sort these two sublists and merge the results.
+
+Let tackle this idea of splitting first:
+
+## Splitting by evens and odds
+
+Write functions
+
+```agda
+evens : {X : Type} → List X → List X
+odds : {X : Type} → List X → List X
+
+evens [] = []
+evens (x :: xs) = x :: odds xs
+odds [] = []
+odds (x :: []) = []
+odds (x :: y :: xs) = evens (y :: xs)
+
+_ : evens (1 :: 2 :: 3 :: []) ≡ 1 :: 3 :: []
+_ = refl (1 :: 3 :: [])
+
+_ : odds (1 :: 2 :: 3 :: []) ≡ 2 :: []
+_ = refl (2 :: [])
+
+_ : evens (0 :: 1 :: 2 :: 3 :: []) ≡ 0 :: 2 :: []
+_ = refl (zero :: 2 :: [])
+
+_ : odds (0 :: 1 :: 2 :: 3 :: []) ≡ 1 :: 3 :: []
+_ = refl (1 :: 3 :: [])
+```
+
+which keep the even-indexed elements and odd-indexed elements respectively.
+
+Note that by declaring the types first, before given the definitions,
+Agda allows us to define these functions mutually recursively (that
+is, the definition of `evens` may use `odds` and vice versa).  You may
+wish to use this in your definition, though it is not necessary.
+
+As an example, we should have
+  * `evens (0 :: 1 :: 2 :: 3 :: []) = 0 :: 2 :: []`
+  * `odds (0 :: 1 :: 2 :: 3 :: []) = 1 :: 3 :: []`
+
+Later we will need to that when we apply these funtions to a list
+with at least two elements, then the result is always shorter.  Let's
+prove that now:
+
+```agda
+
+module _ {X : Type} where
+
+  open <ₗ-wf X
+
+  evens-shorter : (x y : X) (xs : List X) → evens (x :: y :: xs) <ₗ (x :: y :: xs)
+  odds-shorter : (x y : X) (xs : List X) → odds (x :: y :: xs) <ₗ (x :: y :: xs)
+
+  evens-shorter x y []        = <-suc <-zero
+  evens-shorter x y (z :: xs) = <-suc (odds-shorter y z xs) 
+  odds-shorter x y []        = <-suc <-zero
+  odds-shorter x y (z :: xs) = <-suc (<ₙ-trans (<ₙ-lem (length (odds (z :: xs)))) (evens-shorter y z xs))
+```
+
+## Merging
+
+Now let's implement the idea of merging two lists.  A naive attempt might look
+as follows:
+
+```agda
+module _ {X : Type} (τ : StrictTotalOrder X) where
+  open StrictTotalOrder τ
+
+  -- merge-bad : List X × List X → List X
+  -- merge-bad ([] , ys) = ys
+  -- merge-bad (x :: xs , []) = x :: xs
+  -- merge-bad (x :: xs , y :: ys) with trichotomy x y
+  -- merge-bad (x :: xs , y :: ys) | inl x<y = x :: merge-bad (xs , y :: xs)
+  -- merge-bad (x :: xs , y :: ys) | inr y≤x = y :: merge-bad (x :: xs , ys)
+```
+
+But if you uncomment this code, you will find that Agda cannot see that it
+terminates.  Let's try to use well-founded induction to fix this (since we
+can clearly see that in each recursive call **one** of the two lists does
+indeed get shorter).
+
+Since the argument to our function is a *pair* of lists, we first need
+to extend our `_<ₗ_` relation to pairs.  This can be done using the
+**lexicographic** ordering, which we define here for any pair of relations.
+
+```agda
+module Lex-wf
+  {X : Type} {Y : Type}
+  (_<[X]_ : X → X → Type)
+  (_<[Y]_ : Y → Y → Type) where
+
+  data _<[Lex]_ : X × Y → X × Y → Type where
+    lex-left : {x₀ x₁ : X} {y₀ y₁ : Y} → x₀ <[X] x₁ → (x₀ , y₀) <[Lex] (x₁ , y₁)
+    lex-right : {x₀ : X} {y₀ y₁ : Y} → y₀ <[Y] y₁ → (x₀ , y₀) <[Lex] (x₀ , y₁)
+```
+
+The key fact now is that if both of the relations are well-founded, so is their
+lexicographic pairing:
+
+```agda
+  WF-Lex : WF _<[X]_ → WF _<[Y]_ → WF _<[Lex]_
+  WF-Lex wfx wfy (x , y) = acc (lexAcc (wfx x) (wfy y))
+
+    where lexAcc : ∀ {x y} → Acc _<[X]_ x → Acc _<[Y]_ y
+            → (xy : X × Y) → xy <[Lex] (x , y) → Acc _<[Lex]_ xy
+          lexAcc {x} {y} (acc ϕX) accy (x₀ , y₀) (lex-left x₀<x) = acc (lexAcc (ϕX x₀ x₀<x) (wfy y₀))
+          lexAcc {x} {y} accx (acc ϕY) (x₀ , y₀) (lex-right y₀<y) = acc (lexAcc accx (ϕY y₀ y₀<y))
+```
+
+With these tools in hand, write a terminating version of the merge of two lists:
+
+```agda
+module _ (X : Type) (τ : StrictTotalOrder X) where
+
+  open StrictTotalOrder τ
+  open <ₗ-wf X
+  open Lex-wf _<ₗ_ _<ₗ_
+
+  wf-merge : List X × List X → List X
+  wf-merge pxs = wf-ind _<[Lex]_ (λ _ → List X) (WF-Lex <ₗ-WF <ₗ-WF) goal pxs
+    where
+     goal : (x : List X × List X) → ((y : List X × List X) → y <[Lex] x → List X) → List X
+     goal ([] , ys) mg-ih = ys
+     goal (x :: xs , []) mg-ih = x :: xs
+     goal (x :: xs , y :: ys) mg-ih with trichotomy x y
+     goal (x :: xs , y :: ys) mg-ih | inl x<y = x :: mg-ih (xs , y :: ys) (lex-left (<ₙ-lem (length xs))) 
+     goal (x :: xs , y :: ys) mg-ih | inr y≤x = y :: mg-ih (x :: xs , ys) (lex-right (<ₙ-lem (length ys)))
+```
+
+There are often other ways to rewrite a definition in an equivalent
+way that Agda can indeed see terminates.  This is the case with the
+merge function: we can split it into a pair of mutually defined
+functions so that `merge-left` always consumes its left argument and
+`merge-right` always consumes its right one (while keeping an
+auxillary element in scope).  See if you can figure out how this works:
+
+```agda
+  merge-left : List X → List X → List X
+  merge-right : X → List X → List X → List X
+
+  merge-left [] ys = ys
+  merge-left (x :: xs) [] = x :: xs
+  merge-left (x :: xs) (y :: ys) with trichotomy x y
+  merge-left (x :: xs) (y :: ys) | inl x<y = x :: merge-left xs (y :: ys)
+  merge-left (x :: xs) (y :: ys) | inr y≤x = y :: merge-right x xs ys
+
+  merge-right x xs [] = x :: xs
+  merge-right x xs (y :: ys) with trichotomy x y
+  merge-right x xs (y :: ys) | inl x<y = x :: merge-left xs (y :: ys)
+  merge-right x xs (y :: ys) | inr y≤x = y :: merge-right x xs ys
+```
+
+## Merge Sort
+
+The naive implementation of merge sort now looks like this:
+
+```agda
+  -- merge-sort-bad : List X → List X
+  -- merge-sort-bad [] = []
+  -- merge-sort-bad (x :: []) = x :: []
+  -- merge-sort-bad (x :: y :: xs) =
+  --   wf-merge (merge-sort-bad (evens (x :: y :: xs)) ,
+  --             merge-sort-bad (odds (x :: y :: xs)))
+```
+
+Again you will see that Agda cannot see that this functions
+terminates.  Rewrite it using well-founded recursion.
+
+```agda
+  merge-sort : List X → List X
+  merge-sort = wf-ind _<ₗ_ (λ _ → List X) <ₗ-WF goal
+   where
+    goal : (x : List X) → ((y : List X) → y <ₗ x → List X) → List X
+    goal [] merge-sort-ih = []
+    goal (x :: []) merge-sort-ih = x :: []
+    goal (x :: y :: xs) merge-sort-ih =
+     wf-merge (
+      (merge-sort-ih (evens (x :: y :: xs)) (evens-shorter x y xs)) ,
+      (merge-sort-ih (odds (x :: y :: xs)) (odds-shorter x y xs))
+      )
+```
+
+For well-founded recursion you need to first call `wf-ind` then it needs to be passed 5 arguments:
+
+1. The order that shows that the recursive call is smaller. So if your list is geting shorter this would be _<₁_ as it is the order on lists not the order of the elements within the list
+2. An argument that specifies the type of the well founded induction and generally this should be a lambda with an underscore for the first argument and it returns the type that is the same as the return type of the original function
+3. This is a proof that the order given in the first argument is well founded
+4. This should be written as a **SUB PROOF** with a name such as `goal` which actually specifies how the well founded recursion occurs and has the following type
+`(x : X) → (∀ y → (y < x) → P y) → P x)`, where P is the proposition given in 2n. and < is the relation given in argument 1. This function has two arguments:
+  1. An element of the same type as the original expression
+  2. An argument which represents how all further recursive calls should be made with
+  Then in the body of the function you should specify how the well founded infuction 
+5. The argument you took in from the fundtion. Note if you don't take in an argument you don't need this argument to wf-ind
+
+For more of a challenge, try to construct the rest of the sorting
+algorithm.  You will probably want to follow the style of
+[quick-sort](../quick-sort.lagda.md).

@@ -3,7 +3,7 @@
 ```agda
 {-# OPTIONS --without-K --safe --auto-inline #-}
 
-module exercises.test1 where
+module exercises.test1v2 where
 
 open import prelude
 open import natural-numbers-functions
@@ -70,10 +70,12 @@ Now, **prove** that, in each case, the functions act identically.
 
 ```agda
 and-defined-with-if : (a b : Bool) → a && b ≡ a &&' b
-and-defined-with-if = {!!} 
+and-defined-with-if true  b = refl b
+and-defined-with-if false b = refl false
 
 or-defined-with-if  : (a b : Bool) → a || b ≡ a ||' b
-or-defined-with-if = {!!} 
+or-defined-with-if true  b = refl true
+or-defined-with-if false b = refl b
 ```
 
 ## Question 2
@@ -108,28 +110,29 @@ they correspond to the above inductive rules.
 ```agda
 data _is-a-sublist-of_ : List ℕ → List ℕ → Type where
  subl₀ : (ns : List ℕ)
-         → {!!} is-a-sublist-of {!!}
+         → [] is-a-sublist-of ns
  subl₁ : {xs ys : List ℕ} (y : ℕ)
-         → {!!}
-         → {!!} is-a-sublist-of {!!}
+         → xs is-a-sublist-of ys
+         → xs is-a-sublist-of (y :: ys)
  subl₂ : {xs ys : List ℕ} (y : ℕ)
-         → {!!}
-         → {!!} is-a-sublist-of {!!}
+         → xs is-a-sublist-of ys
+         → (y :: xs) is-a-sublist-of (y :: ys)
 ```
 
 Complete the following proofs using this relation:
 
 ```agda
 sublist-example₁ : [ 1 ] is-a-sublist-of (1 :: 2 :: [])
-sublist-example₁ = {!!}
+sublist-example₁ = subl₂ 1 (subl₀ (2 :: []))
 
 sublist-example₂ : (2 :: []) is-a-sublist-of (1 :: 2 :: [])
-sublist-example₂ = {!!}
+sublist-example₂ = subl₁ 1 (subl₂ 2 (subl₀ []))
 
 sublist-example₃ : (2 :: 4 :: 6 :: [])
                         is-a-sublist-of
                        (1 :: 2 :: 3 :: 4 :: 5 :: 6 :: [])
-sublist-example₃ = {!!}
+sublist-example₃ = subl₁ 1
+                     (subl₂ 2 (subl₁ 3 (subl₂ 4 (subl₁ 5 (subl₂ 6 (subl₀ []))))))
 ```
 
 ## Question 3
@@ -152,16 +155,20 @@ bool-+-iso X =
         ; bijectivity = record { inverse = g ; η = section ; ε = retraction } }
   where
    f : X × Bool → X ∔ X
-   f = {!!} 
+   f (x , true ) = inl x
+   f (x , false) = inr x
 
    g : X ∔ X → X × Bool
-   g = {!!} 
+   g (inl x) = x , true
+   g (inr x) = x , false
 
    section : g ∘ f ∼ id
-   section = {!!}
+   section (x , true ) = refl (x , true )
+   section (x , false) = refl (x , false)
 
    retraction : f ∘ g ∼ id
-   retraction = {!!} 
+   retraction (inl x) = refl (inl x)
+   retraction (inr x) = refl (inr x)
 ```
 
 ## Question 4 
@@ -193,7 +200,7 @@ every member of the list.
 
 ```agda
 filter-property : (X : Type) (P : X → Bool) (xs : List X) → Type
-filter-property X P xs = {!!}
+filter-property X P xs = filter P xs ≡ xs → (x : X) → x ∈ xs → P x ≡ true
 ```
 
 *Note*: You must not change the type of `filter-property`.  Moreover,
@@ -208,14 +215,20 @@ Given a function `f : X → X`, we say that an element `x : X` is a
 is a fixed point of a function `f`.
 
 ```agda
-is-fixed-point-of : {!!}
-is-fixed-point-of = {!!} 
+is-fixed-point-of : {X : Type}(x : X)(f : X → X) → Type
+is-fixed-point-of x f = f x ≡ x
 ```
 Now, **state** *and* **prove** the following: if every member `x` of
 a list `l : List X` is a fixed point of `f`, then `l` is a fixed point
 of the function `map f`.
 
 ```agda
-list-fixed-point : {!!}
-list-fixed-point = {!!} 
+list-fixed-point : {X : Type}(l : List X)(f : X → X)
+ → ((x : X) → x ∈ l → is-fixed-point-of x f)
+ → is-fixed-point-of l (map f)
+list-fixed-point [] f g = refl []
+list-fixed-point (x :: l) f g = 
+   f x :: map f l ≡⟨ ap (_:: map f l) (g x (head-case x l)) ⟩
+   x :: map f l   ≡⟨ ap (x ::_) (list-fixed-point l f (λ y yinl → g y (tail-case y l yinl x))) ⟩
+   x :: l         ∎
 ```

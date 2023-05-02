@@ -1125,11 +1125,39 @@ For well-founded recursion you need to first call `wf-ind` then it needs to be p
 3. This is a proof that the order given in the first argument is well founded
 4. This should be written as a **SUB PROOF** with a name such as `goal` which actually specifies how the well founded recursion occurs and has the following type
 `(x : X) → (∀ y → (y < x) → P y) → P x)`, where P is the proposition given in 2n. and < is the relation given in argument 1. This function has two arguments:
-  1. An element of the same type as the original expression
-  2. An argument which represents how all further recursive calls should be made with
-  Then in the body of the function you should specify how the well founded infuction 
-5. The argument you took in from the fundtion. Note if you don't take in an argument you don't need this argument to wf-ind
+    1. An element of the same type as the original expression
+    2. An argument which represents how all further recursive calls should be made with
+   Then in the body of the function you should specify how the well founded induction works using the second argumet for all further calls
+5. The argument you took in from the function. Note if you don't take in an argument you don't need this argument to wf-ind
 
 For more of a challenge, try to construct the rest of the sorting
 algorithm.  You will probably want to follow the style of
 [quick-sort](../quick-sort.lagda.md).
+
+```agda
+strip-suc-<ₙ : (n m : ℕ) → suc n <ₙ suc m → n <ₙ m
+strip-suc-<ₙ n m (<-suc prf) = prf
+
+pos-nat-iso : {X : Type} (xs : List X) → Pos xs ≅ (Σ n ꞉ ℕ , n <ₙ length xs)
+pos-nat-iso {X} xs = record { bijection = f xs; bijectivity = f-is-bijection }
+ where
+  f : (xs : List X) → Pos xs → Σ n ꞉ ℕ , n <ₙ length xs
+  f (x :: xs) (inl ⋆) = zero , <-zero
+  f (x :: xs) (inr p) with f xs p
+  f (x :: xs) (inr p) | n , prf = (suc n) , (<-suc prf)
+
+  g : (xs : List X) → (Σ n ꞉ ℕ , n <ₙ length xs) → Pos xs
+  g (x :: xs) (zero , prf) = inl ⋆
+  g (x :: xs) (suc n , <-suc prf) = inr (g xs (n , prf))
+
+  gf : (xs : List X) → g xs ∘ f xs ∼ id
+  gf (x :: xs) (inl ⋆) = refl (inl ⋆)
+  gf (x :: xs) (inr p) = ap inr (gf xs p)
+
+  fg : (xs : List X) → f xs ∘ g xs ∼ id
+  fg (x :: xs) (zero , <-zero) = refl (zero , <-zero)
+  fg (x :: xs) (suc n , <-suc prf) = ap (λ (n , prf) → suc n , <-suc prf) (fg xs (n , prf))
+
+  f-is-bijection : is-bijection (f xs)
+  f-is-bijection = record { inverse = g xs ; η = gf xs ; ε = fg xs}
+```

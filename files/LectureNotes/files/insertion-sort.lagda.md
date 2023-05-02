@@ -48,6 +48,7 @@ of elements in another list.
 ```agda
   insert-all : List X → List X → List X
   insert-all [] ys = ys
+  -- insert-all (x :: xs) ys = (insert-all xs (insert x ys))
   insert-all (x :: xs) ys = insert x (insert-all xs ys)
 ```
 
@@ -70,15 +71,17 @@ list, the result remains sorted.
 
 ```agda
   insert-is-sorted : (x : X) (xs : List X) → Sorted τ xs → Sorted τ (insert x xs)
-  insert-is-sorted y [] nil-sorted = sing-sorted 
+  insert-is-sorted y [] nil-sorted = sing-sorted
+  
   insert-is-sorted y (x :: []) sing-sorted with trichotomy x y
   insert-is-sorted y (x :: []) sing-sorted | inl x<y = adj-sorted sing-sorted (inr x<y)
   insert-is-sorted y (x :: []) sing-sorted | inr y≤x = adj-sorted sing-sorted y≤x
-  insert-is-sorted y (z :: x :: xs) (adj-sorted srtd z≤x) with trichotomy z y
-  insert-is-sorted y (z :: x :: xs) (adj-sorted srtd z≤x) | inl z<y with trichotomy x y | insert-is-sorted y (x :: xs) srtd
+  
+  insert-is-sorted y (z :: x :: xs) (adj-sorted srtd z≤x) with trichotomy z y  
+  insert-is-sorted y (z :: x :: xs) (adj-sorted srtd z≤x) | inr y≤z = adj-sorted (adj-sorted srtd z≤x) y≤z  
+  insert-is-sorted y (z :: x :: xs) (adj-sorted srtd z≤x) | inl z<y with trichotomy x y |  insert-is-sorted y (x :: xs) srtd
   insert-is-sorted y (z :: x :: xs) (adj-sorted srtd z≤x) | inl z<y | inl x<y | srtd' = adj-sorted srtd' z≤x
-  insert-is-sorted y (z :: x :: xs) (adj-sorted srtd z≤x) | inl z<y | inr y≤x | _ = adj-sorted (adj-sorted srtd y≤x) (inr z<y)
-  insert-is-sorted y (z :: x :: xs) (adj-sorted srtd z≤x) | inr y≤z = adj-sorted (adj-sorted srtd z≤x) y≤z
+  insert-is-sorted y (z :: x :: xs) (adj-sorted srtd z≤x) | inl z<y | inr y≤x | srtd' = adj-sorted srtd' (inr z<y)
 ```
 As you can see, there is not much difficulty here, just an exhaustive analysis of the possible cases.
 
@@ -91,9 +94,8 @@ sorted list is then just a special case:
   insert-all-is-sorted : (xs ys : List X) (ys-srtd : Sorted τ ys)
     → Sorted τ (insert-all xs ys)
   insert-all-is-sorted [] ys ys-srtd = ys-srtd
-  insert-all-is-sorted (x :: xs) ys ys-srtd =
-    insert-is-sorted x (insert-all xs ys)
-      (insert-all-is-sorted xs ys ys-srtd)
+  insert-all-is-sorted (x :: xs) ys ys-srtd
+   = insert-is-sorted x (insert-all xs ys) (insert-all-is-sorted xs ys ys-srtd)
 
   insertion-sort-is-sorted : (xs : List X) → Sorted τ (insertion-sort xs)
   insertion-sort-is-sorted xs = insert-all-is-sorted xs [] nil-sorted 
@@ -110,16 +112,20 @@ do so, we will make use of some auxilliary isomorphisms defined
     → Pos (insert x xs) ≅ 𝟙 ∔ Pos xs
   insert-pos-iso y [] = id-iso (𝟙 ∔ 𝟘)
   insert-pos-iso y (x :: xs) with trichotomy x y
-  insert-pos-iso y (x :: xs) | inl x<y = ∔-left-swap-iso 𝟙 𝟙 (Pos xs) ∘ᵢ (∔-pair-iso (id-iso 𝟙) (insert-pos-iso y xs)) 
+  insert-pos-iso y (x :: xs) | inl x<y = 
+   𝟙 ∔ Pos (insert y xs) ≅⟨ ∔-pair-iso (id-iso 𝟙) (insert-pos-iso y xs) ⟩
+   𝟙 ∔ 𝟙 ∔ Pos xs       ≅⟨ ∔-left-swap-iso 𝟙 𝟙 (Pos xs) ⟩
+   𝟙 ∔ 𝟙 ∔ Pos xs       ∎ᵢ
   insert-pos-iso y (x :: xs) | inr y≤x = id-iso (𝟙 ∔ 𝟙 ∔ Pos xs)
 
   insert-all-pos-iso : (xs ys : List X)
     → Pos (insert-all xs ys) ≅ Pos (xs ++ ys)
   insert-all-pos-iso [] ys = id-iso (Pos ys)
-  insert-all-pos-iso (x :: xs) ys =
-    Pos (insert x (insert-all xs ys)) ≅⟨ insert-pos-iso x (insert-all xs ys) ⟩
-    𝟙 ∔ Pos (insert-all xs ys)       ≅⟨ ∔-pair-iso (id-iso 𝟙) (insert-all-pos-iso xs ys) ⟩
-    𝟙 ∔ Pos (xs ++ ys) ∎ᵢ
+  insert-all-pos-iso (x :: xs) ys = 
+   Pos (insert x (insert-all xs ys)) ≅⟨ insert-pos-iso x (insert-all xs ys) ⟩
+   𝟙 ∔ Pos (insert-all xs ys) ≅⟨ ∔-pair-iso (id-iso 𝟙) (insert-all-pos-iso xs ys) ⟩
+   𝟙 ∔ Pos (xs ++ ys) ∎ᵢ
+
 ```
 
 Now we have to show that the inhabitants are preserved by our choice
@@ -139,19 +145,23 @@ With the above lemma, we can complete the calculation of the equality
 of inhabitants with respect to the insert function.
 
 ```agda
-  insert-inhab-eq : (x : X) (xs : List X)
-    → (p : Pos (insert x xs))
-    → Inhab (insert x xs) p ≡ Inhab (x :: xs) (bijection (insert-pos-iso x xs) p)
-  insert-inhab-eq y [] p = refl (Inhab (y :: []) p)
+  insert-inhab-eq : (y : X) (xs : List X)
+    → (p : Pos (insert y xs))
+    → Inhab (insert y xs) p ≡ Inhab (y :: xs) (bijection (insert-pos-iso y xs) p)
+  insert-inhab-eq y [] (inl ⋆) = refl y
   insert-inhab-eq y (x :: xs) p with trichotomy x y
   insert-inhab-eq y (x :: xs) (inl ⋆) | inl x<y = refl x
-  insert-inhab-eq y (x :: xs) (inr p) | inl x<y =  
-    Inhab (insert y xs) p ≡⟨ insert-inhab-eq y xs p ⟩
-    Inhab (y :: xs) (bijection (insert-pos-iso y xs) p)                ≡⟨ refl _ ⟩
-    Inhab (x :: y :: xs) (inr (bijection (insert-pos-iso y xs) p))     ≡⟨ pos-swap-lemma x y xs (bijection (insert-pos-iso y xs) p) ⟩ 
-    Inhab (y :: x :: xs) (bijection (∔-left-swap-iso 𝟙 𝟙 (Pos xs))
-                         (inr (bijection (insert-pos-iso y xs) p)))    ∎ 
-  insert-inhab-eq y (x :: xs) p | inr y≤x = refl (Inhab (y :: x :: xs) p) 
+  insert-inhab-eq y (x :: xs) (inr p) | inl x<y = 
+   Inhab (insert y xs) p ≡⟨ insert-inhab-eq y xs p ⟩
+   Inhab (y :: xs) (bijection (insert-pos-iso y xs) p) ≡⟨  pos-swap-lemma x y xs (bijection (insert-pos-iso y xs) p) ⟩
+   Inhab (y :: x :: xs)
+      (bijection
+       (𝟙 ∔ Pos (insert y xs) ≅⟨ ∔-pair-iso (id-iso 𝟙) (insert-pos-iso y xs) ⟩
+        𝟙 ∔ 𝟙 ∔ Pos xs        ≅⟨ ∔-left-swap-iso 𝟙 𝟙 (Pos xs) ⟩ 𝟙 ∔ 𝟙 ∔ Pos xs ∎ᵢ)
+       (inr p))                ∎
+       -- Swap and recursive call
+
+  insert-inhab-eq y (x :: xs) p | inr y≤x = refl _
 ```
 
 After a quick lemma showing how to extend a collection of inhabitant
@@ -173,15 +183,17 @@ function.
       Inhab (xs ++ ys) (bijection (insert-all-pos-iso xs ys) p)
   insert-all-inhab-eq [] ys p = refl (Inhab ys p)
   insert-all-inhab-eq (x :: xs) ys p = 
-    Inhab (insert x (insert-all xs ys)) p
-      ≡⟨ insert-inhab-eq x (insert-all xs ys) p ⟩
-    Inhab (x :: insert-all xs ys) (bijection (insert-pos-iso x (insert-all xs ys)) p)
-      ≡⟨ inhab-ext-lemma x (insert-all xs ys) (xs ++ ys)
-           (insert-all-pos-iso xs ys)
-           (λ p → insert-all-inhab-eq xs ys p)
-          (bijection (insert-pos-iso x (insert-all xs ys)) p) ⟩ 
-    Inhab (x :: xs ++ ys) (bijection (∔-pair-iso (id-iso 𝟙) (insert-all-pos-iso xs ys))
-                          (bijection (insert-pos-iso x (insert-all xs ys)) p)) ∎
+   Inhab (insert x (insert-all xs ys)) p ≡⟨ insert-inhab-eq x (insert-all xs ys) p ⟩
+   Inhab (x :: insert-all xs ys) (bijection (insert-pos-iso x (insert-all xs ys)) p)
+     ≡⟨ inhab-ext-lemma x (insert-all xs ys) (xs ++ ys) (insert-all-pos-iso xs ys) (insert-all-inhab-eq xs ys) (bijection (insert-pos-iso x (insert-all xs ys)) p) ⟩
+   Inhab (x :: xs ++ ys)
+   (bijection
+    (Pos (insert x (insert-all xs ys)) ≅⟨
+     insert-pos-iso x (insert-all xs ys) ⟩
+     𝟙 ∔ Pos (insert-all xs ys) ≅⟨
+     ∔-pair-iso (id-iso 𝟙) (insert-all-pos-iso xs ys) ⟩
+     𝟙 ∔ Pos (xs ++ ys) ∎ᵢ)
+    p) ∎
 ```
 
 Together the previous functions give the data required to inhabit our
